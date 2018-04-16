@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CampTalk.iml" filepath="$PROJECT_DIR$/.idea/CampTalk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CampTalkServer/CampTalkServer.iml" filepath="$PROJECT_DIR$/CampTalkServer/CampTalkServer.iml" />
     </modules>
   </component>
 </project>
