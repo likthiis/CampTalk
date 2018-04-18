@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Service Entry Point.
  */
+
 @SpringBootApplication
 @EnableTransactionManagement
 @EntityScan(basePackages = "org.yuru.campTalk.entity")
+
 public class CampTalkApp implements EmbeddedServletContainerCustomizer {
 
     public static void main(String[] args) {
@@ -27,6 +29,8 @@ public class CampTalkApp implements EmbeddedServletContainerCustomizer {
     }
 
     @Bean
+
+
     public HibernateJpaSessionFactoryBean sessionFactory() {
         return new HibernateJpaSessionFactoryBean();
     }

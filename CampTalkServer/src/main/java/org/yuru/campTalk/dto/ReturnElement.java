@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
  * Date  : 2018/4/16
  * Usage : Class ReturnElement is used to encapsulate the real data which returned.
  */
+//元素的数据结构
 public class ReturnElement {
 
     /**
@@ -27,7 +28,10 @@ public class ReturnElement {
     public ReturnElement() {
     }
 
+    //下面这个是什么意思
     @XmlElement(required = false)
+    //上面这个是什么意思
+
     public String getSign() {
         return sign;
     }

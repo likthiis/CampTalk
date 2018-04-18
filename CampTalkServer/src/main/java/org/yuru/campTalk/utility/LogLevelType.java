@@ -8,3 +8,4 @@ package org.yuru.campTalk.utility;
 public enum LogLevelType {
     INFO, WARNING, ERROR, UNAUTHORIZED
 }
+//用在某种日志处理(分类)器上？

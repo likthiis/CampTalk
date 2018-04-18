@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+//主控台。
 public class TestController {
 
     /**
@@ -27,7 +28,8 @@ public class TestController {
      * @param notRequiredArg argument not required
      * @return response package
      */
-    @RequestMapping(value = "/echo", produces = {"application/json"})
+    @RequestMapping(value = "/echo", produces = {"application/json"}) //将http的请求映射到MVC和REST控制器的处理方法上。
+    //就是把内容物送给主控台的函数进行处理。
     @ResponseBody
     @Transactional
     public ReturnModel Echo(@RequestParam(value="requiredArg", required = false)String requiredArg,

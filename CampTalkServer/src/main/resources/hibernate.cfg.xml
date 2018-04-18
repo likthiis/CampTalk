@@ -6,14 +6,25 @@
 
 <hibernate-configuration>
     <session-factory>
+        <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/camptalk</property>
         <property name="connection.username">root</property>
         <property name="connection.password">43420024</property>
+
+        <!-- JDBC connection pool(use the built-in) -->
         <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
+
+        <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
+
+        <!-- Unknown -->
         <property name="format_sql">true</property>
         <property name="hibernate.event.merge.entity_copy_observer">allow</property>
 

@@ -18,7 +18,7 @@ public class EncryptUtil {
     public static String EncryptSHA256(String orgStr) {
         return DigestUtils.sha256Hex(orgStr + GlobalConfigContext.AUTHORITY_SALT);
     }
-
+    //盐值加密器。
     /**
      * Encrypt a string using SHA256 with custom salt.
      * @param orgStr string to be encrypted
@@ -28,4 +28,4 @@ public class EncryptUtil {
     public static String EncryptSHA256(String orgStr, String salt) {
         return DigestUtils.sha256Hex(orgStr + salt);
     }
-}
+}   //还是盐值加密器。

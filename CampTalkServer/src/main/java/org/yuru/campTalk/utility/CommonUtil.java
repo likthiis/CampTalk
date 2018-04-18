@@ -9,6 +9,9 @@ import java.util.Random;
  * Date  : 2018/4/16
  * Usage : Some useful helper methods.
  */
+//标准基础设施仓库。
+
+
 public class CommonUtil {
     /**
      * Check if a string is null or empty.
@@ -18,7 +21,7 @@ public class CommonUtil {
     public static boolean IsNullOrEmpty(String str) {
         return str == null || str.equals("");
     }
-
+    //判断是不是空字符串。
     /**
      * Generate a random number in interval of [min, max)
      * @param min low border included
@@ -29,7 +32,7 @@ public class CommonUtil {
         Random rand = new Random();
         return rand.nextInt(max - min) + min;
     }
-
+    //生成随机数字。
     /**
      * Zip a key vector and a value vector to a hash map.
      * Key list and value list should have same size.
@@ -50,7 +53,7 @@ public class CommonUtil {
         }
         return retMap;
     }
-
+    //键值对转哈希表。
     /**
      * Zip a key vector and a value vector to a hash map in all string type.
      * Key list and value list should have same size.
@@ -69,4 +72,5 @@ public class CommonUtil {
         }
         return retMap;
     }
+    //键值对转哈希表，不过是转成string类型的(方便处理)。
 }
