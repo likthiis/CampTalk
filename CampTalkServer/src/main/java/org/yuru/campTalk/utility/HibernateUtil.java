@@ -64,7 +64,6 @@ public class HibernateUtil {
 
     /**
      * Close active session in this thread.
-     * In normal situation, this method should not be called.
      */
 
     //把线程内的活跃的会话处理掉。

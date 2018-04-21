@@ -11,4 +11,9 @@ public class GlobalConfigContext {
      * Salt of password string.
      */
     public static final String AUTHORITY_SALT = "YuruCamp";
+
+    /**
+     * Valid duration of authorization token.
+     */
+    public static final Long AUTHORITY_TOKEN_VALID_SECOND = 2 * 60 * 60L;
 }

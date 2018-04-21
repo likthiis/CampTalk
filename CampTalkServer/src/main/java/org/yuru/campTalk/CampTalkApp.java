@@ -29,8 +29,6 @@ public class CampTalkApp implements EmbeddedServletContainerCustomizer {
     }
 
     @Bean
-
-
     public HibernateJpaSessionFactoryBean sessionFactory() {
         return new HibernateJpaSessionFactoryBean();
     }
