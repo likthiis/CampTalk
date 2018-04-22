@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "CTChatTableViewController.h"
 
 @interface ViewController ()
 
@@ -26,8 +27,15 @@
     if (self.player) {
         [self.player prepareToPlay];
     }
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(linJiang:)];
     [self.view addGestureRecognizer:tap];
+    
+    self.navigationItem.backBarButtonItem =
+    [[UIBarButtonItem alloc] initWithTitle:@""
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:nil];
 }
 
 - (void)linJiang:(id)sender {
@@ -39,5 +47,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)chat:(id)sender {
+    [self.navigationController pushViewController:[[CTChatTableViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
+    
+}
 
 @end

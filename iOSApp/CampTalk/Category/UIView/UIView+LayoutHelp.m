@@ -11,10 +11,10 @@
 @implementation UIView (LayoutHelp)
 
 - (BOOL)layoutLeftToRight {
-    if (([[[UIDevice currentDevice] systemVersion] compare:@("9") options:NSNumericSearch] == NSOrderedAscending)) {
-        return ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionLeftToRight);
-    } else {
+    if (@available(iOS 9.0, *)) {
         return ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionLeftToRight);
+    } else {
+        return ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionLeftToRight);
     }
 }
 

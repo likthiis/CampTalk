@@ -20,7 +20,6 @@
 		6BD76677208508F5003FD599 /* UINavigationController+ShouldPop.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76656208508F5003FD599 /* UINavigationController+ShouldPop.m */; };
 		6BD76678208508F5003FD599 /* UITabBar+Dot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76659208508F5003FD599 /* UITabBar+Dot.m */; };
 		6BD76679208508F5003FD599 /* UIImage+Name.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD7665D208508F5003FD599 /* UIImage+Name.m */; };
-		6BD7667A208508F5003FD599 /* UIView+LayoutHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76661208508F5003FD599 /* UIView+LayoutHelp.m */; };
 		6BD7667B208508F5003FD599 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76662208508F5003FD599 /* UIImage+Tint.m */; };
 		6BD7667C208508F5003FD599 /* UIImage+JCPictureEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76664208508F5003FD599 /* UIImage+JCPictureEdit.m */; };
 		6BD7667D208508F5003FD599 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76665208508F5003FD599 /* UIImage+ImageEffects.m */; };
@@ -33,7 +32,6 @@
 		6BD766A320850E11003FD599 /* UITabBar+Dot.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76659208508F5003FD599 /* UITabBar+Dot.m */; };
 		6BD766A420850E11003FD599 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD7663A208504E3003FD599 /* main.m */; };
 		6BD766A520850E11003FD599 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD7662C208504E3003FD599 /* AppDelegate.m */; };
-		6BD766A620850E11003FD599 /* UIView+LayoutHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76661208508F5003FD599 /* UIView+LayoutHelp.m */; };
 		6BD766A720850E11003FD599 /* UIImage+Tint.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76662208508F5003FD599 /* UIImage+Tint.m */; };
 		6BD766A820850E11003FD599 /* UIImage+JCPictureEdit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76664208508F5003FD599 /* UIImage+JCPictureEdit.m */; };
 		6BD766A920850E11003FD599 /* UIView+Radius.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76654208508F4003FD599 /* UIView+Radius.m */; };
@@ -45,6 +43,24 @@
 		6BD766B120850E11003FD599 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BD76631208504E3003FD599 /* Main.storyboard */; };
 		6BD766BA208515B8003FD599 /* linJiang.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766B7208511D1003FD599 /* linJiang.m4a */; };
 		6BD766BB208515B9003FD599 /* linJiang.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766B7208511D1003FD599 /* linJiang.m4a */; };
+		9E7276402088A01900FE9454 /* RGBorderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72763F2088A01900FE9454 /* RGBorderLabel.m */; };
+		9E7276412088A01900FE9454 /* RGBorderLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72763F2088A01900FE9454 /* RGBorderLabel.m */; };
+		9E7276442088F3B300FE9454 /* CTChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7276432088F3B200FE9454 /* CTChatTableViewController.m */; };
+		9E7276452088F3B300FE9454 /* CTChatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7276432088F3B200FE9454 /* CTChatTableViewController.m */; };
+		9E72764B2088FE2A00FE9454 /* CTChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72764A2088FE2A00FE9454 /* CTChatTableViewCell.m */; };
+		9E72764C2088FE2A00FE9454 /* CTChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72764A2088FE2A00FE9454 /* CTChatTableViewCell.m */; };
+		9E7276512088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E7276502088FEBE00FE9454 /* CTChatTableViewCell.xib */; };
+		9E7276522088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E7276502088FEBE00FE9454 /* CTChatTableViewCell.xib */; };
+		9E72765520896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72765420896B9B00FE9454 /* CTChatBubbleLabel.m */; };
+		9E72765620896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72765420896B9B00FE9454 /* CTChatBubbleLabel.m */; };
+		9E7276662089E52000FE9454 /* chatBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E7276652089E52000FE9454 /* chatBg.png */; };
+		9E7276672089E52000FE9454 /* chatBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E7276652089E52000FE9454 /* chatBg.png */; };
+		9E72766B208A23D600FE9454 /* CTChatModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72766A208A23D600FE9454 /* CTChatModel.m */; };
+		9E72766C208A23D600FE9454 /* CTChatModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72766A208A23D600FE9454 /* CTChatModel.m */; };
+		9E727670208A36F500FE9454 /* CTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72766F208A36F500FE9454 /* CTNavigationController.m */; };
+		9E727671208A36F500FE9454 /* CTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72766F208A36F500FE9454 /* CTNavigationController.m */; };
+		9E727675208C13BF00FE9454 /* CTChatInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E727674208C13BF00FE9454 /* CTChatInputView.m */; };
+		9E727676208C13BF00FE9454 /* CTChatInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E727674208C13BF00FE9454 /* CTChatInputView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,15 +90,29 @@
 		6BD7665E208508F5003FD599 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		6BD7665F208508F5003FD599 /* UIImage+JCPictureEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+JCPictureEdit.h"; sourceTree = "<group>"; };
 		6BD76660208508F5003FD599 /* UIImage+Read.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Read.h"; sourceTree = "<group>"; };
-		6BD76661208508F5003FD599 /* UIView+LayoutHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+LayoutHelp.m"; path = "../UIImage/UIView+LayoutHelp.m"; sourceTree = "<group>"; };
 		6BD76662208508F5003FD599 /* UIImage+Tint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Tint.m"; sourceTree = "<group>"; };
 		6BD76663208508F5003FD599 /* UIImage+Name.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Name.h"; sourceTree = "<group>"; };
 		6BD76664208508F5003FD599 /* UIImage+JCPictureEdit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+JCPictureEdit.m"; sourceTree = "<group>"; };
 		6BD76665208508F5003FD599 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
-		6BD76666208508F5003FD599 /* UIView+LayoutHelp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+LayoutHelp.h"; path = "../UIImage/UIView+LayoutHelp.h"; sourceTree = "<group>"; };
 		6BD76667208508F5003FD599 /* UIImage+Read.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Read.m"; sourceTree = "<group>"; };
 		6BD766B520850E11003FD599 /* CampTalk Beta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CampTalk Beta.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BD766B7208511D1003FD599 /* linJiang.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = linJiang.m4a; sourceTree = "<group>"; };
+		9E72763E2088A01900FE9454 /* RGBorderLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGBorderLabel.h; sourceTree = "<group>"; };
+		9E72763F2088A01900FE9454 /* RGBorderLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGBorderLabel.m; sourceTree = "<group>"; };
+		9E7276422088F3B200FE9454 /* CTChatTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTChatTableViewController.h; sourceTree = "<group>"; };
+		9E7276432088F3B200FE9454 /* CTChatTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTChatTableViewController.m; sourceTree = "<group>"; };
+		9E7276492088FE2A00FE9454 /* CTChatTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTChatTableViewCell.h; sourceTree = "<group>"; };
+		9E72764A2088FE2A00FE9454 /* CTChatTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTChatTableViewCell.m; sourceTree = "<group>"; };
+		9E7276502088FEBE00FE9454 /* CTChatTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CTChatTableViewCell.xib; sourceTree = "<group>"; };
+		9E72765320896B9B00FE9454 /* CTChatBubbleLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTChatBubbleLabel.h; sourceTree = "<group>"; };
+		9E72765420896B9B00FE9454 /* CTChatBubbleLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTChatBubbleLabel.m; sourceTree = "<group>"; };
+		9E7276652089E52000FE9454 /* chatBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chatBg.png; sourceTree = "<group>"; };
+		9E727669208A23D600FE9454 /* CTChatModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTChatModel.h; sourceTree = "<group>"; };
+		9E72766A208A23D600FE9454 /* CTChatModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTChatModel.m; sourceTree = "<group>"; };
+		9E72766E208A36F500FE9454 /* CTNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTNavigationController.h; sourceTree = "<group>"; };
+		9E72766F208A36F500FE9454 /* CTNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTNavigationController.m; sourceTree = "<group>"; };
+		9E727673208C13BF00FE9454 /* CTChatInputView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTChatInputView.h; sourceTree = "<group>"; };
+		9E727674208C13BF00FE9454 /* CTChatInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTChatInputView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +153,8 @@
 		6BD7662A208504E3003FD599 /* CampTalk */ = {
 			isa = PBXGroup;
 			children = (
+				9E72766D208A36B500FE9454 /* Base */,
+				9E72764D2088FE4800FE9454 /* Chat */,
 				6BD76645208508E9003FD599 /* Category */,
 				6BD7664120850841003FD599 /* Resource */,
 				6BD7662B208504E3003FD599 /* AppDelegate.h */,
@@ -163,9 +195,7 @@
 			children = (
 				6BD7664F208508F4003FD599 /* UIView+JTParentVC.h */,
 				6BD76652208508F4003FD599 /* UIView+JTParentVC.m */,
-				6BD76666208508F5003FD599 /* UIView+LayoutHelp.h */,
 				6BD76653208508F4003FD599 /* UIView+LayoutHelp.h */,
-				6BD76661208508F5003FD599 /* UIView+LayoutHelp.m */,
 				6BD76651208508F4003FD599 /* UIView+LayoutHelp.m */,
 				6BD76650208508F4003FD599 /* UIView+Radius.h */,
 				6BD76654208508F4003FD599 /* UIView+Radius.m */,
@@ -211,6 +241,7 @@
 		6BD766B8208511D7003FD599 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				9E7276652089E52000FE9454 /* chatBg.png */,
 				6BD766422085085A003FD599 /* corver.jpg */,
 			);
 			path = Image;
@@ -222,6 +253,75 @@
 				6BD766B7208511D1003FD599 /* linJiang.m4a */,
 			);
 			path = music;
+			sourceTree = "<group>";
+		};
+		9E72763D20889E7700FE9454 /* UILabel */ = {
+			isa = PBXGroup;
+			children = (
+				9E72763E2088A01900FE9454 /* RGBorderLabel.h */,
+				9E72763F2088A01900FE9454 /* RGBorderLabel.m */,
+			);
+			path = UILabel;
+			sourceTree = "<group>";
+		};
+		9E72764D2088FE4800FE9454 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				9E72764F2088FE7600FE9454 /* Controller */,
+				9E727668208A238400FE9454 /* Model */,
+				9E72764E2088FE6F00FE9454 /* View */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		9E72764E2088FE6F00FE9454 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9E7276492088FE2A00FE9454 /* CTChatTableViewCell.h */,
+				9E72764A2088FE2A00FE9454 /* CTChatTableViewCell.m */,
+				9E7276502088FEBE00FE9454 /* CTChatTableViewCell.xib */,
+				9E72765320896B9B00FE9454 /* CTChatBubbleLabel.h */,
+				9E72765420896B9B00FE9454 /* CTChatBubbleLabel.m */,
+				9E727673208C13BF00FE9454 /* CTChatInputView.h */,
+				9E727674208C13BF00FE9454 /* CTChatInputView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9E72764F2088FE7600FE9454 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9E7276422088F3B200FE9454 /* CTChatTableViewController.h */,
+				9E7276432088F3B200FE9454 /* CTChatTableViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9E727668208A238400FE9454 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9E727669208A23D600FE9454 /* CTChatModel.h */,
+				9E72766A208A23D600FE9454 /* CTChatModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9E72766D208A36B500FE9454 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				9E72763D20889E7700FE9454 /* UILabel */,
+				9E727672208ACA5100FE9454 /* UINavigationController */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		9E727672208ACA5100FE9454 /* UINavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				9E72766E208A36F500FE9454 /* CTNavigationController.h */,
+				9E72766F208A36F500FE9454 /* CTNavigationController.m */,
+			);
+			path = UINavigationController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,7 +367,7 @@
 		6BD76620208504E3003FD599 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = yuru;
 				TargetAttributes = {
 					6BD76627208504E3003FD599 = {
@@ -307,6 +407,8 @@
 				6BD766BA208515B8003FD599 /* linJiang.m4a in Resources */,
 				6BD76635208504E3003FD599 /* Assets.xcassets in Resources */,
 				6BD766432085085A003FD599 /* corver.jpg in Resources */,
+				9E7276662089E52000FE9454 /* chatBg.png in Resources */,
+				9E7276512088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD76633208504E3003FD599 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +421,8 @@
 				6BD766BB208515B9003FD599 /* linJiang.m4a in Resources */,
 				6BD766AF20850E11003FD599 /* Assets.xcassets in Resources */,
 				6BD766B020850E11003FD599 /* corver.jpg in Resources */,
+				9E7276672089E52000FE9454 /* chatBg.png in Resources */,
+				9E7276522088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD766B120850E11003FD599 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -334,16 +438,22 @@
 				6BD76679208508F5003FD599 /* UIImage+Name.m in Sources */,
 				6BD76674208508F5003FD599 /* UIView+LayoutHelp.m in Sources */,
 				6BD76675208508F5003FD599 /* UIView+JTParentVC.m in Sources */,
+				9E7276442088F3B300FE9454 /* CTChatTableViewController.m in Sources */,
 				6BD76677208508F5003FD599 /* UINavigationController+ShouldPop.m in Sources */,
 				6BD76678208508F5003FD599 /* UITabBar+Dot.m in Sources */,
+				9E727670208A36F500FE9454 /* CTNavigationController.m in Sources */,
 				6BD7663B208504E3003FD599 /* main.m in Sources */,
 				6BD7662D208504E3003FD599 /* AppDelegate.m in Sources */,
-				6BD7667A208508F5003FD599 /* UIView+LayoutHelp.m in Sources */,
+				9E72764B2088FE2A00FE9454 /* CTChatTableViewCell.m in Sources */,
+				9E72765520896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */,
 				6BD7667B208508F5003FD599 /* UIImage+Tint.m in Sources */,
 				6BD7667C208508F5003FD599 /* UIImage+JCPictureEdit.m in Sources */,
+				9E727675208C13BF00FE9454 /* CTChatInputView.m in Sources */,
 				6BD76676208508F5003FD599 /* UIView+Radius.m in Sources */,
 				6BD7667D208508F5003FD599 /* UIImage+ImageEffects.m in Sources */,
 				6BD7667E208508F5003FD599 /* UIImage+Read.m in Sources */,
+				9E72766B208A23D600FE9454 /* CTChatModel.m in Sources */,
+				9E7276402088A01900FE9454 /* RGBorderLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,16 +465,22 @@
 				6BD7669F20850E11003FD599 /* UIImage+Name.m in Sources */,
 				6BD766A020850E11003FD599 /* UIView+LayoutHelp.m in Sources */,
 				6BD766A120850E11003FD599 /* UIView+JTParentVC.m in Sources */,
+				9E7276452088F3B300FE9454 /* CTChatTableViewController.m in Sources */,
 				6BD766A220850E11003FD599 /* UINavigationController+ShouldPop.m in Sources */,
 				6BD766A320850E11003FD599 /* UITabBar+Dot.m in Sources */,
+				9E727671208A36F500FE9454 /* CTNavigationController.m in Sources */,
 				6BD766A420850E11003FD599 /* main.m in Sources */,
 				6BD766A520850E11003FD599 /* AppDelegate.m in Sources */,
-				6BD766A620850E11003FD599 /* UIView+LayoutHelp.m in Sources */,
+				9E72764C2088FE2A00FE9454 /* CTChatTableViewCell.m in Sources */,
+				9E72765620896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */,
 				6BD766A720850E11003FD599 /* UIImage+Tint.m in Sources */,
 				6BD766A820850E11003FD599 /* UIImage+JCPictureEdit.m in Sources */,
+				9E727676208C13BF00FE9454 /* CTChatInputView.m in Sources */,
 				6BD766A920850E11003FD599 /* UIView+Radius.m in Sources */,
 				6BD766AA20850E11003FD599 /* UIImage+ImageEffects.m in Sources */,
 				6BD766AB20850E11003FD599 /* UIImage+Read.m in Sources */,
+				9E72766C208A23D600FE9454 /* CTChatModel.m in Sources */,
+				9E7276412088A01900FE9454 /* RGBorderLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +520,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -411,6 +528,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -459,6 +577,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -466,6 +585,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -498,12 +618,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = CampTalk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -512,12 +635,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = CampTalk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
