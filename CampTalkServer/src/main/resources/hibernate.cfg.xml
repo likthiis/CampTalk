@@ -27,6 +27,9 @@
         <property name="hibernate.event.merge.entity_copy_observer">allow</property>
         <mapping class="org.yuru.campTalk.entity.YuruSessionEntity"/>
         <mapping class="org.yuru.campTalk.entity.YuruUserEntity"/>
+        <mapping class="org.yuru.campTalk.entity.YuruContentEntity"/>
+        <mapping class="org.yuru.campTalk.entity.YuruRelationEntity"/>
+        <mapping class="org.yuru.campTalk.entity.YuruTalkEntity"/>
 
     </session-factory>
 

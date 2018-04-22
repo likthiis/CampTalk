@@ -1,14 +1,12 @@
 package org.yuru.campTalk.restful;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.dto.ReturnModelHelper;
 import org.yuru.campTalk.dto.StatusCode;
 import org.yuru.campTalk.service.AuthorizationService;
+import org.yuru.campTalk.service.RegisterService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     /**
      * 使用Uid和密码明文获得授权token.
      * @param uid 用户的唯一uid(required)

@@ -18,8 +18,9 @@ import java.util.UUID;
  */
 public class AuthorizationService {
 
+
     /**
-     * 处理服务授权token获取服务
+     * 处理服务授权token获取服务((测试用)Likthiis注：就是登录啦)
      * @param uid 用户唯一id
      * @param rawPassword 密码（未加密字符串，安全性依靠信道的可靠性）
      * @return 授权token，如果登录失败，则返回一个以#开头的错误原因字符串

@@ -50,9 +50,10 @@ public class HibernateUtil {
      */
     //从这个线程中获得会话，并返回会话的实例(里面应该有相关的数据)。
 
+    //告诉编译器出现警告也要跳过。
     @SuppressWarnings("unchecked")
     public static Session GetLocalSession() {
-        Session s = (Session) session.get(); //会话获得。
+        Session s = (Session) session.get(); //会话获得。(好像是组键值对)
         if (s == null) {  //如果这个会话是不存在的。
             s = HibernateUtil.GetSessionFactory().openSession(); //就调用上面的获得会话工厂的实例，并将里面的实例提取出来。
             HibernateUtil.session.set(s); //设置一下里面的数据。
@@ -82,5 +83,9 @@ public class HibernateUtil {
             LogUtil.Echo("Close hibernate session failed, " + ex,
                     HibernateUtil.class.getName(), LogLevelType.ERROR); //应急手段。
         }
+    }
+
+    public static SessionFactory getSessionFactory(){
+        return sessionFactory;
     }
 }
