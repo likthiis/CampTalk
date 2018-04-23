@@ -13,8 +13,9 @@
  */
 @protocol UINavigationControllerShouldPopDelegate <NSObject>
 
-- (BOOL)navigationControllerControllerShouldPop:(UINavigationController *)navigationController;
-- (BOOL)navigationControllerControllerShouldInteractivePop:(UINavigationController *)navigationController;
+- (BOOL)navigationControllerShouldPop:(UINavigationController *)navigationController isInteractive:(BOOL)isInteractive;
+
+- (void)navigationController:(UINavigationController *)navigationController interactivePopResult:(BOOL)finished;
 
 @end
 

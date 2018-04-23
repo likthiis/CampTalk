@@ -13,19 +13,20 @@
 #import "CTStubbornView.h"
 
 #import "UIImage+Read.h"
+#import "UINavigationController+ShouldPop.h"
 
 #import "CTChatModel.h"
 
 static CGFloat kMinInputViewHeight = 60.f;
 
-@interface CTChatTableViewController () <CTChatInputViewDelegate>
+@interface CTChatTableViewController () <CTChatInputViewDelegate, UINavigationControllerShouldPopDelegate>
 
 @property (nonatomic, strong) CTStubbornView *stubbornView;
 @property (nonatomic, strong) CTChatInputView *inputView;
 
-@property (nonatomic, assign) CGFloat inputViewHeight;
 @property (nonatomic, assign) CGFloat keyboardHeight;
 @property (nonatomic, assign) BOOL needScrollToBottom;
+@property (nonatomic, assign) BOOL viewControllerWillPop;
 
 @property (nonatomic, strong) NSMutableArray <CTChatModel *> *data;
 
@@ -65,7 +66,7 @@ static CGFloat kMinInputViewHeight = 60.f;
     }
     _needScrollToBottom = YES;
     
-    _inputView = [[CTChatInputView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - _inputViewHeight, self.view.bounds.size.width, _inputViewHeight)];
+    _inputView = [[CTChatInputView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kMinInputViewHeight, self.view.bounds.size.width, kMinInputViewHeight)];
     _inputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     _inputView.delegate = self;
     [self __configInputViewLayout];
@@ -77,11 +78,21 @@ static CGFloat kMinInputViewHeight = 60.f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (_needScrollToBottom) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_data.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_data.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-            self->_needScrollToBottom = NO;
         });
+        _needScrollToBottom = NO;
     }
+}
+
+- (BOOL)navigationControllerShouldPop:(UINavigationController *)navigationController isInteractive:(BOOL)isInteractive {
+    _viewControllerWillPop = YES;
+    return YES;
+}
+
+- (void)navigationController:(UINavigationController *)navigationController interactivePopResult:(BOOL)finished {
+    _viewControllerWillPop = finished;
 }
 
 #pragma mark - Table view data source
@@ -159,6 +170,9 @@ static CGFloat kMinInputViewHeight = 60.f;
 }
 
 - (void)__configInputViewLayout {
+    if (_viewControllerWillPop) {
+        return;
+    }
     
     CGFloat inputHeight = MAX(kMinInputViewHeight, _inputView.contentHeight);
     _inputView.frame = CGRectMake(0, self.view.frame.size.height - inputHeight - _keyboardHeight, self.view.bounds.size.width, inputHeight);
