@@ -2,7 +2,7 @@
 //  CTChatTableViewController.m
 //  CampTalk
 //
-//  Created by kikilee on 2018/4/19.
+//  Created by renge on 2018/4/19.
 //  Copyright © 2018年 yuru. All rights reserved.
 //
 
@@ -25,6 +25,7 @@ static CGFloat kMinInputViewHeight = 60.f;
 
 @property (nonatomic, assign) CGFloat inputViewHeight;
 @property (nonatomic, assign) CGFloat keyboardHeight;
+@property (nonatomic, assign) BOOL needScrollToBottom;
 
 @property (nonatomic, strong) NSMutableArray <CTChatModel *> *data;
 
@@ -62,6 +63,7 @@ static CGFloat kMinInputViewHeight = 60.f;
         model.message = string;
         [_data addObject:model];
     }
+    _needScrollToBottom = YES;
     
     _inputView = [[CTChatInputView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - _inputViewHeight, self.view.bounds.size.width, _inputViewHeight)];
     _inputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
@@ -74,10 +76,12 @@ static CGFloat kMinInputViewHeight = 60.f;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_data.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    });
+    if (_needScrollToBottom) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_data.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            self->_needScrollToBottom = NO;
+        });
+    }
 }
 
 #pragma mark - Table view data source
@@ -178,7 +182,6 @@ static CGFloat kMinInputViewHeight = 60.f;
     [notificationCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
-
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
