@@ -19,7 +19,9 @@ static CGFloat kMinInputViewHeight = 60.f;
 
 @interface CTChatTableViewController () <CTChatInputViewDelegate>
 
+@property (nonatomic, strong) UIView *stubbornView;
 @property (nonatomic, strong) CTChatInputView *inputView;
+
 @property (nonatomic, assign) CGFloat inputViewHeight;
 @property (nonatomic, assign) CGFloat keyboardHeight;
 
@@ -33,6 +35,10 @@ static CGFloat kMinInputViewHeight = 60.f;
     [super viewDidLoad];
     
     self.navigationItem.title = @"富士山烤肉场";
+    
+    _stubbornView = [[UIView alloc] initWithFrame:self.view.bounds];
+    _stubbornView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    [self.view addSubview:_stubbornView];
     
     [CTChatTableViewCell registerForTableView:self.tableView];
     
@@ -60,7 +66,7 @@ static CGFloat kMinInputViewHeight = 60.f;
     _inputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     _inputView.delegate = self;
     [self __configInputViewLayout];
-    [self.view addSubview:_inputView];
+    [self.stubbornView addSubview:_inputView];
     
     [self __addKeyboardNotification];
 }
@@ -104,10 +110,13 @@ static CGFloat kMinInputViewHeight = 60.f;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    CGRect bounds = self.view.bounds;
+    _stubbornView.frame = bounds;
+    
     [[self.tableView indexPathsForVisibleRows] enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull visibleIndexPath, NSUInteger idx, BOOL * _Nonnull stop) {
         [self adjustCellAlphaForIndexPath:visibleIndexPath];
     }];
-    [self __configInputViewLayout];
 }
 
 - (void)adjustCellAlphaForIndexPath:(NSIndexPath *)indexPath {
@@ -146,14 +155,19 @@ static CGFloat kMinInputViewHeight = 60.f;
 
 - (void)__configInputViewLayout {
     
-    CGFloat offset = self.tableView.contentOffset.y;
-    
     CGFloat inputHeight = MAX(kMinInputViewHeight, _inputView.contentHeight);
-    _inputView.frame = CGRectMake(0, self.view.frame.size.height - inputHeight + offset - _keyboardHeight, self.view.bounds.size.width, inputHeight);
+    _inputView.frame = CGRectMake(0, self.view.frame.size.height - inputHeight - _keyboardHeight, self.view.bounds.size.width, inputHeight);
     
+    CGPoint contentOffset = self.tableView.contentOffset;
     UIEdgeInsets contentInset = self.tableView.contentInset;
-    contentInset.bottom = inputHeight + 10.f;
+    
+    CGFloat bottom = self.view.frame.size.height - CGRectGetMinY(_inputView.frame) + 10.f;
+    
+    contentOffset.y += bottom - contentInset.bottom;
+    contentInset.bottom = bottom;
+    
     self.tableView.contentInset = contentInset;
+    self.tableView.contentOffset = contentOffset;
 }
 
 #pragma mark - Keyboard

@@ -80,7 +80,7 @@ static UIEdgeInsets kCTChatInputInset = {8,5,5,5};
     if (@available(iOS 11.0, *)) {
         _textView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
-//    _textView.font = [UIFont systemFontOfSize:15.f];
+    _textView.tintColor = [UIColor whiteColor];
     _textView.delegate = self;
     [self addSubview:_textView];
     
