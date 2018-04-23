@@ -10,6 +10,7 @@
 
 #import "CTChatTableViewCell.h"
 #import "CTChatInputView.h"
+#import "CTStubbornView.h"
 
 #import "UIImage+Read.h"
 
@@ -19,7 +20,7 @@ static CGFloat kMinInputViewHeight = 60.f;
 
 @interface CTChatTableViewController () <CTChatInputViewDelegate>
 
-@property (nonatomic, strong) UIView *stubbornView;
+@property (nonatomic, strong) CTStubbornView *stubbornView;
 @property (nonatomic, strong) CTChatInputView *inputView;
 
 @property (nonatomic, assign) CGFloat inputViewHeight;
@@ -36,7 +37,7 @@ static CGFloat kMinInputViewHeight = 60.f;
     
     self.navigationItem.title = @"富士山烤肉场";
     
-    _stubbornView = [[UIView alloc] initWithFrame:self.view.bounds];
+    _stubbornView = [[CTStubbornView alloc] initWithFrame:self.view.bounds];
     _stubbornView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:_stubbornView];
     
@@ -66,7 +67,7 @@ static CGFloat kMinInputViewHeight = 60.f;
     _inputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     _inputView.delegate = self;
     [self __configInputViewLayout];
-    [self.stubbornView addSubview:_inputView];
+    [_stubbornView addSubview:_inputView];
     
     [self __addKeyboardNotification];
 }

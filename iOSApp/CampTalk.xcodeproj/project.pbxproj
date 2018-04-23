@@ -61,6 +61,8 @@
 		9E727671208A36F500FE9454 /* CTNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72766F208A36F500FE9454 /* CTNavigationController.m */; };
 		9E727675208C13BF00FE9454 /* CTChatInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E727674208C13BF00FE9454 /* CTChatInputView.m */; };
 		9E727676208C13BF00FE9454 /* CTChatInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E727674208C13BF00FE9454 /* CTChatInputView.m */; };
+		9E72767D208DBE7D00FE9454 /* CTStubbornView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72767C208DBE7D00FE9454 /* CTStubbornView.m */; };
+		9E72767E208DBE7D00FE9454 /* CTStubbornView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72767C208DBE7D00FE9454 /* CTStubbornView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +115,8 @@
 		9E72766F208A36F500FE9454 /* CTNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTNavigationController.m; sourceTree = "<group>"; };
 		9E727673208C13BF00FE9454 /* CTChatInputView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTChatInputView.h; sourceTree = "<group>"; };
 		9E727674208C13BF00FE9454 /* CTChatInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTChatInputView.m; sourceTree = "<group>"; };
+		9E72767B208DBE7D00FE9454 /* CTStubbornView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTStubbornView.h; sourceTree = "<group>"; };
+		9E72767C208DBE7D00FE9454 /* CTStubbornView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTStubbornView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +288,8 @@
 				9E72765420896B9B00FE9454 /* CTChatBubbleLabel.m */,
 				9E727673208C13BF00FE9454 /* CTChatInputView.h */,
 				9E727674208C13BF00FE9454 /* CTChatInputView.m */,
+				9E72767B208DBE7D00FE9454 /* CTStubbornView.h */,
+				9E72767C208DBE7D00FE9454 /* CTStubbornView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -451,6 +457,7 @@
 				9E727675208C13BF00FE9454 /* CTChatInputView.m in Sources */,
 				6BD76676208508F5003FD599 /* UIView+Radius.m in Sources */,
 				6BD7667D208508F5003FD599 /* UIImage+ImageEffects.m in Sources */,
+				9E72767D208DBE7D00FE9454 /* CTStubbornView.m in Sources */,
 				6BD7667E208508F5003FD599 /* UIImage+Read.m in Sources */,
 				9E72766B208A23D600FE9454 /* CTChatModel.m in Sources */,
 				9E7276402088A01900FE9454 /* RGBorderLabel.m in Sources */,
@@ -478,6 +485,7 @@
 				9E727676208C13BF00FE9454 /* CTChatInputView.m in Sources */,
 				6BD766A920850E11003FD599 /* UIView+Radius.m in Sources */,
 				6BD766AA20850E11003FD599 /* UIImage+ImageEffects.m in Sources */,
+				9E72767E208DBE7D00FE9454 /* CTStubbornView.m in Sources */,
 				6BD766AB20850E11003FD599 /* UIImage+Read.m in Sources */,
 				9E72766C208A23D600FE9454 /* CTChatModel.m in Sources */,
 				9E7276412088A01900FE9454 /* RGBorderLabel.m in Sources */,
