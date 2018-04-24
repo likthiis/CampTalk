@@ -51,7 +51,6 @@ static CGFloat kMinInputViewHeight = 60.f;
     
     self.tableView.backgroundView = bgView;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nvgbar_music"] style:UIBarButtonItemStylePlain target:self action:nil];
     
@@ -180,13 +179,18 @@ static CGFloat kMinInputViewHeight = 60.f;
     CGPoint contentOffset = self.tableView.contentOffset;
     UIEdgeInsets contentInset = self.tableView.contentInset;
     
-    CGFloat bottom = self.view.frame.size.height - CGRectGetMinY(_inputView.frame) + 10.f;
+    CGFloat bottomMargin = 10.f;
+    CGFloat bottom = self.view.frame.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin;
     
     contentOffset.y += bottom - contentInset.bottom;
     contentInset.bottom = bottom;
     
     self.tableView.contentInset = contentInset;
     self.tableView.contentOffset = contentOffset;
+    
+    UIEdgeInsets scrollIndicatorInsets = self.tableView.scrollIndicatorInsets;
+    scrollIndicatorInsets.bottom = bottom - bottomMargin;
+    self.tableView.scrollIndicatorInsets = scrollIndicatorInsets;
 }
 
 #pragma mark - Keyboard
