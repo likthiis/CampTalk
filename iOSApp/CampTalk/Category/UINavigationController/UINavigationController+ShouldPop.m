@@ -73,34 +73,31 @@ NSString *kInteractiveViewController = @"kInteractiveViewController";
         UIViewController *vc = objc_getAssociatedObject(self, kInteractiveViewController.UTF8String);
         objc_setAssociatedObject(self, kInteractiveViewController.UTF8String, 0, OBJC_ASSOCIATION_ASSIGN);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            UIView *animateView = vc.view;
-            while (animateView.layer.animationKeys.count == 0) {
-                animateView = animateView.superview;
+        [self interactivePopResultCallback:vc];
+    }
+}
+
+- (void)interactivePopResultCallback:(UIViewController *)vc {
+    UIView *animateView = vc.view;
+    while (animateView && animateView.layer.animationKeys.count == 0) {
+        animateView = animateView.superview;
+    }
+    
+    if (!animateView) {
+        if (vc && [vc conformsToProtocol:@protocol(UINavigationControllerShouldPopDelegate)]) {
+            if ([vc respondsToSelector:@selector(navigationController:interactivePopResult:)]) {
+                [(id <UINavigationControllerShouldPopDelegate>)vc navigationController:self interactivePopResult:self.topViewController != vc];
             }
-            __block CGFloat duration = 0.f;
-            [animateView.layer.animationKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                CAAnimation *animation = [animateView.layer animationForKey:obj];
-                duration = MAX(animation.duration, duration);
-            }];
-            duration += 0.05f;
-            
-            void(^callBack)(void) = ^{
-                if (vc && [vc conformsToProtocol:@protocol(UINavigationControllerShouldPopDelegate)]) {
-                    if ([vc respondsToSelector:@selector(navigationController:interactivePopResult:)]) {
-                        [(id <UINavigationControllerShouldPopDelegate>)vc navigationController:self interactivePopResult:self.topViewController != vc];
-                    }
-                }
-            };
-            
-            if (duration == 0.f) {
-                callBack();
-            } else {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    callBack();
-                });
-            }
+        }
+    } else {
+        __block CGFloat duration = 0.f;
+        [animateView.layer.animationKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            CAAnimation *animation = [animateView.layer animationForKey:obj];
+            duration = MAX(animation.duration, duration);
+        }];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self interactivePopResultCallback:vc];
         });
     }
 }
