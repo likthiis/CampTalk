@@ -22,40 +22,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/register")
 public class RegisterController {
-
-
     /**
-     * 进行注册，暂时只需要输入密码和昵称就可以了。
-     * @param uid 用户自定义不可重复名(required)
-     *
-     * 特别提醒：本设计如若后期修改，则需要对服务端和客户端一定规模的更新。
-     *
-     * @param password 用户明文密码(required)
+     * User can use the uid and password to register.
+     * @param uid is set by user,and it is unique(required)
+     * @param password is the cleartext one(required)
      * @return response package
      * @see ReturnModel
      */
-
     @RequestMapping(produces = {"application/json"})
     @Transactional
-    public ReturnModel Register(@RequestParam(value="uid", required = false)String uid,
-                                @RequestParam(value="password", required = false)String password){
-        ReturnModel usModel = new ReturnModel();
+    public ReturnModel Register(@RequestParam(value="uid")String uid,
+                                @RequestParam(value="password")String password){
+        ReturnModel returnModel = new ReturnModel();
         try {
-            //缺失参数。
+            // Handle missing params.
             List<String> missingParams = new ArrayList<>();
             if (uid == null) missingParams.add("uid");
             if (password == null) missingParams.add("password");
             if (missingParams.size() > 0) {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
-            // 注册
+            // Register
             String jsonifyResponse = RegisterService.Register(uid, password);
-            // 返回
-            ReturnModelHelper.StandardResponse(usModel, StatusCode.OK, jsonifyResponse);
+            // Return
+            ReturnModelHelper.StandardResponse(returnModel, StatusCode.OK, jsonifyResponse);
 
         }catch (Exception e) {
-            ReturnModelHelper.ExceptionResponse(usModel, e.getClass().getName());
+            ReturnModelHelper.ExceptionResponse(returnModel, e.getClass().getName());
         }
-        return usModel;
+        return returnModel;
     }
 }

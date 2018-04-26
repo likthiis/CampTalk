@@ -15,5 +15,6 @@ public class GlobalConfigContext {
     /**
      * Valid duration of authorization token.
      */
-    public static final Long AUTHORITY_TOKEN_VALID_SECOND = 2 * 60 * 60L;
+    //public static final Long AUTHORITY_TOKEN_VALID_SECOND = 2 * 60 * 60L;
+    public static final Long AUTHORITY_TOKEN_VALID_SECOND = 20L;
 }

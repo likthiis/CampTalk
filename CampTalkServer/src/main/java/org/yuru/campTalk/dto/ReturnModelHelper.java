@@ -14,28 +14,29 @@ import java.util.List;
 public class ReturnModelHelper {
     /**
      * Warp success response to a ReturnModel
-     * @param rnModel return model package to be updated
+     * @param returnModel return model package to be updated
      * @param code status code enum
      * @param retStr execution return data
      */
-    public static void StandardResponse(ReturnModel rnModel, StatusCode code, String retStr) {
-        rnModel.setCode(code);
-        rnModel.setTimestamp(TimestampUtil.GetTimestampString());
+    public static void StandardResponse(ReturnModel returnModel, StatusCode code, String retStr) {
+        returnModel.setCode(code);
+        returnModel.setTimestamp(TimestampUtil.GetTimestampString());
         ReturnElement returnElement = new ReturnElement();
         returnElement.setData(retStr);
-        rnModel.setReturnElement(returnElement);
+        returnModel.setReturnElement(returnElement);
     }
 
     /**
      * Router exception handler.
+     * @param returnModel return model package to be updated
      * @param exception exception descriptor
      */
-    public static void ExceptionResponse(ReturnModel rnModel, String exception) {
-        rnModel.setCode(StatusCode.Exception);
-        rnModel.setTimestamp(TimestampUtil.GetTimestampString());
+    public static void ExceptionResponse(ReturnModel returnModel, String exception) {
+        returnModel.setCode(StatusCode.Exception);
+        returnModel.setTimestamp(TimestampUtil.GetTimestampString());
         ReturnElement returnElement = new ReturnElement();
         returnElement.setMessage(exception);
-        rnModel.setReturnElement(returnElement);
+        returnModel.setReturnElement(returnElement);
     }
 
     /**
@@ -44,15 +45,15 @@ public class ReturnModelHelper {
      * @return response package
      */
     public static ReturnModel UnauthorizedResponse(String token) {
-        ReturnModel rnModel = new ReturnModel();
-        rnModel.setCode(StatusCode.Unauthorized);
-        rnModel.setTimestamp(TimestampUtil.GetTimestampString());
+        ReturnModel returnModel = new ReturnModel();
+        returnModel.setCode(StatusCode.Unauthorized);
+        returnModel.setTimestamp(TimestampUtil.GetTimestampString());
         ReturnElement returnElement = new ReturnElement();
         returnElement.setMessage(token);
-        rnModel.setReturnElement(returnElement);
+        returnModel.setReturnElement(returnElement);
         LogUtil.Log(String.format("Unauthorized service request (token:%s)", token),
                 ReturnModelHelper.class.getName(), LogLevelType.UNAUTHORIZED, "");
-        return rnModel;
+        return returnModel;
     }
 
     /**
@@ -61,9 +62,9 @@ public class ReturnModelHelper {
      * @return response package
      */
     public static ReturnModel MissingParametersResponse(List<String> params) {
-        ReturnModel rnModel = new ReturnModel();
-        rnModel.setCode(StatusCode.Fail);
-        rnModel.setTimestamp(TimestampUtil.GetTimestampString());
+        ReturnModel returnModel = new ReturnModel();
+        returnModel.setCode(StatusCode.Fail);
+        returnModel.setTimestamp(TimestampUtil.GetTimestampString());
         ReturnElement returnElement = new ReturnElement();
         StringBuilder sb = new StringBuilder();
         sb.append("miss required parameters:");
@@ -71,7 +72,7 @@ public class ReturnModelHelper {
             sb.append(s).append(" ");
         }
         returnElement.setMessage(sb.toString());
-        rnModel.setReturnElement(returnElement);
-        return rnModel;
+        returnModel.setReturnElement(returnElement);
+        return returnModel;
     }
 }

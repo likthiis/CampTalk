@@ -12,31 +12,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 聊天管理器，负责功能：
- * [1]生成会话；
- * [2]发送信息(客户端->服务端)；
- * [3]发送信息(服务端->客户端)；
- *
+ * A controller to manage chats between users.
  */
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
 
     /**
-     * [1]会话生成器。
-     * @param target 用户希望联系的朋友uid
-     * @param myself 自己的uid
+     * While a user want to chat with one of its friends,the system will help it
+     * generate a database entry.
+     * @param target represents the man that is the friend user wants to chat with(required)
+     * @param myself represents the user(required)
      * @return response package
      * @see ReturnModel
      */
     @RequestMapping(value = "/setRe",produces = {"application/json"})
     @ResponseBody
     @Transactional
-    public ReturnModel RelationSetting(@RequestParam(value = "target", required = false)String target,
-                                       @RequestParam(value = "myself", required = false)String myself) {
+    public ReturnModel RelationSetting(@RequestParam(value = "target")String target,
+                                       @RequestParam(value = "myself")String myself) {
         ReturnModel rnModel = new ReturnModel();
         try {
-            // 参数处理
+            // handle missing params
             List<String> missingParams = new ArrayList<>();
             if (target == null) missingParams.add("target");
             if (myself == null) missingParams.add("myself");
@@ -44,10 +41,10 @@ public class ChatController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
 
-            // 会话生成
+            // generate the session
             String jsonifyResponse = ChatService.RelationSetting(target, myself);
 
-            // 返回
+            // return
             ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResponse);
 
         } catch(Exception e) {
@@ -57,10 +54,10 @@ public class ChatController {
     }
 
     /**
-     * [2]信息接受器。
-     * @param target 用户希望联系的朋友uid
-     * @param content 发送的内容
-     * @param myself 用户自己的uid
+     *
+     * @param target
+     * @param content
+     * @param myself
      * @return response package
      * @see ReturnModel
      */
@@ -94,15 +91,13 @@ public class ChatController {
     }
 
     /**
-     * [3]信息代传器。
-     * @param target 用户希望联系的朋友uid
-     * @param content 发送的内容
+     *
+     * @param target
+     * @param content
      * @return response package
      * @see ReturnModel
      */
 
-    //TODO:发出的数据格式的注解
-    @RequestBody
     @Transactional
     public void MessageSend(@RequestParam(value = "target", required = false)String target,
                             @RequestParam(value = "content", required = false)String content) {

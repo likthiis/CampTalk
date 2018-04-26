@@ -1,13 +1,17 @@
 package org.yuru.campTalk.restful;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.dto.ReturnModelHelper;
 import org.yuru.campTalk.dto.StatusCode;
 import org.yuru.campTalk.service.AuthorizationService;
-import org.yuru.campTalk.service.RegisterService;
+import org.yuru.campTalk.websocket.MyWebSocketHandler;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,34 +23,40 @@ import java.util.List;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    @Autowired
+    MyWebSocketHandler handler;
     /**
-     * 使用Uid和密码明文获得授权token.
-     * @param uid 用户的唯一uid(required)
-     * @param password 用户明文密码(required)
+     * Using uid and cleartext password to get the token.
+     * At the same time,a connection using websocket will be built up.
      * @return response package
      * @see ReturnModel
      */
     @RequestMapping(value = "/login", produces = {"application/json"})
     @ResponseBody
     @Transactional
-    public ReturnModel Login(@RequestParam(value="uid", required = false)String uid,
-                             @RequestParam(value="password", required = false)String password) {
-        ReturnModel rnModel = new ReturnModel();
+    public ReturnModel Login(HttpSession webSocketSession) {
+        String uid = (String)webSocketSession.getAttribute("uid");
+        String password = (String)webSocketSession.getAttribute("password");
+        ReturnModel returnModel = new ReturnModel();
         try {
-            // miss params
+            // Find missing params.
             List<String> missingParams = new ArrayList<>();
-            if (uid == null) missingParams.add("uid");
-            if (password == null) missingParams.add("password");
+            if (uid == null) {
+                missingParams.add("uid");
+            }
+            if (password == null) {
+                missingParams.add("password");
+            }
             if (missingParams.size() > 0) {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             // logic
-            String jsonifyResponse = AuthorizationService.Login(uid, password);
+            String jsonifyResponse = AuthorizationService.Login(webSocketSession, uid, password);
             // return
-            ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(returnModel, StatusCode.OK, jsonifyResponse);
         } catch (Exception e) {
-            ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
+            ReturnModelHelper.ExceptionResponse(returnModel, e.getClass().getName());
         }
-        return rnModel;
+        return returnModel;
     }
 }
