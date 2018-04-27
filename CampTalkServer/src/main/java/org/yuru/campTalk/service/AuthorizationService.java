@@ -3,13 +3,11 @@ package org.yuru.campTalk.service;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.web.socket.WebSocketSession;
 import org.yuru.campTalk.GlobalConfigContext;
 import org.yuru.campTalk.entity.YuruSessionEntity;
 import org.yuru.campTalk.entity.YuruUserEntity;
 import org.yuru.campTalk.utility.*;
 
-import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
@@ -65,14 +63,14 @@ public class AuthorizationService {
         }
     }
 
-    public static void SocketSetAttribute(String uid,Timestamp untilTimeStamp,HttpSession socketSession) {
-        System.out.println("userId is " + uid);
-
-        socketSession.setAttribute("userId", uid);
-        socketSession.setAttribute("untilTime", untilTimeStamp);
-        System.out.println("now the session's userId is " + socketSession.getAttribute("userId"));
-        System.out.println("now the session's timestamp is " + socketSession.getAttribute("untilTime"));
-    }
+//    public static void SocketSetAttribute(String uid,Timestamp untilTimeStamp,HttpSession socketSession) {
+//        System.out.println("userId is " + uid);
+//
+//        socketSession.setAttribute("userId", uid);
+//        socketSession.setAttribute("untilTime", untilTimeStamp);
+//        System.out.println("now the session's userId is " + socketSession.getAttribute("userId"));
+//        System.out.println("now the session's timestamp is " + socketSession.getAttribute("untilTime"));
+//    }
 
     /**
      * Using token to achieve the login function.
@@ -80,7 +78,7 @@ public class AuthorizationService {
      * @param rawPassword will be showed in encryption status
      * @return token or a string beginning with "#" if failing to login
      */
-    public static String Login(HttpSession socketSession, String uid, String rawPassword) {
+    public static String Login(String uid, String rawPassword) {
         Session DBsession = HibernateUtil.GetLocalSession();
         Transaction transaction = DBsession.beginTransaction();
         try {
@@ -102,9 +100,9 @@ public class AuthorizationService {
             // Ruin the existing session in database,if the moment in its record is after the moment of login on this occasion.
             RuinPassToken(uid,DBsession);
             // Create a new authorized session.
-            Timestamp untilTimeStamp = SetUserLoginAndSave(uid,DBsession);
+            SetUserLoginAndSave(uid,DBsession);
+            //SocketSetAttribute(uid,untilTimeStamp);
             // Transaction commit.
-            SocketSetAttribute(uid,untilTimeStamp,socketSession);
             transaction.commit();
             return "#login_success";
         }
