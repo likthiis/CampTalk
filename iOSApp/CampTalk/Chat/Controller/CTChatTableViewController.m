@@ -11,24 +11,49 @@
 #import "CTChatTableViewCell.h"
 #import "CTChatInputView.h"
 #import "CTStubbornView.h"
+#import "CTCameraView.h"
+#import "CTMusicButton.h"
 
 #import "UIImage+Read.h"
+#import "UIImage+Tint.h"
 #import "UINavigationController+ShouldPop.h"
+#import "UIViewController+SafeArea.h"
+#import "UIViewController+DragBarItem.h"
+#import "UIView+PanGestureHelp.h"
 
 #import "CTChatModel.h"
 
 static CGFloat kMinInputViewHeight = 60.f;
 
-@interface CTChatTableViewController () <CTChatInputViewDelegate, UINavigationControllerShouldPopDelegate>
+static NSString * const kCTChatToolConfig = @"kCTChatToolConfig";
+static NSMutableDictionary <NSString *, NSArray <NSNumber *> *> *__toolConfig;
+
+typedef enum : NSUInteger {
+    CTChatToolIconIdCamara = 100,
+    CTChatToolIconIdMusic,
+} CTChatToolIconId;
+
+typedef enum : NSUInteger {
+    CTChatToolIconUnknow = 0,
+    CTChatToolIconPlaceNavigation,
+    CTChatToolIconPlaceMainView,
+    CTChatToolIconPlaceInputView,
+    CTChatToolIconPlaceCount,
+} CTChatToolIconPlace;
+
+@interface CTChatTableViewController () <CTChatInputViewDelegate, UINavigationControllerShouldPopDelegate, CTCameraViewDelegate, CAAnimationDelegate>
 
 @property (nonatomic, strong) CTStubbornView *stubbornView;
 @property (nonatomic, strong) CTChatInputView *inputView;
+@property (nonatomic, strong) CTCameraView *cameraView;
 
 @property (nonatomic, assign) CGFloat keyboardHeight;
 @property (nonatomic, assign) BOOL needScrollToBottom;
 @property (nonatomic, assign) BOOL viewControllerWillPop;
 
 @property (nonatomic, strong) NSMutableArray <CTChatModel *> *data;
+
+@property (nonatomic, strong) CTMusicButton *dragButton;
 
 @end
 
@@ -40,7 +65,6 @@ static CGFloat kMinInputViewHeight = 60.f;
     self.navigationItem.title = @"富士山烤肉场";
     
     _stubbornView = [[CTStubbornView alloc] initWithFrame:self.view.bounds];
-    _stubbornView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:_stubbornView];
     
     [CTChatTableViewCell registerForTableView:self.tableView];
@@ -52,7 +76,7 @@ static CGFloat kMinInputViewHeight = 60.f;
     self.tableView.backgroundView = bgView;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nvgbar_music"] style:UIBarButtonItemStylePlain target:self action:nil];
+    self.tableView.delaysContentTouches = NO;
     
     _data = [NSMutableArray array];
     int i = 100;
@@ -71,6 +95,13 @@ static CGFloat kMinInputViewHeight = 60.f;
     [self __configInputViewLayout];
     [_stubbornView addSubview:_inputView];
     
+    _cameraView = [[CTCameraView alloc] init];
+    _cameraView.delegate = self;
+    _cameraView.hidden = YES;
+    [_cameraView showInView:_stubbornView];
+    
+    [self __configIconPlace];
+    
     [self __addKeyboardNotification];
 }
 
@@ -83,6 +114,145 @@ static CGFloat kMinInputViewHeight = 60.f;
         });
         _needScrollToBottom = NO;
     }
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    [self __configStubbornViewLayout];
+}
+
+- (void)__configIconPlace {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDictionary *dic = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kCTChatToolConfig];
+        if (dic) {
+            __toolConfig = [NSMutableDictionary dictionaryWithDictionary:dic];
+        } else {
+            NSDictionary *dic = @{
+                                  @(CTChatToolIconPlaceNavigation).stringValue : @[@(CTChatToolIconIdMusic)],
+                                  @(CTChatToolIconPlaceMainView).stringValue : @[@(CTChatToolIconIdCamara)],
+                                };
+            __toolConfig = [NSMutableDictionary dictionaryWithDictionary:dic];
+        }
+    });
+    
+    [_inputView removeAllToolBarItem];
+    [self removeAllRightDragBarItem];
+    
+    NSArray <NSString *> *allkeys = [__toolConfig allKeys];
+    for (NSString *placeNumber in allkeys) {
+        CTChatToolIconPlace place = placeNumber.integerValue;
+        
+        NSArray <NSNumber *> *allIcon = __toolConfig[placeNumber];
+        
+        for (NSNumber *iconIdNumber in allIcon) {
+            
+            CTChatToolIconId iconId = iconIdNumber.integerValue;
+            
+            switch (place) {
+                case CTChatToolIconPlaceInputView: {
+                    UIView *icon = [self iconCopyWithIconId:iconId];
+                    [_inputView addToolBarItem:[CTChatInputViewToolBarItem itemWithIcon:icon identifier:iconId]];
+                    if (iconId == CTChatToolIconIdCamara) {
+                        _cameraView.hidden = YES;
+                    }
+                    break;
+                }
+                case CTChatToolIconPlaceNavigation: {
+                    UIView *icon = [self iconCopyWithIconId:iconId];
+                    [self addRightDragBarItemWithIcon:icon itemId:iconId];
+                    if (iconId == CTChatToolIconIdCamara) {
+                        _cameraView.hidden = YES;
+                    }
+                    break;
+                }
+                case CTChatToolIconPlaceMainView: {
+                    switch (iconId) {
+                        case CTChatToolIconIdCamara:
+                            _cameraView.hidden = NO;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+}
+
+- (void)__updateIconConfig {
+    
+    NSMutableArray <NSNumber *> *icons = [NSMutableArray arrayWithArray:@[@(CTChatToolIconIdCamara), @(CTChatToolIconIdMusic)]];
+    
+    for (CTChatToolIconPlace place = CTChatToolIconPlaceNavigation; place < CTChatToolIconPlaceCount; place ++) {
+        NSMutableArray *newArray = [NSMutableArray array];
+        switch (place) {
+            case CTChatToolIconPlaceMainView:{
+                [icons enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (obj.integerValue == CTChatToolIconIdCamara && !self.cameraView.isHidden) {
+                        [newArray addObject:obj];
+                        *stop = YES;
+                    }
+                }];
+                break;
+            }
+            case CTChatToolIconPlaceInputView:{
+                [self.inputView.toolBarItems enumerateObjectsUsingBlock:^(CTChatInputViewToolBarItem * _Nonnull items, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [icons enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        if (items.identifier == obj.integerValue) {
+                            [newArray addObject:obj];
+                        }
+                    }];
+                }];
+                break;
+            }
+            case CTChatToolIconPlaceNavigation:{
+                NSArray <NSNumber *> *items = self.rightDragBarItemIds;
+                [items enumerateObjectsUsingBlock:^(NSNumber * _Nonnull itemId, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [icons enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        if (itemId.integerValue == obj.integerValue) {
+                            [newArray addObject:obj];
+                        }
+                    }];
+                }];
+            }
+            default:
+                break;
+        }
+        if (newArray.count) {
+            [__toolConfig setObject:newArray forKey:@(place).stringValue];
+        } else {
+            [__toolConfig removeObjectForKey:@(place).stringValue];
+        }
+        [icons removeObjectsInArray:newArray];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:__toolConfig forKey:kCTChatToolConfig];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (UIView *)iconCopyWithIconId:(CTChatToolIconId)iconId {
+    UIView *icon = nil;
+    switch (iconId) {
+        case CTChatToolIconIdCamara:
+            _cameraView.hidden = YES;
+            icon = [self createCameraButton];
+            break;
+        case CTChatToolIconIdMusic:
+            icon = [self createMusicButton];
+            break;
+        default:
+            break;
+    }
+    return icon;
+}
+
+- (void)__configStubbornViewLayout {
+    CGRect bounds = self.view.bounds;
+    _stubbornView.frame = UIEdgeInsetsInsetRect(bounds, self.viewSafeAreaInsets);
 }
 
 - (BOOL)navigationControllerShouldPop:(UINavigationController *)navigationController isInteractive:(BOOL)isInteractive {
@@ -126,8 +296,7 @@ static CGFloat kMinInputViewHeight = 60.f;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    CGRect bounds = self.view.bounds;
-    _stubbornView.frame = bounds;
+    [self __configStubbornViewLayout];
     
     [[self.tableView indexPathsForVisibleRows] enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull visibleIndexPath, NSUInteger idx, BOOL * _Nonnull stop) {
         [self adjustCellAlphaForIndexPath:visibleIndexPath];
@@ -173,14 +342,16 @@ static CGFloat kMinInputViewHeight = 60.f;
         return;
     }
     
+    CGRect bounds = _stubbornView.bounds;
+    
     CGFloat inputHeight = MAX(kMinInputViewHeight, _inputView.contentHeight);
-    _inputView.frame = CGRectMake(0, self.view.frame.size.height - inputHeight - _keyboardHeight, self.view.bounds.size.width, inputHeight);
+    _inputView.frame = CGRectMake(0, bounds.size.height - inputHeight - _keyboardHeight, bounds.size.width, inputHeight);
     
     CGPoint contentOffset = self.tableView.contentOffset;
     UIEdgeInsets contentInset = self.tableView.contentInset;
     
     CGFloat bottomMargin = 10.f;
-    CGFloat bottom = self.view.frame.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin;
+    CGFloat bottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin;
     
     contentOffset.y += bottom - contentInset.bottom;
     contentInset.bottom = bottom;
@@ -191,6 +362,165 @@ static CGFloat kMinInputViewHeight = 60.f;
     UIEdgeInsets scrollIndicatorInsets = self.tableView.scrollIndicatorInsets;
     scrollIndicatorInsets.bottom = bottom - bottomMargin;
     self.tableView.scrollIndicatorInsets = scrollIndicatorInsets;
+}
+
+- (void)chatInputView:(CTChatInputView *)chatInputView willRemoveItem:(CTChatInputViewToolBarItem *)item syncAnimations:(void (^)(void))syncAnimations {
+    
+    __weak typeof(self) wSelf = self;
+    
+    UIView *icon = item.icon;
+    
+    CGPoint center = [chatInputView convertPoint:icon.center toView:self.stubbornView];
+    [icon removeFromSuperview];
+    icon.tintColor = chatInputView.tintColor;
+    [self.stubbornView addSubview:icon];
+    icon.center = center;
+    
+    [self addRightDragBarItemWithDragIcon:icon
+                                   itmeId:item.identifier
+                          ignoreIntersect:item.identifier == CTChatToolIconIdMusic
+                                 copyIcon:^UIView *{
+                                     return [wSelf iconCopyWithIconId:item.identifier];
+                                 } syncAnimate:^(UIView *customView) {
+                                     icon.tintColor = customView.tintColor;
+                                     syncAnimations();
+                                 } completion:^(BOOL added) {
+                                     if (!added) {
+                                         if (item.identifier == CTChatToolIconIdCamara) {
+                                             wSelf.cameraView.hidden = NO;
+                                             [wSelf.cameraView setCameraButtonCenterPoint:[icon.superview convertPoint:icon.center toView:wSelf.cameraView]];
+                                             
+                                             [wSelf.cameraView showCameraButtonWithAnimate:NO];
+                                             [wSelf.cameraView performSelector:@selector(hideCameraButton) withObject:nil afterDelay:1];
+                                             
+                                             [UIView animateWithDuration:0.3 animations:^{
+                                                 syncAnimations();
+                                             } completion:^(BOOL finished) {
+                                                 [wSelf __updateIconConfig];
+                                             }];
+                                         }
+                                     }
+                                     [icon removeFromSuperview];
+                                 }];
+}
+
+#pragma mark - CTCameraViewDelegate
+
+- (void)cameraView:(CTCameraView *)cameraView didDragButton:(UIButton *)cameraButton {
+    [_inputView updateInputViewDragIcon:cameraButton toolId:CTChatToolIconIdCamara copyIconBlock:^UIView *{
+        return [self createCameraButton];
+    }];
+}
+
+- (void)cameraView:(CTCameraView *)cameraView endDragButton:(UIButton *)cameraButton layoutBlock:(void (^)(BOOL))layout {
+    
+    __weak typeof(self) wSelf = self;
+    
+    [_inputView addOrRemoveInputViewToolBarWithDragIcon:cameraButton toolId:CTChatToolIconIdCamara copyIconBlock:^UIView *{
+        
+        return [wSelf createCameraButton];
+        
+    } customAnimate:nil completion:^(BOOL added) {
+        
+        if (added) {
+            cameraView.hidden = YES;
+            layout(YES);
+            [wSelf __updateIconConfig];
+            return;
+        }
+        
+        [wSelf addRightDragBarItemWithDragIcon:cameraButton itmeId:CTChatToolIconIdCamara ignoreIntersect:NO copyIcon:^UIView *{
+            return [wSelf createCameraButton];
+        } syncAnimate:^(UIView *customView) {
+            cameraButton.tintColor = customView.tintColor;
+        } completion:^(BOOL added) {
+            cameraButton.tintColor = nil;
+            if (added) {
+                cameraView.hidden = YES;
+                layout(YES);
+                return;
+            }
+            layout(added);
+        }];
+    }];
+}
+
+- (void)cameraView:(CTCameraView *)cameraView didTapButton:(UIButton *)cameraButton {
+    [self shareMedia:cameraButton];
+}
+
+- (UIButton *)createCameraButton {
+    UIButton *button = _cameraView.copyCameraButton;
+    [button addTarget:self action:@selector(shareMedia:) forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
+
+- (void)shareMedia:(UIButton *)sender {
+    NSLog(@"share media");
+}
+
+#pragma mark - CTMusicButton
+
+- (CTMusicButton *)createMusicButton {
+    CTMusicButton *music = [CTMusicButton new];
+    [music sizeToFit];
+    music.tintColor = [UIColor whiteColor];
+    
+    __weak typeof(self) wSelf = self;
+    music.clickBlock = ^(CTMusicButton *button) {
+        [wSelf playMusic:button];
+    };
+    music.isPlaying = YES;
+    return music;
+}
+
+- (void)playMusic:(CTMusicButton *)sender {
+    NSLog(@"play music");
+    sender.isPlaying = !sender.isPlaying;
+}
+
+#pragma mark - UIViewController + DragBarItem
+
+- (void)dragItem:(UIView *)icon didDrag:(NSInteger)itmeId {
+    [_inputView updateInputViewDragIcon:icon toolId:itmeId copyIconBlock:^UIView *{
+        return [self iconCopyWithIconId:itmeId];
+    }];
+}
+
+- (BOOL)dragItemShouldRemove:(UIView *)icon endDrag:(NSInteger)itmeId {
+    
+    __weak typeof(self) wSelf = self;
+    __block BOOL remove = YES;
+    
+    [_inputView addOrRemoveInputViewToolBarWithDragIcon:icon toolId:itmeId copyIconBlock:^UIView *{
+        return [wSelf iconCopyWithIconId:itmeId];
+    } customAnimate:nil completion:^(BOOL added) {
+        remove = added;
+        if (added) {
+            [wSelf __updateIconConfig];
+            return;
+        }
+        
+        if (itmeId == CTChatToolIconIdCamara) {
+            
+            remove = YES;
+            
+            wSelf.cameraView.hidden = NO;
+            [wSelf.cameraView setCameraButtonCenterPoint:[icon.superview convertPoint:icon.center toView:wSelf.cameraView]];
+            
+            [wSelf.cameraView showCameraButtonWithAnimate:NO];
+            [wSelf.cameraView performSelector:@selector(hideCameraButton) withObject:nil afterDelay:1];
+        }
+    }];
+    return remove;
+}
+
+- (void)dragItemDidDragAdd:(UIView *)icon didDrag:(NSInteger)itemId {
+    [self __updateIconConfig];
+}
+
+- (void)dragItemDidDragRemove:(UIView *)icon didDrag:(NSInteger)itemId {
+    [self __updateIconConfig];
 }
 
 #pragma mark - Keyboard
