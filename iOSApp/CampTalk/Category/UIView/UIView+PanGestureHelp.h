@@ -11,6 +11,7 @@
 @interface UIView (PanGestureHelp)
 
 @property (nonatomic, assign) CGPoint originCenter;
+@property (nonatomic, assign) CGSize originSize;
 @property (nonatomic, assign) CGPoint startPoint;
 
 - (void)startWithPoint:(CGPoint)startPoint;

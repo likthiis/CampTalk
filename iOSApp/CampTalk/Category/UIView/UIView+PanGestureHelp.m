@@ -11,6 +11,7 @@
 
 char *kOriginCenter = "kOriginCenter";
 char *kStartPoint = "kStartPoint";
+char *kOriginSize = "kOriginSize";
 
 @implementation UIView (PanGestureHelp)
 
@@ -20,6 +21,14 @@ char *kStartPoint = "kStartPoint";
 
 - (CGPoint)originCenter {
     return [objc_getAssociatedObject(self, kOriginCenter) CGPointValue];
+}
+
+- (void)setOriginSize:(CGSize)originSize {
+    objc_setAssociatedObject(self, kOriginSize, [NSNumber valueWithCGSize:originSize], OBJC_ASSOCIATION_RETAIN);
+}
+
+- (CGSize)originSize {
+    return [objc_getAssociatedObject(self, kOriginSize) CGSizeValue];
 }
 
 - (void)setStartPoint:(CGPoint)startPoint {

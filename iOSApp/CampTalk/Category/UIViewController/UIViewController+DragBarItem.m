@@ -118,9 +118,15 @@
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan: {
             
+            UIView *placeHolder = [[UIView alloc] initWithFrame:icon.frame];
+            placeHolder.autoresizingMask = icon.autoresizingMask;
+            placeHolder.tag = icon.tag;
+            [icon.superview addSubview:placeHolder];
+            
             CGRect frame = [icon convertRect:icon.bounds toView:self.navigationController.view];
             icon.frame = frame;
             icon.tintColor = icon.superview.tintColor;
+
             [self.navigationController.view addSubview:icon];
             
             [icon startWithPoint:[recognizer locationInView:icon.superview]];
@@ -144,12 +150,20 @@
                 UIBarButtonItem *item = [self rightBarItemWithId:icon.tag];
                 UIView *wapper = item.customView;
                 
+                __block UIView *placeHolder = nil;
+                [[wapper subviews] enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (obj.tag == icon.tag) {
+                        placeHolder = obj;
+                    }
+                }];
+                
+                
                 [UIView animateWithDuration:0.3 animations:^{
                     icon.transform = CGAffineTransformIdentity;
-                    CGRect frame = [wapper convertRect:wapper.bounds toView:icon.superview];
-                    icon.frame = UIEdgeInsetsInsetRect(frame, UIEdgeInsetsMake(5, 5, 5, 5));
+                    icon.frame = [placeHolder convertRect:placeHolder.bounds toView:icon.superview];
                 } completion:^(BOOL finished) {
-                    icon.frame = UIEdgeInsetsInsetRect(wapper.bounds, UIEdgeInsetsMake(5, 5, 5, 5));
+                    [placeHolder removeFromSuperview];
+                    icon.frame = placeHolder.frame;
                     [wapper addSubview:icon];
                 }];
             } else {
