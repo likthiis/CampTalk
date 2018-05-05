@@ -41,15 +41,20 @@ typedef enum : NSUInteger {
     CTChatToolIconPlaceCount,
 } CTChatToolIconPlace;
 
-@interface CTChatTableViewController () <CTChatInputViewDelegate, UINavigationControllerShouldPopDelegate, CTCameraViewDelegate, CAAnimationDelegate>
+@interface CTChatTableViewController () <CTChatInputViewDelegate, UINavigationControllerShouldPopDelegate, CTCameraViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) CTStubbornView *stubbornView;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) CTStubbornView *tableViewCover;
+
 @property (nonatomic, strong) CTChatInputView *inputView;
 @property (nonatomic, strong) CTCameraView *cameraView;
 
 @property (nonatomic, assign) CGFloat keyboardHeight;
 @property (nonatomic, assign) BOOL needScrollToBottom;
 @property (nonatomic, assign) BOOL viewControllerWillPop;
+
+@property (nonatomic, strong) NSIndexPath *recordMaxIndexPath;
+@property (nonatomic, assign) CGPoint recordOffSet;
 
 @property (nonatomic, strong) NSMutableArray <CTChatModel *> *data;
 
@@ -62,43 +67,61 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"富士山烤肉场";
+    self.navigationItem.title = @"海拉尔草原野炊";
     
-    _stubbornView = [[CTStubbornView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:_stubbornView];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
     
+    // Config TableView
     [CTChatTableViewCell registerForTableView:self.tableView];
-    
-    UIImage *image = [UIImage imageWithFullName:@"chatBg" extension:@"png"];
+    UIImage *image = [UIImage imageWithFullName:@"chatBg_1" extension:@"jpg"];
     UIImageView *bgView = [[UIImageView alloc] initWithImage:image];
     bgView.contentMode = UIViewContentModeScaleAspectFill;
-    
     self.tableView.backgroundView = bgView;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.tableView.delaysContentTouches = NO;
     
+    _tableViewCover = [[CTStubbornView alloc] initWithFrame:self.tableView.bounds];
+    _tableViewCover.image = image;
+    _tableViewCover.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _tableViewCover.contentMode = UIViewContentModeScaleAspectFill;
+    [_tableViewCover setGradientDirection:YES];
+    [self.tableView addSubview:_tableViewCover];
+    
+    // fake data
     _data = [NSMutableArray array];
-    int i = 100;
+    int i = 3;
     NSMutableString *string = [[NSMutableString alloc] init];
     while (i--) {
         [string appendString:@"啊"];
         CTChatModel *model = [CTChatModel new];
-        model.message = string;
         [_data addObject:model];
+        
+        if (i > 0 && i <= 3) {
+            NSString *size = [NSString stringWithFormat:@"@{%f,%f}", powf(10, i), powf(10, i)];
+            model.thumbSize = CGSizeFromString(size);
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"corver" ofType:@"jpg"];
+            model.thumbUrl = [NSURL fileURLWithPath:filePath].absoluteString;
+        } else {
+            model.message = string;
+        }
     }
+    
     _needScrollToBottom = YES;
     
     _inputView = [[CTChatInputView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kMinInputViewHeight, self.view.bounds.size.width, kMinInputViewHeight)];
     _inputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     _inputView.delegate = self;
+    [self.view addSubview:_inputView];
     [self __configInputViewLayout];
-    [_stubbornView addSubview:_inputView];
     
     _cameraView = [[CTCameraView alloc] init];
     _cameraView.delegate = self;
     _cameraView.hidden = YES;
-    [_cameraView showInView:_stubbornView];
+    [_cameraView showInView:self.view];
     
     [self __configIconPlace];
     
@@ -118,7 +141,30 @@ typedef enum : NSUInteger {
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    CGFloat recordTBHeight = self.tableView.frame.size.height;
+    
+    self.tableView.frame = self.view.bounds;
+    
     [self __configStubbornViewLayout];
+    
+    if (!_needScrollToBottom) {
+        
+        if (recordTBHeight != self.tableView.frame.size.height) {
+            
+            if (!_recordMaxIndexPath) {
+                return;
+            }
+            
+            [UIView performWithoutAnimation:^{
+                [self.tableView scrollToRowAtIndexPath:self.recordMaxIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [UIView performWithoutAnimation:^{
+                        [self.tableView scrollToRowAtIndexPath:self.recordMaxIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                    }];
+                });
+            }];
+        }
+    }
 }
 
 - (void)__configIconPlace {
@@ -251,17 +297,30 @@ typedef enum : NSUInteger {
 }
 
 - (void)__configStubbornViewLayout {
-    CGRect bounds = self.view.bounds;
-    _stubbornView.frame = UIEdgeInsetsInsetRect(bounds, self.viewSafeAreaInsets);
+    _tableViewCover.frame = self.tableView.bounds;
+    [self __adjustTableViewCoverAlpha];
+}
+
+- (void)__adjustTableViewCoverAlpha {
+    CGRect barFrame = self.navigationController.navigationBar.frame;
+    
+    CGFloat begain = (barFrame.origin.y + barFrame.size.height / 2.f) / _tableViewCover.bounds.size.height;
+    
+    CGFloat end = (barFrame.size.height + barFrame.origin.y + 10.f) / _tableViewCover.bounds.size.height;
+    [_tableViewCover setGradientBegain:begain end:end];
 }
 
 - (BOOL)navigationControllerShouldPop:(UINavigationController *)navigationController isInteractive:(BOOL)isInteractive {
     _viewControllerWillPop = YES;
+    _recordOffSet = self.tableView.contentOffset;
     return YES;
 }
 
 - (void)navigationController:(UINavigationController *)navigationController interactivePopResult:(BOOL)finished {
     _viewControllerWillPop = finished;
+    if (!finished) {
+        self.tableView.contentOffset = _recordOffSet;
+    }
 }
 
 #pragma mark - Table view data source
@@ -275,60 +334,60 @@ typedef enum : NSUInteger {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [CTChatTableViewCell estimatedHeightWithText:_data[indexPath.row].message tableView:tableView];
+    CTChatModel *model = _data[indexPath.row];
+    if (model.thumbUrl) {
+        return [CTChatTableViewCell heightWithThumbSize:model.thumbSize tableView:tableView];
+    } else if (model.message.length) {
+        return [CTChatTableViewCell estimatedHeightWithText:model.message tableView:tableView];
+    }
+    return 0.f;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return [CTChatTableViewCell heightWithText:_data[indexPath.row].message tableView:tableView];
+    CTChatModel *model = _data[indexPath.row];
+    if (model.thumbUrl) {
+        return [CTChatTableViewCell heightWithThumbSize:model.thumbSize tableView:tableView];
+    } else if (model.message.length) {
+        return [CTChatTableViewCell heightWithText:model.message tableView:tableView];
+    }
+    return 0.f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CTChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CTChatTableViewCellId forIndexPath:indexPath];
     cell.iconView.image = [UIImage imageNamed:@"zhimalin"];
-    cell.chatBubbleLabel.label.text = _data[indexPath.row].message;
+    
+    CTChatModel *model = _data[indexPath.row];
+    if (model.thumbUrl) {
+        NSURL *url = [NSURL URLWithString:model.thumbUrl];
+        if (url.isFileURL) {
+            cell.thumbView.image = [UIImage imageWithContentsOfFile:url.path];
+        } else {
+            // load from server
+        }
+    } else if (model.message.length) {
+        cell.chatBubbleLabel.label.text = model.message;
+    }
+    
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self adjustCellAlphaForIndexPath:indexPath];
+    if (!_recordMaxIndexPath) {
+        [self recordMaxIndexPathIfNeed];
+    } else {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(recordMaxIndexPathIfNeed) object:nil];
+        [self performSelector:@selector(recordMaxIndexPathIfNeed) withObject:nil afterDelay:0.3f inModes:@[NSRunLoopCommonModes]];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    
-    [self __configStubbornViewLayout];
-    
-    [[self.tableView indexPathsForVisibleRows] enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull visibleIndexPath, NSUInteger idx, BOOL * _Nonnull stop) {
-        [self adjustCellAlphaForIndexPath:visibleIndexPath];
-    }];
+    _tableViewCover.frame = scrollView.bounds;
 }
 
-- (void)adjustCellAlphaForIndexPath:(NSIndexPath *)indexPath {
-    CTChatTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if (!cell) {
-        return;
-    }
-    
-    CGFloat offset = self.tableView.contentOffset.y;
-    
-    CGRect barFrame = self.navigationController.navigationBar.frame;
-    barFrame.size.height += barFrame.origin.y;
-    barFrame.origin.y = offset;
-  
-    barFrame.size.height += 20.f;
-    CGFloat coverd = CGRectGetMaxY(barFrame) - cell.frame.origin.y;
-
-    if (coverd > 0.f) {
-        
-        CGFloat gradientSpace = MIN(35.f, coverd);
-        CGFloat percent = (coverd - gradientSpace)/cell.frame.size.height;
-        CGFloat gradientPercent = coverd / cell.frame.size.height;
-        
-        [cell setGradientBegain:percent end:gradientPercent];
-        
-    } else {
-        [cell setGradientBegain:0 end:0];
-    }
+- (void)recordMaxIndexPathIfNeed {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(recordMaxIndexPathIfNeed) object:nil];
+    _recordMaxIndexPath = self.tableView.indexPathsForVisibleRows.lastObject.copy;
 }
 
 #pragma mark - CTChatInputViewDelegate
@@ -341,19 +400,37 @@ typedef enum : NSUInteger {
     if (_viewControllerWillPop) {
         return;
     }
-    
-    CGRect bounds = _stubbornView.bounds;
+    CGRect bounds = self.view.bounds;
     
     CGFloat inputHeight = MAX(kMinInputViewHeight, _inputView.contentHeight);
+    CGFloat bottomMargin = 10.f;
+    
+//    CGFloat lastBottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
+    
     _inputView.frame = CGRectMake(0, bounds.size.height - inputHeight - _keyboardHeight, bounds.size.width, inputHeight);
+    
+    CGFloat safeAreaBottom = 0.f;
+    if (@available(iOS 11.0, *)) {
+        safeAreaBottom = _inputView.safeAreaInsets.bottom;
+        _inputView.frame = UIEdgeInsetsInsetRect(_inputView.frame, UIEdgeInsetsMake(-safeAreaBottom, 0, 0, 0));
+    }
+    
+    CGFloat bottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
     
     CGPoint contentOffset = self.tableView.contentOffset;
     UIEdgeInsets contentInset = self.tableView.contentInset;
     
-    CGFloat bottomMargin = 10.f;
-    CGFloat bottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin;
+    CGFloat contentBottom = self.tableView.frame.size.height - self.viewSafeAreaInsets.bottom - self.tableView.contentSize.height;
     
-    contentOffset.y += bottom - contentInset.bottom;
+    if (_keyboardHeight > 0 && contentBottom > 0) {
+        CGFloat offSetY = bottom - contentBottom;
+        if (offSetY > -self.viewSafeAreaInsets.top) {
+            contentOffset.y = offSetY;
+        }
+    } else {
+        contentOffset.y += bottom - contentInset.bottom;
+    }
+    
     contentInset.bottom = bottom;
     
     self.tableView.contentInset = contentInset;
@@ -370,10 +447,10 @@ typedef enum : NSUInteger {
     
     UIView *icon = item.icon;
     
-    CGPoint center = [chatInputView convertPoint:icon.center toView:self.stubbornView];
+    CGPoint center = [chatInputView convertPoint:icon.center toView:self.navigationController.view];
     [icon removeFromSuperview];
     icon.tintColor = chatInputView.tintColor;
-    [self.stubbornView addSubview:icon];
+    [self.navigationController.view addSubview:icon];
     icon.center = center;
     
     [self addRightDragBarItemWithDragIcon:icon
@@ -402,6 +479,38 @@ typedef enum : NSUInteger {
                                      }
                                      [icon removeFromSuperview];
                                  }];
+}
+
+- (void)chatInputView:(CTChatInputView *)chatInputView didTapActionButton:(UIButton *)button {
+    if (!chatInputView.text.length) {
+        return;
+    }
+    CTChatModel *model = [CTChatModel new];
+    model.message = chatInputView.text;
+    [_data addObject:model];
+    
+    [UIView performWithoutAnimation:^{
+        chatInputView.text = nil;
+        [chatInputView layoutIfNeeded];
+    }];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_data.count - 1 inSection:0];
+    
+    [UIView performWithoutAnimation:^{
+        if (@available(iOS 11.0, *)) {
+            [self.tableView performBatchUpdates:^{
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+            } completion:^(BOOL finished) {
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }];
+        } else {
+            [self.tableView beginUpdates];
+            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+            [self.tableView endUpdates];
+            
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        }
+    }];
 }
 
 #pragma mark - CTCameraViewDelegate
@@ -563,6 +672,10 @@ typedef enum : NSUInteger {
     _keyboardHeight = (selfFrame.origin.y + selfFrame.size.height) - kbFrame.origin.y;
     if (_keyboardHeight < 0) {
         _keyboardHeight = 0;
+    } else {
+        [UIView animateWithDuration:0.1 animations:^{
+            [self __configInputViewLayout];
+        }];
     }
 }
 
@@ -582,6 +695,12 @@ typedef enum : NSUInteger {
             
         }];
     }
+}
+
+- (void)dealloc {
+    self.tableView.delegate = nil;
+    self.tableView.dataSource = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 /*

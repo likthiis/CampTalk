@@ -60,7 +60,7 @@
             }
             dragIcon.frame = frame;
         } completion:^(BOOL finished) {
-            icon.superview.alpha = 1.f;
+            icon.alpha = 1.f;
             dragIcon.frame = recordFrame;
             if (completion) {
                 completion(YES);
@@ -91,7 +91,7 @@
     wapper.tag = itemId;
     icon.tag = itemId;
     
-    wapper.alpha = alpha;
+    icon.alpha = alpha;
     
     NSMutableArray *itmes = [NSMutableArray arrayWithArray:self.navigationItem.rightBarButtonItems];
     [itmes addObject:item];

@@ -8,6 +8,23 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CTStubbornView : UIView
+@interface CTStubbornView : UIImageView
+
+
+/**
+ gradient mask, alpha 0 -> 0 -> 1 -> 1
+
+ @param begain percent of center 0
+ @param end percent of center 1
+ */
+- (void)setGradientBegain:(CGFloat)begain end:(CGFloat)end;
+
+
+/**
+ change gradient mask direction
+
+ @param up YES : alpha 1 -> 1 -> 0 -> 0; NO : alpha 0 -> 0 -> 1 -> 1;
+ */
+- (void)setGradientDirection:(BOOL)up;
 
 @end

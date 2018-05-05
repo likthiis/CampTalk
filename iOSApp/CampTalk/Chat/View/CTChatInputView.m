@@ -39,8 +39,11 @@ static CGFloat kSendButtonSide = 50.f;
 
 @interface CTChatInputView () <UITextViewDelegate, UIGestureRecognizerDelegate>
 
+@property (nonatomic, strong) UITextView *textView;
+
 @property (nonatomic, assign) CGFloat backgroundAlpha;
-@property (nonatomic, strong) UIView *noBorderView;
+
+@property (nonatomic, strong) UIView *contentView;
 
 @property (nonatomic, assign) BOOL ignoreToolBarLayout;
 
@@ -63,14 +66,6 @@ static CGFloat kSendButtonSide = 50.f;
     return self;
 }
 
-//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-//    UIView *view = [super hitTest:point withEvent:event];
-//    if (view == self) {
-//        return self;
-//    }
-//    return <#expression#>
-//}
-
 - (NSMutableArray<CTChatInputViewToolBarItem *> *)toolBarItems {
     if (!_toolBarItems) {
         _toolBarItems = [NSMutableArray array];
@@ -79,10 +74,6 @@ static CGFloat kSendButtonSide = 50.f;
 }
 
 - (void)__config {
-//    _noBorderView = [UIView new];
-//    _noBorderView.frame = UIEdgeInsetsInsetRect(self.bounds, UIEdgeInsetsMake(4, 4, 4, 4));
-//    _noBorderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//    [self addSubview:_noBorderView];
     
     self.userInteractionEnabled = YES;
     self.tintColor = [UIColor whiteColor];
@@ -94,13 +85,16 @@ static CGFloat kSendButtonSide = 50.f;
     _backgroundView.layer.cornerRadius = 4.f;
     _backgroundView.clipsToBounds = YES;
     _backgroundView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.7f];
-//    _backgroundView.image = [[UIImage imageNamed:@"chat_input_bg"] resizableImageWithCapInsets:UIEdgeInsetsMake(50, 300, 50, 300) resizingMode:UIImageResizingModeTile];
     [self addSubview:_backgroundView];
+    
+    _contentView = [[UIView alloc] initWithFrame:self.bounds];
+    [self addSubview:_contentView];
     
     _actionButton = [[UIButton alloc] init];
     [_actionButton setImage:[UIImage imageNamed:@"fuzi"] forState:UIControlStateNormal];
     _actionButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self addSubview:_actionButton];
+    [_actionButton addTarget:self action:@selector(actionButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    [_contentView addSubview:_actionButton];
     
     _textView = [[UITextView alloc] init];
     _textView.backgroundColor = [UIColor clearColor];
@@ -130,18 +124,36 @@ static CGFloat kSendButtonSide = 50.f;
     }
     _textView.tintColor = [UIColor whiteColor];
     _textView.delegate = self;
-    [self addSubview:_textView];
+    [_contentView addSubview:_textView];
     
     _maxContentHeight = 180.f;
     [self __configBackgroundAlphaWithAnimate:NO];
+    
+    [_contentView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
+}
+
+- (void)tap:(UITapGestureRecognizer *)tap {
+    if (tap.state == UIGestureRecognizerStateEnded) {
+        [self.textView becomeFirstResponder];
+    }
+}
+
+- (void)safeAreaInsetsDidChange {
+    [super safeAreaInsetsDidChange];
+    [self setNeedsLayout];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
     CGRect bounds = self.bounds;
+    if (@available(iOS 11.0, *)) {
+        bounds = UIEdgeInsetsInsetRect(bounds, self.safeAreaInsets);
+    }
+    
+    _contentView.frame = bounds;
     
     _actionButton.frame = CGRectMake(bounds.size.width - 18.f - kSendButtonSide, (bounds.size.height - self.__toolBarHeight - kSendButtonSide) / 2.f, kSendButtonSide, kSendButtonSide);
-    _actionButton.contentMode = UIViewContentModeScaleAspectFit;
     
     CGSize textSize = CGSizeMake(CGRectGetMinX(_actionButton.frame) - kCTChatInputInset.left - kCTChatInputInset.right, CGFLOAT_MAX);
     textSize.height = [_textView sizeThatFits:textSize].height;
@@ -161,7 +173,7 @@ static CGFloat kSendButtonSide = 50.f;
         CGFloat layoutY = CGRectGetMaxY(_textView.frame);
         
         [self.toolBarItems enumerateObjectsUsingBlock:^(CTChatInputViewToolBarItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (obj.icon.superview == self) {
+            if (obj.icon.superview == self.contentView) {
                 obj.icon.frame = CGRectMake(layoutX, layoutY, kToolBarHeight, kToolBarHeight);
             }
             layoutX += kToolBarHeight + 5.f;
@@ -229,12 +241,29 @@ static CGFloat kSendButtonSide = 50.f;
     }
 }
 
+- (void)actionButtonTouchUpInside:(UIButton *)sender {
+    if ([self.delegate respondsToSelector:@selector(chatInputView:didTapActionButton:)]) {
+        [self.delegate chatInputView:self didTapActionButton:sender];
+    }
+}
+
+- (NSString *)text {
+    return self.textView.text;
+}
+
+- (void)setText:(NSString *)text {
+    self.textView.text = text;
+    [self.textView sizeToFit];
+    [self setNeedsLayout];
+    [self updateContentHeight];
+}
+
 #pragma mark - tool bar
 
 - (void)addToolBarItem:(CTChatInputViewToolBarItem *)item {
     if (![self.toolBarItems containsObject:item]) {
         [self.toolBarItems addObject:item];
-        [self addSubview:item.icon];
+        [self.contentView addSubview:item.icon];
         [self setNeedsLayout];
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];

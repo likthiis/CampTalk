@@ -63,6 +63,8 @@
 		9E727676208C13BF00FE9454 /* CTChatInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E727674208C13BF00FE9454 /* CTChatInputView.m */; };
 		9E72767D208DBE7D00FE9454 /* CTStubbornView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72767C208DBE7D00FE9454 /* CTStubbornView.m */; };
 		9E72767E208DBE7D00FE9454 /* CTStubbornView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72767C208DBE7D00FE9454 /* CTStubbornView.m */; };
+		E6035A17209BF9AB00A6C6CA /* RGBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */; };
+		E6035A18209BF9AB00A6C6CA /* RGBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */; };
 		E64713532096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */; };
 		E64713542096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */; };
 		E6B7F45F2093DE2B00918BC8 /* CTCameraView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B7F45E2093DE2B00918BC8 /* CTCameraView.m */; };
@@ -77,6 +79,8 @@
 		E6B7F47E20944FA900918BC8 /* UIView+PanGestureHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B7F47C20944FA900918BC8 /* UIView+PanGestureHelp.m */; };
 		E6B7F48B2096869800918BC8 /* CTMusicButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B7F48A2096869800918BC8 /* CTMusicButton.m */; };
 		E6B7F48C2096869800918BC8 /* CTMusicButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B7F48A2096869800918BC8 /* CTMusicButton.m */; };
+		E6E05AD7209C358C00C54A24 /* chatBg_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */; };
+		E6E05AD8209C358C00C54A24 /* chatBg_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -131,6 +135,8 @@
 		9E727674208C13BF00FE9454 /* CTChatInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTChatInputView.m; sourceTree = "<group>"; };
 		9E72767B208DBE7D00FE9454 /* CTStubbornView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTStubbornView.h; sourceTree = "<group>"; };
 		9E72767C208DBE7D00FE9454 /* CTStubbornView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTStubbornView.m; sourceTree = "<group>"; };
+		E6035A15209BF9AB00A6C6CA /* RGBubbleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGBubbleView.h; sourceTree = "<group>"; };
+		E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGBubbleView.m; sourceTree = "<group>"; };
 		E64713512096EC1600A304BC /* UIViewController+DragBarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DragBarItem.h"; sourceTree = "<group>"; };
 		E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+DragBarItem.m"; sourceTree = "<group>"; };
 		E6B7F45D2093DE2B00918BC8 /* CTCameraView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTCameraView.h; sourceTree = "<group>"; };
@@ -145,6 +151,7 @@
 		E6B7F47C20944FA900918BC8 /* UIView+PanGestureHelp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+PanGestureHelp.m"; sourceTree = "<group>"; };
 		E6B7F4892096869800918BC8 /* CTMusicButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTMusicButton.h; sourceTree = "<group>"; };
 		E6B7F48A2096869800918BC8 /* CTMusicButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTMusicButton.m; sourceTree = "<group>"; };
+		E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chatBg_1.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +284,7 @@
 		6BD766B8208511D7003FD599 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */,
 				9E7276652089E52000FE9454 /* chatBg.png */,
 				6BD766422085085A003FD599 /* corver.jpg */,
 			);
@@ -351,6 +359,7 @@
 		9E72766D208A36B500FE9454 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				E6035A19209BF9AF00A6C6CA /* UIView */,
 				9E72763D20889E7700FE9454 /* UILabel */,
 				9E727672208ACA5100FE9454 /* UINavigationController */,
 			);
@@ -364,6 +373,15 @@
 				9E72766F208A36F500FE9454 /* CTNavigationController.m */,
 			);
 			path = UINavigationController;
+			sourceTree = "<group>";
+		};
+		E6035A19209BF9AF00A6C6CA /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				E6035A15209BF9AB00A6C6CA /* RGBubbleView.h */,
+				E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */,
+			);
+			path = UIView;
 			sourceTree = "<group>";
 		};
 		E6B7F4612093F9B300918BC8 /* UIViewController */ = {
@@ -471,6 +489,7 @@
 				6BD766BA208515B8003FD599 /* linJiang.m4a in Resources */,
 				6BD76635208504E3003FD599 /* Assets.xcassets in Resources */,
 				6BD766432085085A003FD599 /* corver.jpg in Resources */,
+				E6E05AD7209C358C00C54A24 /* chatBg_1.jpg in Resources */,
 				9E7276662089E52000FE9454 /* chatBg.png in Resources */,
 				9E7276512088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD76633208504E3003FD599 /* Main.storyboard in Resources */,
@@ -485,6 +504,7 @@
 				6BD766BB208515B9003FD599 /* linJiang.m4a in Resources */,
 				6BD766AF20850E11003FD599 /* Assets.xcassets in Resources */,
 				6BD766B020850E11003FD599 /* corver.jpg in Resources */,
+				E6E05AD8209C358C00C54A24 /* chatBg_1.jpg in Resources */,
 				9E7276672089E52000FE9454 /* chatBg.png in Resources */,
 				9E7276522088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD766B120850E11003FD599 /* Main.storyboard in Resources */,
@@ -509,6 +529,7 @@
 				6BD76677208508F5003FD599 /* UINavigationController+ShouldPop.m in Sources */,
 				6BD76678208508F5003FD599 /* UITabBar+Dot.m in Sources */,
 				E6B7F4792094468700918BC8 /* UINavigationItem+Gesture.m in Sources */,
+				E6035A17209BF9AB00A6C6CA /* RGBubbleView.m in Sources */,
 				9E727670208A36F500FE9454 /* CTNavigationController.m in Sources */,
 				6BD7663B208504E3003FD599 /* main.m in Sources */,
 				6BD7662D208504E3003FD599 /* AppDelegate.m in Sources */,
@@ -544,6 +565,7 @@
 				6BD766A220850E11003FD599 /* UINavigationController+ShouldPop.m in Sources */,
 				6BD766A320850E11003FD599 /* UITabBar+Dot.m in Sources */,
 				E6B7F47A2094468700918BC8 /* UINavigationItem+Gesture.m in Sources */,
+				E6035A18209BF9AB00A6C6CA /* RGBubbleView.m in Sources */,
 				9E727671208A36F500FE9454 /* CTNavigationController.m in Sources */,
 				6BD766A420850E11003FD599 /* main.m in Sources */,
 				6BD766A520850E11003FD599 /* AppDelegate.m in Sources */,
@@ -732,6 +754,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/CampTalk/Info.plist";
@@ -739,6 +762,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalkBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -747,6 +771,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/CampTalk/Info.plist";
@@ -754,6 +779,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalkBeta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

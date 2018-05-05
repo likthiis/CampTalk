@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "CTChatTableViewController.h"
+#import "RGBubbleView.h"
 
 @interface ViewController ()
 
@@ -21,6 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+    
     NSURL *fileUrl = [[NSBundle mainBundle] URLForResource:@"linJiang" withExtension:@"m4a"];
     self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileUrl error:nil];
     
@@ -48,8 +52,8 @@
 }
 
 - (IBAction)chat:(id)sender {
-    [self.navigationController pushViewController:[[CTChatTableViewController alloc] initWithStyle:UITableViewStylePlain] animated:YES];
-    
+    CTChatTableViewController *vc = [CTChatTableViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

@@ -8,6 +8,15 @@
 
 #import "CTStubbornView.h"
 
+@interface CTStubbornView ()
+
+@property (nonatomic, strong) CAGradientLayer *gradLayer;
+
+@property (nonatomic, assign) CGFloat begain;
+@property (nonatomic, assign) CGFloat end;
+
+@end
+
 @implementation CTStubbornView
 
 /*
@@ -17,6 +26,68 @@
     // Drawing code
 }
 */
+
+- (CAGradientLayer *)gradLayer {
+    if (!_gradLayer) {
+        _gradLayer = [CAGradientLayer layer];
+        [_gradLayer setStartPoint:CGPointMake(0.0f, 0.0f)];
+        [_gradLayer setEndPoint:CGPointMake(0.0f, 1.0f)];
+        [_gradLayer setFrame:self.bounds];
+    }
+    return _gradLayer;
+}
+
+- (void)setGradientBegain:(CGFloat)begain end:(CGFloat)end {
+    if (_begain == begain && _end == end) {
+        return;
+    }
+    if (!_gradLayer) {
+        NSArray *colors = @[
+                            (id)[[UIColor colorWithWhite:0 alpha:0] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:0] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:1] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:1] CGColor],
+                            ];
+        [self.gradLayer setColors:colors];
+    }
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    self.gradLayer.locations = @[@(0.0), @(begain), @(end),  @(1.0)];
+    [self.layer setMask:self.gradLayer];
+    [CATransaction commit];
+    
+    _begain = begain;
+    _end = end;
+}
+
+- (void)setGradientDirection:(BOOL)up {
+    if (up) {
+        NSArray *colors = @[
+                            (id)[[UIColor colorWithWhite:0 alpha:1] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:1] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:0] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:0] CGColor],
+                            ];
+        [self.gradLayer setColors:colors];
+    } else {
+        NSArray *colors = @[
+                            (id)[[UIColor colorWithWhite:0 alpha:0] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:0] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:1] CGColor],
+                            (id)[[UIColor colorWithWhite:0 alpha:1] CGColor],
+                            ];
+        [self.gradLayer setColors:colors];
+    }
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    [_gradLayer setFrame:self.bounds];
+    [CATransaction commit];
+}
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
     UIView *hitView = [super hitTest:point withEvent:event];

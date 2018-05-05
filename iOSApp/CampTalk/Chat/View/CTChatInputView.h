@@ -24,14 +24,15 @@
 @property (nonatomic, strong) UIImageView *backgroundView;
 @property (nonatomic, strong) UIButton *actionButton;
 
-@property (nonatomic, strong) UITextView *textView;
-
 @property (nonatomic, assign) CGFloat contentHeight;
 @property (nonatomic, assign) CGFloat maxContentHeight;
 
 @property (nonatomic, assign) id <CTChatInputViewDelegate> delegate;
 
 @property (nonatomic, strong) NSMutableArray <CTChatInputViewToolBarItem *> *toolBarItems;
+
+- (NSString *)text;
+- (void)setText:(NSString *)text;
 
 - (void)addToolBarItem:(CTChatInputViewToolBarItem *)item;
 - (void)removeToolBarItemWithId:(NSInteger)identifier;
@@ -54,6 +55,8 @@
 @end
 
 @protocol CTChatInputViewDelegate <NSObject>
+
+- (void)chatInputView:(CTChatInputView *)chatInputView didTapActionButton:(UIButton *)button;
 
 - (void)contentSizeDidChange:(CTChatInputView *)chatInputView size:(CGSize)size;
 

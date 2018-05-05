@@ -26,7 +26,12 @@
     [super viewDidAppear:animated];
     [self.navigationBar setTranslucent:YES];
     
-    UIImage *barBg = [UIImage imageNamed:@"gradientBarBg"];
+    UIImage *barBg = nil;
+    if ([UIApplication sharedApplication].statusBarFrame.size.height > 20.f) {
+        barBg = [UIImage imageNamed:@"gradientBarBg_fringe"];
+    } else {
+        barBg = [UIImage imageNamed:@"gradientBarBg"];
+    }
     [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsDefault];
     
     barBg = [UIImage imageNamed:@"gradientBarBg_landscape"];
