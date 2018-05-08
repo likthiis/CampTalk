@@ -2,26 +2,21 @@ package org.yuru.campTalk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 
 /**
  * Service Entry Point.
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@EntityScan(basePackages = "org.yuru.campTalk.entity")
-@ComponentScan(basePackages = "org.yuru.campTalk.websocket")
+//@ComponentScan(basePackages = "org.yuru.campTalk.service")
 public class CampTalkApp implements EmbeddedServletContainerCustomizer {
     /**
-     * TODO:Using WebSocket to achieve the connection between two users.
      * In the view of programmer,the infomation coming from a user should
      * be written in database of server and be sent to another user by
      * server.

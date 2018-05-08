@@ -9,6 +9,8 @@ import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.dto.ReturnModelHelper;
 import org.yuru.campTalk.dto.StatusCode;
 import org.yuru.campTalk.service.AuthorizationService;
+
+import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 
