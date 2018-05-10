@@ -57,6 +57,7 @@ public class RegisterService {
             }
             if(!judgeDuplicate) {
                 InsertUserInfo(DBsession,uid,encryptedPassword);
+                ImageSetting.DefaultPicture();
                 // transaction finish
                 transaction.commit();
             }
