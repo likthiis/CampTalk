@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="CampTalk_of_MySQL" uuid="a738e2eb-edd8-4efe-92f8-7dd71aa2d5a7">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <introspection-schemas>*:camptalk</introspection-schemas>
+    </data-source>
+  </component>
+</project>

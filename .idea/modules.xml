@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CampTalk.iml" filepath="$PROJECT_DIR$/.idea/CampTalk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/CampTalkServer/CampTalkServer.iml" filepath="$PROJECT_DIR$/CampTalkServer/CampTalkServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CampTalkServer/src/main/main.iml" filepath="$PROJECT_DIR$/CampTalkServer/src/main/main.iml" />
     </modules>
   </component>
 </project>

@@ -63,15 +63,6 @@ public class AuthorizationService {
         }
     }
 
-//    public static void SocketSetAttribute(String uid,Timestamp untilTimeStamp,HttpSession socketSession) {
-//        System.out.println("userId is " + uid);
-//
-//        socketSession.setAttribute("userId", uid);
-//        socketSession.setAttribute("untilTime", untilTimeStamp);
-//        System.out.println("now the session's userId is " + socketSession.getAttribute("userId"));
-//        System.out.println("now the session's timestamp is " + socketSession.getAttribute("untilTime"));
-//    }
-
     /**
      * Using token to achieve the login function.
      * @param uid is the only one identifier of user
@@ -105,8 +96,7 @@ public class AuthorizationService {
             // Transaction commit.
             transaction.commit();
             return "#login_success";
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             String exception = String.format("Request for auth but exception occurred (%s), service rollback, %s", uid, ex);
             LogUtil.Log(exception, AuthorizationService.class.getName(), LogLevelType.ERROR, "");
             transaction.rollback();

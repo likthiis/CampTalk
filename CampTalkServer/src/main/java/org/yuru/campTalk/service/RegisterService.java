@@ -17,7 +17,7 @@ import java.sql.Timestamp;
  */
 public class RegisterService {
 
-    public static boolean checkDuplicateUser(Session DBsession,String uid) {
+    public static boolean CheckDuplicateUser(Session DBsession,String uid) {
         YuruUserEntity duplicateUser = DBsession.get(YuruUserEntity.class, uid);
         if(duplicateUser != null) {
             return true;
@@ -50,14 +50,14 @@ public class RegisterService {
         try{
             String encryptedPassword = EncryptUtil.EncryptSHA256(rawPassword);
             boolean judgeDuplicate = false;
-            judgeDuplicate = checkDuplicateUser(DBsession,uid);
+            judgeDuplicate = CheckDuplicateUser(DBsession,uid);
             if(judgeDuplicate) {
                 transaction.commit();
                 return "#duplicate_uid";
             }
             if(!judgeDuplicate) {
                 InsertUserInfo(DBsession,uid,encryptedPassword);
-                ImageSetting.DefaultPicture();
+                ImageService.DefaultPicture(uid);
                 // transaction finish
                 transaction.commit();
             }
@@ -67,7 +67,7 @@ public class RegisterService {
 
         }catch (Exception ex){
             LogUtil.Log(String.format("Request for login but exception occurred, service rollback, %s", ex),
-                    AuthorizationService.class.getName(), LogLevelType.ERROR, "");
+                    RegisterService.class.getName(), LogLevelType.ERROR, "");
             transaction.rollback();
             return "#exception_occurred";
         }
