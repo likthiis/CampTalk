@@ -7,6 +7,7 @@
 //
 
 #import "CTChatTableViewController.h"
+#import "CTImagePickerViewController.h"
 
 #import "CTChatTableViewCell.h"
 #import "CTChatInputView.h"
@@ -16,10 +17,14 @@
 
 #import "UIImage+Read.h"
 #import "UIImage+Tint.h"
+#import "UIImage+JCPictureEdit.h"
 #import "UINavigationController+ShouldPop.h"
 #import "UIViewController+SafeArea.h"
 #import "UIViewController+DragBarItem.h"
 #import "UIView+PanGestureHelp.h"
+
+#import "CTUserConfig.h"
+#import "CTFileManger.h"
 
 #import "CTChatModel.h"
 
@@ -72,24 +77,16 @@ typedef enum : NSUInteger {
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    UILongPressGestureRecognizer *longeTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(__changeBg:)];
+    [self.tableView addGestureRecognizer:longeTap];
     [self.view addSubview:self.tableView];
     
     // Config TableView
     [CTChatTableViewCell registerForTableView:self.tableView];
-    UIImage *image = [UIImage imageWithFullName:@"chatBg_1" extension:@"jpg"];
-    UIImageView *bgView = [[UIImageView alloc] initWithImage:image];
-    bgView.contentMode = UIViewContentModeScaleAspectFill;
-    self.tableView.backgroundView = bgView;
+    
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.tableView.delaysContentTouches = NO;
-    
-    _tableViewCover = [[CTStubbornView alloc] initWithFrame:self.tableView.bounds];
-    _tableViewCover.image = image;
-    _tableViewCover.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _tableViewCover.contentMode = UIViewContentModeScaleAspectFill;
-    [_tableViewCover setGradientDirection:YES];
-    [self.tableView addSubview:_tableViewCover];
     
     // fake data
     _data = [NSMutableArray array];
@@ -126,6 +123,8 @@ typedef enum : NSUInteger {
     [self __configIconPlace];
     
     [self __addKeyboardNotification];
+    [self __configBackgroundImage];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(__configBackgroundImage) name:UCChatBackgroundImagePathChangedNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -144,8 +143,12 @@ typedef enum : NSUInteger {
     CGFloat recordTBHeight = self.tableView.frame.size.height;
     
     self.tableView.frame = self.view.bounds;
+    _cameraView.frame = self.safeBounds;
     
     [self __configStubbornViewLayout];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
+    [self performSelector:@selector(__configInputViewTintColor) withObject:nil afterDelay:0.3];
     
     if (!_needScrollToBottom) {
         
@@ -165,6 +168,14 @@ typedef enum : NSUInteger {
             }];
         }
     }
+}
+
+- (void)viewSafeAreaInsetsDidChange {
+    [super viewSafeAreaInsetsDidChange];
+    [self __configInputViewLayout];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
+    [self performSelector:@selector(__configInputViewTintColor) withObject:nil afterDelay:0.3];
 }
 
 - (void)__configIconPlace {
@@ -278,6 +289,54 @@ typedef enum : NSUInteger {
     
     [[NSUserDefaults standardUserDefaults] setObject:__toolConfig forKey:kCTChatToolConfig];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)__changeBg:(UILongPressGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        [CTImagePickerViewController presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
+            
+            [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            
+            PHAsset *asset = phassets.firstObject;
+            if (!asset) {
+                return;
+            }
+            
+            PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+            options.deliveryMode = PHImageRequestOptionsVersionOriginal;
+            options.synchronous = NO;
+            options.networkAccessAllowed = YES;
+            
+            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                if (!imageData) {
+                    return;
+                }
+                [CTUserConfig setChatBackgroundImageData:imageData];
+            }];
+        }];
+    }
+}
+
+- (void)__configBackgroundImage {
+    UIImage *image = [UIImage imageWithContentsOfFile:[CTUserConfig chatBackgroundImagePath]];
+    if ([self.tableView.backgroundView isKindOfClass:UIImageView.class]) {
+        [(UIImageView *)self.tableView.backgroundView setImage:image];
+    } else {
+        UIImageView *bgView = [[UIImageView alloc] initWithImage:image];
+        bgView.contentMode = UIViewContentModeScaleAspectFill;
+        bgView.clipsToBounds = YES;
+        self.tableView.backgroundView = bgView;
+    }
+    if (!_tableViewCover) {
+        _tableViewCover = [[CTStubbornView alloc] initWithFrame:self.tableView.bounds];
+        _tableViewCover.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _tableViewCover.contentMode = UIViewContentModeScaleAspectFill;
+        [_tableViewCover setGradientDirection:YES];
+        [self.tableView addSubview:_tableViewCover];
+    }
+    _tableViewCover.image = image;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
+    [self performSelector:@selector(__configInputViewTintColor) withObject:nil afterDelay:0.3];
 }
 
 - (UIView *)iconCopyWithIconId:(CTChatToolIconId)iconId {
@@ -396,51 +455,6 @@ typedef enum : NSUInteger {
     [self __configInputViewLayout];
 }
 
-- (void)__configInputViewLayout {
-    if (_viewControllerWillPop) {
-        return;
-    }
-    CGRect bounds = self.view.bounds;
-    
-    CGFloat inputHeight = MAX(kMinInputViewHeight, _inputView.contentHeight);
-    CGFloat bottomMargin = 10.f;
-    
-//    CGFloat lastBottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
-    
-    _inputView.frame = CGRectMake(0, bounds.size.height - inputHeight - _keyboardHeight, bounds.size.width, inputHeight);
-    
-    CGFloat safeAreaBottom = 0.f;
-    if (@available(iOS 11.0, *)) {
-        safeAreaBottom = _inputView.safeAreaInsets.bottom;
-        _inputView.frame = UIEdgeInsetsInsetRect(_inputView.frame, UIEdgeInsetsMake(-safeAreaBottom, 0, 0, 0));
-    }
-    
-    CGFloat bottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
-    
-    CGPoint contentOffset = self.tableView.contentOffset;
-    UIEdgeInsets contentInset = self.tableView.contentInset;
-    
-    CGFloat contentBottom = self.tableView.frame.size.height - self.viewSafeAreaInsets.bottom - self.tableView.contentSize.height;
-    
-    if (_keyboardHeight > 0 && contentBottom > 0) {
-        CGFloat offSetY = bottom - contentBottom;
-        if (offSetY > -self.viewSafeAreaInsets.top) {
-            contentOffset.y = offSetY;
-        }
-    } else {
-        contentOffset.y += bottom - contentInset.bottom;
-    }
-    
-    contentInset.bottom = bottom;
-    
-    self.tableView.contentInset = contentInset;
-    self.tableView.contentOffset = contentOffset;
-    
-    UIEdgeInsets scrollIndicatorInsets = self.tableView.scrollIndicatorInsets;
-    scrollIndicatorInsets.bottom = bottom - bottomMargin;
-    self.tableView.scrollIndicatorInsets = scrollIndicatorInsets;
-}
-
 - (void)chatInputView:(CTChatInputView *)chatInputView willRemoveItem:(CTChatInputViewToolBarItem *)item syncAnimations:(void (^)(void))syncAnimations {
     
     __weak typeof(self) wSelf = self;
@@ -478,7 +492,14 @@ typedef enum : NSUInteger {
                                          }
                                      }
                                      [icon removeFromSuperview];
+                                     [NSObject cancelPreviousPerformRequestsWithTarget:wSelf selector:@selector(__configInputViewTintColor) object:nil];
+                                     [wSelf performSelector:@selector(__configInputViewTintColor) withObject:nil afterDelay:0.3];
                                  }];
+}
+
+- (void)chatInputView:(CTChatInputView *)chatInputView didAddItem:(CTChatInputViewToolBarItem *)item {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
+    [self __configInputViewTintColor];
 }
 
 - (void)chatInputView:(CTChatInputView *)chatInputView didTapActionButton:(UIButton *)button {
@@ -511,6 +532,87 @@ typedef enum : NSUInteger {
             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
     }];
+}
+
+- (void)__configInputViewLayout {
+    if (_viewControllerWillPop) {
+        return;
+    }
+    CGRect bounds = self.view.bounds;
+    
+    CGFloat inputHeight = MAX(kMinInputViewHeight, _inputView.contentHeight);
+    CGFloat bottomMargin = 10.f;
+    
+    //    CGFloat lastBottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
+    
+    _inputView.frame = CGRectMake(0, bounds.size.height - inputHeight - _keyboardHeight, bounds.size.width, inputHeight);
+    
+    CGFloat safeAreaBottom = 0.f;
+    if (@available(iOS 11.0, *)) {
+        safeAreaBottom = _inputView.safeAreaInsets.bottom;
+        _inputView.frame = UIEdgeInsetsInsetRect(_inputView.frame, UIEdgeInsetsMake(-safeAreaBottom, 0, 0, 0));
+    }
+    
+    CGFloat bottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
+    
+    CGPoint contentOffset = self.tableView.contentOffset;
+    UIEdgeInsets contentInset = self.tableView.contentInset;
+    
+    CGFloat contentBottom = self.tableView.frame.size.height - self.viewSafeAreaInsets.bottom - self.tableView.contentSize.height;
+    
+    if (_keyboardHeight >= 0 && contentBottom - inputHeight - self.viewSafeAreaInsets.top > 0) {
+        if (_keyboardHeight == 0) {
+            contentOffset.y = -self.viewSafeAreaInsets.top;
+        } else {
+            CGFloat offSetY = bottom - contentBottom;
+            contentOffset.y = MAX(offSetY, -self.viewSafeAreaInsets.top);
+        }
+    } else {
+        contentOffset.y += bottom - contentInset.bottom;
+    }
+    
+    contentInset.bottom = bottom;
+    
+    self.tableView.contentInset = contentInset;
+    self.tableView.contentOffset = contentOffset;
+    
+    UIEdgeInsets scrollIndicatorInsets = self.tableView.scrollIndicatorInsets;
+    scrollIndicatorInsets.bottom = bottom - bottomMargin;
+    self.tableView.scrollIndicatorInsets = scrollIndicatorInsets;
+}
+
+- (void)__configInputViewTintColor {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
+    
+    CGSize boundsSize = self.view.bounds.size;
+    UIEdgeInsets edge = self.viewSafeAreaInsets;
+    CGRect toolBarFrame = _inputView.toolBarFrame;
+    
+    CGFloat toolBarHeight = CTChatInputToolBarHeight + edge.bottom;
+    CGFloat toolBarWidth = MAX(toolBarFrame.size.width, CTChatInputToolBarHeight);
+    edge.left = toolBarFrame.origin.x + _inputView.contentView.frame.origin.x;
+
+    UIImage *image = [(UIImageView *)self.tableView.backgroundView image];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        
+        CGSize size = [image sizeThatFill:boundsSize];
+        CGSize pixSize = image.pixSize;
+        CGFloat scale = pixSize.width / size.width;
+        
+        CGFloat x = (size.width - boundsSize.width) / 2.f + edge.left;
+        CGFloat y = size.height - (size.height - boundsSize.height) / 2.f - toolBarHeight;
+        
+        
+        UIImage *cropImage = [image cropInRect:
+                              CGRectMake(x * scale,
+                                         y * scale,
+                                         toolBarWidth * scale,
+                                         (toolBarHeight - edge.bottom) * scale)];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.inputView updateNormalTintColorWithBackgroundImage:cropImage];
+        });
+    });
 }
 
 #pragma mark - CTCameraViewDelegate
@@ -566,6 +668,9 @@ typedef enum : NSUInteger {
 
 - (void)shareMedia:(UIButton *)sender {
     NSLog(@"share media");
+    [CTImagePickerViewController presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
+        [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }];
 }
 
 #pragma mark - CTMusicButton

@@ -129,4 +129,148 @@
     return resultImg;
 }
 
+- (BOOL)hasAlpha {
+    CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage);
+    return (alpha == kCGImageAlphaFirst ||
+            alpha == kCGImageAlphaLast ||
+            alpha == kCGImageAlphaPremultipliedFirst ||
+            alpha == kCGImageAlphaPremultipliedLast);
+}
+
+//根据图片获取图片的主色调
+- (UIColor *)mainColor {
+    //第一步 先把图片缩小 加快计算速度. 但越小结果误差可能越大
+    CGSize thumbSize = [self sizeThatFits:CGSizeMake(50/[UIScreen mainScreen].scale, 50/[UIScreen mainScreen].scale) strect:NO];
+    thumbSize.width *= [UIScreen mainScreen].scale;
+    thumbSize.height *= [UIScreen mainScreen].scale;
+    
+    CGImageRef cgImage = self.CGImage;
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(cgImage);
+    CGContextRef context = CGBitmapContextCreate(NULL,
+                                                 thumbSize.width,
+                                                 thumbSize.height,
+                                                 8,//bits per component
+                                                 0,
+                                                 colorSpace,
+                                                 CGImageGetBitmapInfo(cgImage));
+    
+    CGRect drawRect = CGRectMake(0, 0, thumbSize.width, thumbSize.height);
+    CGContextDrawImage(context, drawRect, cgImage);
+    CGColorSpaceRelease(colorSpace);
+    
+    //第二步 取每个点的像素值
+    unsigned char* data = CGBitmapContextGetData (context);
+    
+    if (data == NULL) {CGContextRelease(context); return nil;}
+    
+    NSCountedSet *cls=[NSCountedSet setWithCapacity:thumbSize.width*thumbSize.height];
+    
+    for (int x=0; x<thumbSize.width; x++) {
+        for (int y=0; y<thumbSize.height; y++) {
+            int offset = 4*(x*y);
+            int red = data[offset];
+            int green = data[offset+1];
+            int blue = data[offset+2];
+            int alpha =  data[offset+3];
+            if (alpha>0) {//去除透明
+                if (red==255&&green==255&&blue==255) {//去除白色
+                }else{
+                    NSArray *clr=@[@(red),@(green),@(blue),@(alpha)];
+                    [cls addObject:clr];
+                }
+                
+            }
+        }
+    }
+    CGContextRelease(context);
+    //第三步 找到出现次数最多的那个颜色
+    NSEnumerator *enumerator = [cls objectEnumerator];
+    NSArray *curColor = nil;
+    NSArray *MaxColor=nil;
+    NSUInteger MaxCount=0;
+    while ( (curColor = [enumerator nextObject]) != nil )
+    {
+        NSUInteger tmpCount = [cls countForObject:curColor];
+        if ( tmpCount < MaxCount ) continue;
+        MaxCount=tmpCount;
+        MaxColor=curColor;
+        
+    }
+    return [UIColor colorWithRed:([MaxColor[0] intValue]/255.0f) green:([MaxColor[1] intValue]/255.0f) blue:([MaxColor[2] intValue]/255.0f) alpha:([MaxColor[3] intValue]/255.0f)];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size strect:(BOOL)stretch {
+    CGSize imageSize = self.logicSize;
+    
+    if (stretch) {
+        CGFloat scale = size.width / imageSize.width;
+        
+        CGFloat width = size.width;
+        CGFloat height = imageSize.height * scale;
+        
+        if (height > size.height) {
+            scale = size.height / imageSize.height;
+            imageSize.height = size.height;
+            imageSize.width = imageSize.width * scale;
+        } else {
+            imageSize.height = height;
+            imageSize.width = width;
+        }
+    } else {
+        CGFloat scale = size.width / imageSize.width;
+        if (scale < 1.f) {
+            if (imageSize.height * scale > size.height) {
+                scale = size.height / imageSize.height;
+            }
+            imageSize.height *= scale;
+            imageSize.width *= scale;
+        } else {
+            scale = size.height / imageSize.height;
+            if (scale < 1.f) {
+                if (imageSize.width * scale > size.width) {
+                    scale = size.width / imageSize.width;
+                }
+                imageSize.height *= scale;
+                imageSize.width *= scale;
+            }
+        }
+    }
+    return imageSize;
+}
+
+- (CGSize)sizeThatFill:(CGSize)size {
+    CGSize imageSize = self.logicSize;
+    
+    CGFloat scale = size.width / imageSize.width;
+    
+    CGFloat width = size.width;
+    CGFloat height = imageSize.height * scale;
+    
+    if (height < size.height) {
+        scale = size.height / imageSize.height;
+        imageSize.height = size.height;
+        imageSize.width = imageSize.width * scale;
+    } else {
+        imageSize.height = height;
+        imageSize.width = width;
+    }
+    return imageSize;
+}
+
+- (CGSize)logicSize {
+    CGSize imageSize = self.size;
+    if (self.scale != [UIScreen mainScreen].scale) {
+        CGFloat scale = self.scale / [UIScreen mainScreen].scale;
+        imageSize.height *= scale;
+        imageSize.width *= scale;
+    }
+    return imageSize;
+}
+
+- (CGSize)pixSize {
+    CGSize imageSize = self.size;
+    imageSize.width *= self.scale;
+    imageSize.height *= self.scale;
+    return imageSize;
+}
 @end

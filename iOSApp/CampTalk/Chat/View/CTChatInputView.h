@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+extern CGFloat const CTChatInputToolBarHeight;
+
 @interface CTChatInputViewToolBarItem : NSObject
 
 @property (nonatomic, strong) UIView *icon;
@@ -24,6 +26,7 @@
 @property (nonatomic, strong) UIImageView *backgroundView;
 @property (nonatomic, strong) UIButton *actionButton;
 
+@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, assign) CGFloat contentHeight;
 @property (nonatomic, assign) CGFloat maxContentHeight;
 
@@ -37,6 +40,11 @@
 - (void)addToolBarItem:(CTChatInputViewToolBarItem *)item;
 - (void)removeToolBarItemWithId:(NSInteger)identifier;
 - (void)removeAllToolBarItem;
+
+- (CGRect)toolBarFrame;
+
+- (void)updateNormalTintColorWithBackgroundImage:(UIImage *)image;
+- (void)updateNormalTintColorWithBackgroundView:(UIView *)view frame:(CGRect)rect;
 
 - (NSInteger)containToolBarItemWithId:(NSInteger)identifier;
 - (void)updateContentHeight;
@@ -61,5 +69,7 @@
 - (void)contentSizeDidChange:(CTChatInputView *)chatInputView size:(CGSize)size;
 
 - (void)chatInputView:(CTChatInputView *)chatInputView willRemoveItem:(CTChatInputViewToolBarItem *)item syncAnimations:(void(^)(void))syncAnimations;
+
+- (void)chatInputView:(CTChatInputView *)chatInputView didAddItem:(CTChatInputViewToolBarItem *)item;
 
 @end

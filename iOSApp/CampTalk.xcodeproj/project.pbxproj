@@ -65,6 +65,16 @@
 		9E72767E208DBE7D00FE9454 /* CTStubbornView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E72767C208DBE7D00FE9454 /* CTStubbornView.m */; };
 		E6035A17209BF9AB00A6C6CA /* RGBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */; };
 		E6035A18209BF9AB00A6C6CA /* RGBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */; };
+		E6312B6B20A0565F0090054C /* CTImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312B6A20A0565F0090054C /* CTImagePickerViewController.m */; };
+		E6312B6C20A0565F0090054C /* CTImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312B6A20A0565F0090054C /* CTImagePickerViewController.m */; };
+		E6312B7020A0619F0090054C /* CTImageAlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312B6F20A0619F0090054C /* CTImageAlbumListViewController.m */; };
+		E6312B7120A0619F0090054C /* CTImageAlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312B6F20A0619F0090054C /* CTImageAlbumListViewController.m */; };
+		E6312BB420A28C670090054C /* CTUserConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312BB320A28C670090054C /* CTUserConfig.m */; };
+		E6312BB520A28C670090054C /* CTUserConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312BB320A28C670090054C /* CTUserConfig.m */; };
+		E6312BBE20A290DA0090054C /* MLWBluuurView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312BB820A290DA0090054C /* MLWBluuurView.m */; };
+		E6312BBF20A290DA0090054C /* MLWBluuurView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312BB820A290DA0090054C /* MLWBluuurView.m */; };
+		E6312BC720A2ECA60090054C /* CTFileManger.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312BC620A2ECA60090054C /* CTFileManger.m */; };
+		E6312BC820A2ECA60090054C /* CTFileManger.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312BC620A2ECA60090054C /* CTFileManger.m */; };
 		E64713532096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */; };
 		E64713542096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */; };
 		E6B7F45F2093DE2B00918BC8 /* CTCameraView.m in Sources */ = {isa = PBXBuildFile; fileRef = E6B7F45E2093DE2B00918BC8 /* CTCameraView.m */; };
@@ -137,6 +147,17 @@
 		9E72767C208DBE7D00FE9454 /* CTStubbornView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTStubbornView.m; sourceTree = "<group>"; };
 		E6035A15209BF9AB00A6C6CA /* RGBubbleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGBubbleView.h; sourceTree = "<group>"; };
 		E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGBubbleView.m; sourceTree = "<group>"; };
+		E6312B6920A0565F0090054C /* CTImagePickerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTImagePickerViewController.h; sourceTree = "<group>"; };
+		E6312B6A20A0565F0090054C /* CTImagePickerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTImagePickerViewController.m; sourceTree = "<group>"; };
+		E6312B6E20A0619F0090054C /* CTImageAlbumListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTImageAlbumListViewController.h; sourceTree = "<group>"; };
+		E6312B6F20A0619F0090054C /* CTImageAlbumListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTImageAlbumListViewController.m; sourceTree = "<group>"; };
+		E6312BB220A28C670090054C /* CTUserConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTUserConfig.h; sourceTree = "<group>"; };
+		E6312BB320A28C670090054C /* CTUserConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTUserConfig.m; sourceTree = "<group>"; };
+		E6312BB820A290DA0090054C /* MLWBluuurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLWBluuurView.m; sourceTree = "<group>"; };
+		E6312BBA20A290DA0090054C /* Bluuur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bluuur.h; sourceTree = "<group>"; };
+		E6312BBB20A290DA0090054C /* MLWBluuurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLWBluuurView.h; sourceTree = "<group>"; };
+		E6312BC520A2ECA60090054C /* CTFileManger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTFileManger.h; sourceTree = "<group>"; };
+		E6312BC620A2ECA60090054C /* CTFileManger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTFileManger.m; sourceTree = "<group>"; };
 		E64713512096EC1600A304BC /* UIViewController+DragBarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DragBarItem.h"; sourceTree = "<group>"; };
 		E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+DragBarItem.m"; sourceTree = "<group>"; };
 		E6B7F45D2093DE2B00918BC8 /* CTCameraView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTCameraView.h; sourceTree = "<group>"; };
@@ -193,8 +214,11 @@
 			isa = PBXGroup;
 			children = (
 				9E72766D208A36B500FE9454 /* Base */,
+				E6312BB120A2891D0090054C /* Config */,
 				9E72764D2088FE4800FE9454 /* Chat */,
 				6BD76645208508E9003FD599 /* Category */,
+				E6312BC420A2EC830090054C /* File */,
+				E6312B6D20A060C60090054C /* ImagePicker */,
 				6BD7664120850841003FD599 /* Resource */,
 				6BD7662B208504E3003FD599 /* AppDelegate.h */,
 				6BD7662C208504E3003FD599 /* AppDelegate.m */,
@@ -378,10 +402,58 @@
 		E6035A19209BF9AF00A6C6CA /* UIView */ = {
 			isa = PBXGroup;
 			children = (
+				E6312BB620A290DA0090054C /* Bluuur */,
 				E6035A15209BF9AB00A6C6CA /* RGBubbleView.h */,
 				E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */,
 			);
 			path = UIView;
+			sourceTree = "<group>";
+		};
+		E6312B6D20A060C60090054C /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				E6312B6E20A0619F0090054C /* CTImageAlbumListViewController.h */,
+				E6312B6F20A0619F0090054C /* CTImageAlbumListViewController.m */,
+				E6312B6920A0565F0090054C /* CTImagePickerViewController.h */,
+				E6312B6A20A0565F0090054C /* CTImagePickerViewController.m */,
+			);
+			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		E6312BB120A2891D0090054C /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				E6312BB220A28C670090054C /* CTUserConfig.h */,
+				E6312BB320A28C670090054C /* CTUserConfig.m */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		E6312BB620A290DA0090054C /* Bluuur */ = {
+			isa = PBXGroup;
+			children = (
+				E6312BB720A290DA0090054C /* Classes */,
+			);
+			path = Bluuur;
+			sourceTree = "<group>";
+		};
+		E6312BB720A290DA0090054C /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				E6312BBA20A290DA0090054C /* Bluuur.h */,
+				E6312BBB20A290DA0090054C /* MLWBluuurView.h */,
+				E6312BB820A290DA0090054C /* MLWBluuurView.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		E6312BC420A2EC830090054C /* File */ = {
+			isa = PBXGroup;
+			children = (
+				E6312BC520A2ECA60090054C /* CTFileManger.h */,
+				E6312BC620A2ECA60090054C /* CTFileManger.m */,
+			);
+			path = File;
 			sourceTree = "<group>";
 		};
 		E6B7F4612093F9B300918BC8 /* UIViewController */ = {
@@ -520,14 +592,17 @@
 			files = (
 				E6B7F45F2093DE2B00918BC8 /* CTCameraView.m in Sources */,
 				6BD76630208504E3003FD599 /* ViewController.m in Sources */,
+				E6312B7020A0619F0090054C /* CTImageAlbumListViewController.m in Sources */,
 				6BD76679208508F5003FD599 /* UIImage+Name.m in Sources */,
 				E6B7F47D20944FA900918BC8 /* UIView+PanGestureHelp.m in Sources */,
 				6BD76674208508F5003FD599 /* UIView+LayoutHelp.m in Sources */,
+				E6312B6B20A0565F0090054C /* CTImagePickerViewController.m in Sources */,
 				6BD76675208508F5003FD599 /* UIView+JTParentVC.m in Sources */,
 				9E7276442088F3B300FE9454 /* CTChatTableViewController.m in Sources */,
 				E6B7F4702093FBB100918BC8 /* UIViewController+SafeArea.m in Sources */,
 				6BD76677208508F5003FD599 /* UINavigationController+ShouldPop.m in Sources */,
 				6BD76678208508F5003FD599 /* UITabBar+Dot.m in Sources */,
+				E6312BC720A2ECA60090054C /* CTFileManger.m in Sources */,
 				E6B7F4792094468700918BC8 /* UINavigationItem+Gesture.m in Sources */,
 				E6035A17209BF9AB00A6C6CA /* RGBubbleView.m in Sources */,
 				9E727670208A36F500FE9454 /* CTNavigationController.m in Sources */,
@@ -537,12 +612,14 @@
 				9E72765520896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */,
 				6BD7667B208508F5003FD599 /* UIImage+Tint.m in Sources */,
 				6BD7667C208508F5003FD599 /* UIImage+JCPictureEdit.m in Sources */,
+				E6312BB420A28C670090054C /* CTUserConfig.m in Sources */,
 				9E727675208C13BF00FE9454 /* CTChatInputView.m in Sources */,
 				E6B7F4682093F9B300918BC8 /* UIViewController+BarFrame.m in Sources */,
 				6BD76676208508F5003FD599 /* UIView+Radius.m in Sources */,
 				6BD7667D208508F5003FD599 /* UIImage+ImageEffects.m in Sources */,
 				9E72767D208DBE7D00FE9454 /* CTStubbornView.m in Sources */,
 				E64713532096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */,
+				E6312BBE20A290DA0090054C /* MLWBluuurView.m in Sources */,
 				E6B7F48B2096869800918BC8 /* CTMusicButton.m in Sources */,
 				6BD7667E208508F5003FD599 /* UIImage+Read.m in Sources */,
 				9E72766B208A23D600FE9454 /* CTChatModel.m in Sources */,
@@ -556,14 +633,17 @@
 			files = (
 				E6B7F4602093DE2B00918BC8 /* CTCameraView.m in Sources */,
 				6BD7669E20850E11003FD599 /* ViewController.m in Sources */,
+				E6312B7120A0619F0090054C /* CTImageAlbumListViewController.m in Sources */,
 				6BD7669F20850E11003FD599 /* UIImage+Name.m in Sources */,
 				E6B7F47E20944FA900918BC8 /* UIView+PanGestureHelp.m in Sources */,
 				6BD766A020850E11003FD599 /* UIView+LayoutHelp.m in Sources */,
+				E6312B6C20A0565F0090054C /* CTImagePickerViewController.m in Sources */,
 				6BD766A120850E11003FD599 /* UIView+JTParentVC.m in Sources */,
 				9E7276452088F3B300FE9454 /* CTChatTableViewController.m in Sources */,
 				E6B7F4712093FBB100918BC8 /* UIViewController+SafeArea.m in Sources */,
 				6BD766A220850E11003FD599 /* UINavigationController+ShouldPop.m in Sources */,
 				6BD766A320850E11003FD599 /* UITabBar+Dot.m in Sources */,
+				E6312BC820A2ECA60090054C /* CTFileManger.m in Sources */,
 				E6B7F47A2094468700918BC8 /* UINavigationItem+Gesture.m in Sources */,
 				E6035A18209BF9AB00A6C6CA /* RGBubbleView.m in Sources */,
 				9E727671208A36F500FE9454 /* CTNavigationController.m in Sources */,
@@ -573,12 +653,14 @@
 				9E72765620896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */,
 				6BD766A720850E11003FD599 /* UIImage+Tint.m in Sources */,
 				6BD766A820850E11003FD599 /* UIImage+JCPictureEdit.m in Sources */,
+				E6312BB520A28C670090054C /* CTUserConfig.m in Sources */,
 				9E727676208C13BF00FE9454 /* CTChatInputView.m in Sources */,
 				E6B7F4692093F9B300918BC8 /* UIViewController+BarFrame.m in Sources */,
 				6BD766A920850E11003FD599 /* UIView+Radius.m in Sources */,
 				6BD766AA20850E11003FD599 /* UIImage+ImageEffects.m in Sources */,
 				9E72767E208DBE7D00FE9454 /* CTStubbornView.m in Sources */,
 				E64713542096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */,
+				E6312BBF20A290DA0090054C /* MLWBluuurView.m in Sources */,
 				E6B7F48C2096869800918BC8 /* CTMusicButton.m in Sources */,
 				6BD766AB20850E11003FD599 /* UIImage+Read.m in Sources */,
 				9E72766C208A23D600FE9454 /* CTChatModel.m in Sources */,

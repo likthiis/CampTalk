@@ -89,9 +89,26 @@
     [CATransaction commit];
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     UIView *hitView = [super hitTest:point withEvent:event];
-    if (hitView == self){
+    if (hitView == self) {
+//        __block BOOL hasLongTap = NO;
+//        [event.allTouches enumerateObjectsUsingBlock:^(UITouch * _Nonnull obj, BOOL * _Nonnull stop) {
+//            [obj.gestureRecognizers enumerateObjectsUsingBlock:^(UIGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                if([obj isKindOfClass:UILongPressGestureRecognizer.class]){
+//                    hasLongTap = YES;
+//                    *stop = YES;
+//                }
+//            }];
+//            if (hasLongTap) {
+//                *stop = YES;
+//            }
+//        }];
+//        if (hasLongTap) {
+//            NSLog(@"response");
+//            return self;
+//        }
+//        NSLog(@"no response");
         return nil;
     }
     return hitView;

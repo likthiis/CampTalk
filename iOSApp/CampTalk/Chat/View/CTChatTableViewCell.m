@@ -7,6 +7,7 @@
 //
 
 #import "CTChatTableViewCell.h"
+#import "UIImage+Tint.h"
 
 static CGSize _maxIconSize = {40, 40};
 static CGFloat _chatCelIIconWidth = 40;
@@ -46,7 +47,7 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     
     // 头像布局，头像宽不超出 _chatCelIIconWidth，高度不超出父视图的高度，否则按比例缩放头像至全部显示
     
-    CGSize iconSize = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(_chatCelIIconWidth, height) imageSize:[CTChatTableViewCell imageTrueSizeWithImage:self.iconView.image]];
+    CGSize iconSize = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(_chatCelIIconWidth, height) imageSize:self.iconView.image.logicSize];
     
     self.iconView.frame =
     CGRectMake(
@@ -60,7 +61,7 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     
     if (self.displayThumb) {
         //图片布局
-        bounds.size = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(bounds.size.width, height - _marginTop) imageSize:[CTChatTableViewCell imageTrueSizeWithImage:self.thumbView.image]];
+        bounds.size = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(bounds.size.width, height - _marginTop) imageSize:self.thumbView.image.logicSize];
         bounds.origin.y = self.bounds.size.height - bounds.size.height;
         self.thumbWapper.frame = bounds;
         
@@ -109,16 +110,6 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
             imageSize.height *= scale;
             imageSize.width *= scale;
         }
-    }
-    return imageSize;
-}
-
-+ (CGSize)imageTrueSizeWithImage:(UIImage *)image {
-    CGSize imageSize = image.size;
-    if (image.scale != [UIScreen mainScreen].scale) {
-        CGFloat scale = image.scale / [UIScreen mainScreen].scale;
-        imageSize.height *= scale;
-        imageSize.width *= scale;
     }
     return imageSize;
 }
@@ -187,5 +178,13 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     self.chatBubbleLabel.label.text = nil;
     [self setNeedsLayout];
 }
+
+//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+//    UIView *hitView = [super hitTest:point withEvent:event];
+//    if (hitView == self || hitView == self.contentView) {
+//        return nil;
+//    }
+//    return hitView;
+//}
 
 @end

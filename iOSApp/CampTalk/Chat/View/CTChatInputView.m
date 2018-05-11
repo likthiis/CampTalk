@@ -8,6 +8,8 @@
 
 #import "CTChatInputView.h"
 #import "UIView+PanGestureHelp.h"
+#import "UIImage+JCPictureEdit.h"
+#import "UIImage+Tint.h"
 
 @implementation CTChatInputViewToolBarItem
 
@@ -33,19 +35,19 @@
 
 @end
 
+CGFloat const CTChatInputToolBarHeight = 40.f;
 static UIEdgeInsets kCTChatInputInset = {8,5,5,5};
-static CGFloat kToolBarHeight = 40.f;
 static CGFloat kSendButtonSide = 50.f;
 
-@interface CTChatInputView () <UITextViewDelegate, UIGestureRecognizerDelegate>
+@interface CTChatInputView () <UITextViewDelegate>
 
 @property (nonatomic, strong) UITextView *textView;
 
 @property (nonatomic, assign) CGFloat backgroundAlpha;
 
-@property (nonatomic, strong) UIView *contentView;
-
 @property (nonatomic, assign) BOOL ignoreToolBarLayout;
+
+@property (nonatomic, strong) UIColor *normalTintColor;
 
 @end
 
@@ -76,7 +78,7 @@ static CGFloat kSendButtonSide = 50.f;
 - (void)__config {
     
     self.userInteractionEnabled = YES;
-    self.tintColor = [UIColor whiteColor];
+    _normalTintColor = [UIColor whiteColor];
     
     _backgroundView = [[UIImageView alloc] initWithFrame:self.bounds];
     _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -174,9 +176,9 @@ static CGFloat kSendButtonSide = 50.f;
         
         [self.toolBarItems enumerateObjectsUsingBlock:^(CTChatInputViewToolBarItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (obj.icon.superview == self.contentView) {
-                obj.icon.frame = CGRectMake(layoutX, layoutY, kToolBarHeight, kToolBarHeight);
+                obj.icon.frame = CGRectMake(layoutX, layoutY, CTChatInputToolBarHeight, CTChatInputToolBarHeight);
             }
-            layoutX += kToolBarHeight + 5.f;
+            layoutX += CTChatInputToolBarHeight + 5.f;
         }];
     }
 }
@@ -202,7 +204,7 @@ static CGFloat kSendButtonSide = 50.f;
 }
 
 - (CGFloat)__toolBarHeight {
-    return _toolBarItems.count > 0 ? kToolBarHeight : 0;
+    return _toolBarItems.count > 0 ? CTChatInputToolBarHeight : 0;
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {
@@ -223,11 +225,15 @@ static CGFloat kSendButtonSide = 50.f;
         _backgroundAlpha = 1.f;
         tintColor = [UIColor whiteColor];
     } else {
-        if (_backgroundAlpha == 0.1f) {
+        if (_backgroundAlpha == 0.1f &&
+            (self.tintColor == _normalTintColor ||
+            (self.tintColor &&
+            _normalTintColor &&
+            CGColorEqualToColor(_normalTintColor.CGColor, self.tintColor.CGColor)))) {
             return;
         }
         _backgroundAlpha = 0.1f;
-        tintColor = [UIColor blackColor];
+        tintColor = _normalTintColor;
     }
     
     if (animate) {
@@ -267,7 +273,6 @@ static CGFloat kSendButtonSide = 50.f;
         [self setNeedsLayout];
         
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-        longPress.delegate = self;
         [item.icon addGestureRecognizer:longPress];
         
         item.icon.tintColor = nil;
@@ -349,7 +354,9 @@ static CGFloat kSendButtonSide = 50.f;
             if (customAnimate) {
                 customAnimate();
             }
-            
+            if ([self.delegate respondsToSelector:@selector(chatInputView:didAddItem:)]) {
+                [self.delegate chatInputView:self didAddItem:item];
+            }
         } completion:^(BOOL finished) {
             dragIcon.hidden = recordHide;
             if (completion) {
@@ -423,6 +430,46 @@ static CGFloat kSendButtonSide = 50.f;
             break;
         }
     }
+}
+
+- (CGRect)toolBarFrame {
+    if (self.toolBarItems.count) {
+        
+        UIView *firstView = self.toolBarItems.firstObject.icon;
+        UIView *lastView = self.toolBarItems.lastObject.icon;
+        
+        CGFloat x = CGRectGetMinX(firstView.frame);
+        CGFloat y = CGRectGetMaxY(_textView.frame);
+        CGFloat width = CGRectGetMaxX(lastView.frame) - x;
+        return CGRectMake(x, y, width, CTChatInputToolBarHeight);
+    }
+    return CGRectZero;
+}
+
+- (void)updateNormalTintColorWithBackgroundImage:(UIImage *)image {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        UIColor *mainColor = image.mainColor;
+        
+        if (!mainColor) {
+            return;
+        }
+        CGFloat white;
+        [mainColor getWhite:&white alpha:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (white > 0.5) {
+                self.normalTintColor = [UIColor colorWithWhite:0.f alpha:1.f];
+            } else {
+                self.normalTintColor = [UIColor colorWithWhite:1.f alpha:1.f];
+            }
+            [self __configBackgroundAlphaWithAnimate:YES];
+        });
+    });
+}
+
+- (void)updateNormalTintColorWithBackgroundView:(UIView *)view frame:(CGRect)rect {
+    UIImage *image = [UIImage cropView:view inRect:rect scale:[[UIScreen mainScreen] scale]];
+    [self updateNormalTintColorWithBackgroundImage:image];
 }
 
 @end

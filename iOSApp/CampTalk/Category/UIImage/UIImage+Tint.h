@@ -19,4 +19,13 @@
 + (UIImage *)imageByApplyingAlphaWithImage:(UIImage *)image;
 + (UIImage *)drawImage:(UIImage *)image aboveAnotherImage:(UIImage *)anotherImage;
 
+- (UIColor *)mainColor;
+- (BOOL)hasAlpha;
+
+- (CGSize)sizeThatFits:(CGSize)size strect:(BOOL)stretch;
+- (CGSize)sizeThatFill:(CGSize)size;
+
+- (CGSize)logicSize;
+- (CGSize)pixSize;
+
 @end
