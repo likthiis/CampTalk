@@ -123,11 +123,7 @@
 }
 
 - (CGRect)safeAreaFixHeight:(CGRect)rect {
-    if (self.navigationController) {
-        rect.size.height -= self.viewSafeAreaInsets.bottom;
-    } else {
-        rect.size.height -= (self.viewSafeAreaInsets.top + self.viewSafeAreaInsets.bottom);
-    }
+    rect.size.height -= (self.viewSafeAreaInsets.top + self.viewSafeAreaInsets.bottom);
     return rect;
 }
 

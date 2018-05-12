@@ -35,7 +35,7 @@
 
 @end
 
-CGFloat const CTChatInputToolBarHeight = 40.f;
+CGFloat const CTChatInputToolBarHeight = 35.f;
 static UIEdgeInsets kCTChatInputInset = {8,5,5,5};
 static CGFloat kSendButtonSide = 50.f;
 
@@ -283,7 +283,7 @@ static CGFloat kSendButtonSide = 50.f;
     NSInteger index = [self containToolBarItemWithId:identifier];
     if (index != NSNotFound) {
         CTChatInputViewToolBarItem *item = [self.toolBarItems objectAtIndex:index];
-        if (item.icon.superview == self) {
+        if (item.icon.superview == self.contentView) {
             [item.icon removeFromSuperview];
         }
         [self.toolBarItems removeObjectAtIndex:index];
@@ -377,9 +377,8 @@ static CGFloat kSendButtonSide = 50.f;
         case UIGestureRecognizerStateBegan: {
             _ignoreToolBarLayout = YES;
             [icon startWithPoint:[recognizer locationInView:icon.superview]];
-            
             [UIView animateWithDuration:0.3 animations:^{
-                [icon centerScale:1.2f];
+                icon.transform = CGAffineTransformMakeScale(1.2, 1.2);
             }];
             break;
         }
@@ -407,7 +406,14 @@ static CGFloat kSendButtonSide = 50.f;
             BOOL add = CGRectIntersectsRect(frame, self.frame);
             
             if (add) {
+                
                 [UIView animateWithDuration:0.3 animations:^{
+                    
+                    icon.transform = CGAffineTransformIdentity;
+                    [self setNeedsLayout];
+                    [self layoutIfNeeded];
+                    
+                } completion:^(BOOL finished) {
                     [self setNeedsLayout];
                     [self layoutIfNeeded];
                 }];

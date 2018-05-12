@@ -17,5 +17,6 @@
 
 + (NSString *)pathWithFileName:(NSString *)fileName folderName:(NSString *)folderName;
 + (NSString *)createFile:(NSString *)fileName atFolder:(NSString *)folderName data:(NSData *)data;
++ (NSString *)createFile:(NSString *)fileName extension:(NSString *)extension atFolder:(NSString *)folderName data:(NSData *)data;
 
 @end

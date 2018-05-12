@@ -36,23 +36,22 @@
 }
 
 - (void)drawTextInRect:(CGRect)rect {
-    CGSize shadowOffset = self.shadowOffset;
     UIColor *textColor = self.textColor;
     
     CGContextRef c = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(c, _borderWidth);
     CGContextSetLineJoin(c, kCGLineJoinRound);
     
+    //画外边
     CGContextSetTextDrawingMode(c, kCGTextStroke);
     self.textColor = self.borderColor;
     [super drawTextInRect:rect];
     
+    //画内文字
     CGContextSetTextDrawingMode(c, kCGTextFill);
     self.textColor = textColor;
     self.shadowOffset = CGSizeMake(0, 0);
     [super drawTextInRect:rect];
-    
-    self.shadowOffset = shadowOffset;
 }
 
 /*

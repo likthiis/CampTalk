@@ -25,6 +25,7 @@
 @interface CTCameraView : UIView
 
 @property (nonatomic, strong) UIButton *cameraButton;
+@property (nonatomic, strong) UIView *tintColorEffectView;
 
 @property (nonatomic, weak) id <CTCameraViewDelegate> delegate;
 
@@ -32,9 +33,10 @@
 
 - (UIButton *)copyCameraButton;
 
-- (void)showInView:(UIView *)superView;
+- (void)showInView:(UIView *)superView tintColorEffectView:(UIView *)view;
 
 - (void)showCameraButtonWithAnimate:(BOOL)animate;
 - (void)hideCameraButton;
+- (void)adjustTintColor;
 
 @end

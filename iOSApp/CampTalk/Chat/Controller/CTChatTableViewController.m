@@ -90,7 +90,7 @@ typedef enum : NSUInteger {
     
     // fake data
     _data = [NSMutableArray array];
-    int i = 3;
+    int i = 0;
     NSMutableString *string = [[NSMutableString alloc] init];
     while (i--) {
         [string appendString:@"啊"];
@@ -118,11 +118,12 @@ typedef enum : NSUInteger {
     _cameraView = [[CTCameraView alloc] init];
     _cameraView.delegate = self;
     _cameraView.hidden = YES;
-    [_cameraView showInView:self.view];
+    [_cameraView showInView:self.view tintColorEffectView:nil];
     
     [self __configIconPlace];
     
     [self __addKeyboardNotification];
+    
     [self __configBackgroundImage];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(__configBackgroundImage) name:UCChatBackgroundImagePathChangedNotification object:nil];
 }
@@ -130,11 +131,15 @@ typedef enum : NSUInteger {
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (_needScrollToBottom) {
+        _needScrollToBottom = NO;
+        
+        if (_data.count <= 0) {
+            return;
+        }
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_data.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self->_data.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         });
-        _needScrollToBottom = NO;
     }
 }
 
@@ -149,6 +154,9 @@ typedef enum : NSUInteger {
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
     [self performSelector:@selector(__configInputViewTintColor) withObject:nil afterDelay:0.3];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:_cameraView selector:@selector(adjustTintColor) object:nil];
+    [_cameraView performSelector:@selector(adjustTintColor) withObject:nil afterDelay:0.3];
     
     if (!_needScrollToBottom) {
         
@@ -326,6 +334,7 @@ typedef enum : NSUInteger {
         bgView.contentMode = UIViewContentModeScaleAspectFill;
         bgView.clipsToBounds = YES;
         self.tableView.backgroundView = bgView;
+        _cameraView.tintColorEffectView = bgView;
     }
     if (!_tableViewCover) {
         _tableViewCover = [[CTStubbornView alloc] initWithFrame:self.tableView.bounds];
@@ -337,6 +346,9 @@ typedef enum : NSUInteger {
     _tableViewCover.image = image;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
     [self performSelector:@selector(__configInputViewTintColor) withObject:nil afterDelay:0.3];
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:_cameraView selector:@selector(adjustTintColor) object:nil];
+    [_cameraView performSelector:@selector(adjustTintColor) withObject:nil afterDelay:0.3];
 }
 
 - (UIView *)iconCopyWithIconId:(CTChatToolIconId)iconId {
@@ -473,7 +485,6 @@ typedef enum : NSUInteger {
                                  copyIcon:^UIView *{
                                      return [wSelf iconCopyWithIconId:item.identifier];
                                  } syncAnimate:^(UIView *customView) {
-                                     icon.tintColor = customView.tintColor;
                                      syncAnimations();
                                  } completion:^(BOOL added) {
                                      if (!added) {
@@ -508,30 +519,12 @@ typedef enum : NSUInteger {
     }
     CTChatModel *model = [CTChatModel new];
     model.message = chatInputView.text;
-    [_data addObject:model];
     
     [UIView performWithoutAnimation:^{
         chatInputView.text = nil;
         [chatInputView layoutIfNeeded];
     }];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_data.count - 1 inSection:0];
-    
-    [UIView performWithoutAnimation:^{
-        if (@available(iOS 11.0, *)) {
-            [self.tableView performBatchUpdates:^{
-                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-            } completion:^(BOOL finished) {
-                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-            }];
-        } else {
-            [self.tableView beginUpdates];
-            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-            [self.tableView endUpdates];
-            
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-        }
-    }];
+    [self insertChatData:model];
 }
 
 - (void)__configInputViewLayout {
@@ -642,10 +635,7 @@ typedef enum : NSUInteger {
         
         [wSelf addRightDragBarItemWithDragIcon:cameraButton itmeId:CTChatToolIconIdCamara ignoreIntersect:NO copyIcon:^UIView *{
             return [wSelf createCameraButton];
-        } syncAnimate:^(UIView *customView) {
-            cameraButton.tintColor = customView.tintColor;
-        } completion:^(BOOL added) {
-            cameraButton.tintColor = nil;
+        } syncAnimate:nil completion:^(BOOL added) {
             if (added) {
                 cameraView.hidden = YES;
                 layout(YES);
@@ -667,9 +657,79 @@ typedef enum : NSUInteger {
 }
 
 - (void)shareMedia:(UIButton *)sender {
-    NSLog(@"share media");
     [CTImagePickerViewController presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
+        
         [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        
+        PHAsset *asset = phassets.firstObject;
+        if (!asset) {
+            return;
+        }
+        
+        __block BOOL inserted = NO;
+        CGFloat scale = [UIScreen mainScreen].scale;
+        CGFloat height = MIN(asset.pixelHeight, 120 * scale);
+        CGFloat width = height / asset.pixelHeight * asset.pixelWidth;
+        CGSize size = CGSizeMake(width, MIN(asset.pixelHeight, 120 * scale));
+        
+        CTChatModel *model = [CTChatModel new];
+        model.thumbSize = size;
+        
+        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+        options.synchronous = NO;
+        options.networkAccessAllowed = YES;
+        
+        // thumb
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+        options.resizeMode = PHImageRequestOptionsResizeModeFast;
+        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        
+            NSData *data = nil;
+            if (result.hasAlpha) {
+                data = UIImagePNGRepresentation(result);
+            } else {
+                data = UIImageJPEGRepresentation(result, 1);
+            }
+            
+            NSString *path = [CTFileManger createFile:asset.localIdentifier atFolder:UCChatDataFolderName data:data];
+            if (!path.length) {
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (inserted) {
+                    return;
+                }
+                inserted = YES;
+                model.thumbUrl = [NSURL fileURLWithPath:path].absoluteString;
+                model.thumbSize = size;
+                [self insertChatData:model];
+            });
+        }];
+        
+        // original
+        options.resizeMode = PHImageRequestOptionsResizeModeNone;
+        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+            if (!imageData) {
+                return;
+            }
+            NSString *path = [CTFileManger createFile:asset.localIdentifier atFolder:UCChatDataFolderName data:imageData];
+            if (!path.length) {
+                return;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (inserted) {
+                    // find the message and update originalUrl
+                } else {
+                    inserted = YES;
+                    CTChatModel *model = [CTChatModel new];
+                    model.thumbUrl = [NSURL fileURLWithPath:path].absoluteString;
+                    model.originalImageUrl = [NSURL fileURLWithPath:path].absoluteString;
+                    model.thumbSize = size;
+                    [self insertChatData:model];
+                }
+            });
+        }];
     }];
 }
 
@@ -735,6 +795,44 @@ typedef enum : NSUInteger {
 
 - (void)dragItemDidDragRemove:(UIView *)icon didDrag:(NSInteger)itemId {
     [self __updateIconConfig];
+}
+
+#pragma mark - Data
+
+- (void)insertChatData:(CTChatModel *)chatData {
+    void(^insertBlock)(void) = ^{
+        
+        if ([self.data containsObject:chatData]) {
+            return;
+        }
+        
+        [self.data addObject:chatData];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.data.count - 1 inSection:0];
+        
+        [UIView performWithoutAnimation:^{
+            if (@available(iOS 11.0, *)) {
+                [self.tableView performBatchUpdates:^{
+                    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+                } completion:^(BOOL finished) {
+                    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                }];
+            } else {
+                [self.tableView beginUpdates];
+                [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+                [self.tableView endUpdates];
+                
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }
+        }];
+    };
+    if (![NSThread isMainThread]) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            insertBlock();
+        });
+    } else {
+        insertBlock();
+    }
 }
 
 #pragma mark - Keyboard

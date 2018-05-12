@@ -20,11 +20,11 @@
 @property (nonatomic, copy) NSString *subTitle;
 
 // image
-@property (nonatomic, assign) CGSize thumbSize; // "4.5,2"
-@property (nonatomic, copy) NSString *thumbUrl;
+@property (nonatomic, assign) CGSize thumbSize; // "4.5,2" //  pix
+@property (nonatomic, copy) NSString *thumbUrl; // localPhoto use File://
 
-@property (nonatomic, assign) CGSize originalImageSize; // "45,20"
-@property (nonatomic, copy) NSString *originalImageUrl;
+@property (nonatomic, assign) CGSize originalImageSize; // "45,20" pix
+@property (nonatomic, copy) NSString *originalImageUrl; // localPhoto use File://
 
 // userInfo
 @property (nonatomic, copy) NSString *userId;

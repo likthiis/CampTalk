@@ -9,7 +9,8 @@
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "CTChatTableViewController.h"
-#import "RGBubbleView.h"
+#import "CTLoginViewController.h"
+#import "CTNavigationController.h"
 
 @interface ViewController ()
 
@@ -40,6 +41,12 @@
                                      style:UIBarButtonItemStylePlain
                                     target:self
                                     action:nil];
+    
+    self.navigationItem.leftBarButtonItem =
+    [[UIBarButtonItem alloc] initWithTitle:@"Login"
+                                     style:UIBarButtonItemStylePlain
+                                    target:self
+                                    action:@selector(login:)];
 }
 
 - (void)linJiang:(id)sender {
@@ -54,6 +61,12 @@
 - (IBAction)chat:(id)sender {
     CTChatTableViewController *vc = [CTChatTableViewController new];
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)login:(id)sender {
+    CTNavigationController *ngv = [CTNavigationController navigationWithRoot:[[CTLoginViewController alloc] initWithStyle:UITableViewStylePlain]];
+    ngv.type = CTNavigationBackgroundTypeAllTranslucent;
+    [self presentViewController:ngv animated:YES completion:nil];
 }
 
 @end

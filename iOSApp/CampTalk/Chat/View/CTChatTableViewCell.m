@@ -131,6 +131,11 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
 }
 
 + (CGFloat)heightWithThumbSize:(CGSize)thumbSize tableView:(UITableView *)tableView {
+    
+    CGFloat scale = [UIScreen mainScreen].scale;
+    thumbSize.height /= scale;
+    thumbSize.width /= scale;
+    
     CGSize fits = CGSizeMake((tableView.frame.size.width - _maxIconSize.width - _margin * 2 - _marginBubble), 200.f);
     fits.height = [self imageSizeThatFits:fits imageSize:thumbSize].height;
     fits.height = MAX(fits.height, _maxIconSize.height);

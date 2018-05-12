@@ -49,19 +49,46 @@
         [self __addRightBarItemWithIcon:icon itemId:itemId alpha:0.f];
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    UIView *placeHolder = [[UIView alloc] initWithFrame:icon.frame];
+    placeHolder.autoresizingMask = icon.autoresizingMask;
+    placeHolder.tag = icon.tag;
+    [icon.superview addSubview:placeHolder];
+    
+    UIView *transView = self.navigationController.view;
+    
+    icon.transform = dragIcon.transform;
+    icon.frame = [dragIcon.superview convertRect:dragIcon.frame toView:transView];
+    CGPoint recordCenter = icon.center;
+    icon.alpha = 1.f;
+    icon.tintColor = dragIcon.tintColor;
+    [transView addSubview:icon];
+    
+    BOOL isHidden = dragIcon.isHidden;
+    dragIcon.hidden = YES;
+    
+    [UIView animateWithDuration:0.8 animations:^{
+        icon.transform = CGAffineTransformIdentity;
+        icon.center = recordCenter;
+    } completion:^(BOOL finished) {
         
-        CGRect frame = [icon convertRect:icon.bounds toView:dragIcon.superview];
-        CGRect recordFrame = dragIcon.frame;
-        
-        [UIView animateWithDuration:0.6 animations:^{
+    }];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.6f animations:^{
+            icon.frame = [placeHolder convertRect:placeHolder.bounds toView:icon.superview];
+            icon.tintColor = placeHolder.superview.tintColor;
             if (syncAnimate) {
                 syncAnimate(icon);
             }
-            dragIcon.frame = frame;
         } completion:^(BOOL finished) {
-            icon.alpha = 1.f;
-            dragIcon.frame = recordFrame;
+            
+            [placeHolder.superview addSubview:icon];
+            [placeHolder removeFromSuperview];
+            
+            icon.transform = CGAffineTransformIdentity;
+            icon.frame = placeHolder.frame;
+            dragIcon.hidden = isHidden;
+            
             if (completion) {
                 completion(YES);
             }

@@ -14,30 +14,72 @@
 
 @implementation CTNavigationController
 
++ (CTNavigationController *)navigationWithRoot:(UIViewController *)root {
+    CTNavigationController *ngv = [[CTNavigationController alloc] initWithRootViewController:root];
+    return ngv;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationBar.tintColor = [UIColor whiteColor];
-    
     self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor whiteColor]};
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(configBar) object:nil];
+    [self performSelector:@selector(configBar) withObject:nil afterDelay:0.f inModes:@[NSRunLoopCommonModes]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self.navigationBar setTranslucent:YES];
-    
-    UIImage *barBg = nil;
-    if ([UIApplication sharedApplication].statusBarFrame.size.height > 20.f) {
-        barBg = [UIImage imageNamed:@"gradientBarBg_fringe"];
+}
+
+- (void)setType:(CTNavigationBackgroundType)type {
+    _type = type;
+    if (self.isViewLoaded) {
+        [self configBar];
     } else {
-        barBg = [UIImage imageNamed:@"gradientBarBg"];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(configBar) object:nil];
+        [self performSelector:@selector(configBar) withObject:nil afterDelay:0.f inModes:@[NSRunLoopCommonModes]];
     }
-    [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsDefault];
-    
-    barBg = [UIImage imageNamed:@"gradientBarBg_landscape"];
-    [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsCompact];
-    
-    [self.navigationBar setShadowImage:[UIImage new]];
+}
+
+- (void)configBar {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(configBar) object:nil];
+    switch (_type) {
+        case CTNavigationBackgroundTypeNormal:
+            [self.navigationBar setTranslucent:YES];
+            [self.navigationBar setShadowImage:nil];
+            [self.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+            [self.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsCompact];
+            [self.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsCompactPrompt];
+            break;
+        case CTNavigationBackgroundTypeAllTranslucent: {
+            [self.navigationBar setTranslucent:YES];
+            UIImage *barBg = [UIImage new];
+            [self.navigationBar setShadowImage:barBg];
+            [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsDefault];
+            [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsCompact];
+            [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsCompactPrompt];
+            break;
+        }
+        case CTNavigationBackgroundTypeShadow: {
+            [self.navigationBar setTranslucent:YES];
+            [self.navigationBar setShadowImage:[UIImage new]];
+            UIImage *barBg = nil;
+            if ([UIApplication sharedApplication].statusBarFrame.size.height > 20.f) {
+                barBg = [UIImage imageNamed:@"gradientBarBg_fringe"];
+            } else {
+                barBg = [UIImage imageNamed:@"gradientBarBg"];
+            }
+            [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsDefault];
+            
+            barBg = [UIImage imageNamed:@"gradientBarBg_landscape"];
+            [self.navigationBar setBackgroundImage:barBg forBarMetrics:UIBarMetricsCompact];
+            [self.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsCompactPrompt];
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

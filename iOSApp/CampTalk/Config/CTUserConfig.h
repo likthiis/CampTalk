@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 extern NSString * const UCChatBackgroundImagePathChangedNotification;
+extern NSString * const UCChatDataFolderName;
 
 @interface CTUserConfig : NSObject
 

@@ -8,6 +8,7 @@
 
 #import "CTCameraView.h"
 #import "UIImage+Tint.h"
+#import "UIImage+JCPictureEdit.h"
 
 NSString * const kRecordCenter = @"kRecordCenter";
 
@@ -75,12 +76,25 @@ static CGPoint __recordCenter; // [0,1]
     center.x += offSetX;
     center.y += offSetY;
     _cameraButton.center = center;
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(adjustTintColor) object:nil];
+    [self performSelector:@selector(adjustTintColor) withObject:nil afterDelay:1.f];
+}
+
+- (void)adjustTintColor {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(adjustTintColor) object:nil];
+    if (_tintColorEffectView) {
+        CGRect rect = [self convertRect:_cameraButton.frame toView:_tintColorEffectView];
+        UIImage *image = [UIImage cropView:_tintColorEffectView inRect:rect scale:[UIScreen mainScreen].scale];
+        [self adjustTintColorWithBackgroundImage:image];
+    }
 }
 
 - (UIButton *)cameraButton {
     if (!_cameraButton) {
         _cameraButton = [self createButton];
-        self.tintColor = [UIColor blackColor];
+        self.tintColor = [UIColor clearColor];
+        
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(move:)];
         pan.delaysTouchesBegan = YES;
         [_cameraButton addGestureRecognizer:pan];
@@ -88,6 +102,45 @@ static CGPoint __recordCenter; // [0,1]
         [_cameraButton addTarget:self action:@selector(cameraAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cameraButton;
+}
+
+- (void)adjustTintColorWithBackgroundImage:(UIImage *)backgroundImage {
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCameraButton) object:nil];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        UIColor *mainColor = backgroundImage.mainColor;
+        
+        if (!mainColor) {
+            return;
+        }
+        CGFloat white;
+        [mainColor getWhite:&white alpha:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIColor *tintColor = nil;
+            if (white > 0.5) {
+                tintColor = [UIColor colorWithWhite:0.f alpha:1.f];
+            } else {
+                tintColor = [UIColor colorWithWhite:1.f alpha:1.f];
+            }
+            
+            if (self.cameraButton.tintColor == [UIColor clearColor]) {
+                
+                self.cameraButton.tintColor = tintColor;
+                
+                [self showCameraButtonWithAnimate:YES];
+                [self showCameraButtonAndAutoHide];
+                
+            } else {
+                [UIView animateWithDuration:0.3 animations:^{
+                    self.cameraButton.tintColor = tintColor;
+                } completion:^(BOOL finished) {
+                    [self showCameraButtonAndAutoHide];
+                }];
+            }
+        });
+    });
 }
 
 - (UIButton *)createButton {
@@ -99,16 +152,22 @@ static CGPoint __recordCenter; // [0,1]
 }
 
 - (void)cameraAction:(UIButton *)sender {
-    [self showCameraButton];
-    [self performSelector:@selector(hideCameraButton) withObject:nil afterDelay:1];
+    [self showCameraButtonAndAutoHide];
     if ([self.delegate respondsToSelector:@selector(cameraView:didTapButton:)]) {
         [self.delegate cameraView:self didTapButton:sender];
     }
 }
 
+- (void)setHidden:(BOOL)hidden {
+    [super setHidden:hidden];
+    if (!hidden) {
+        [self showCameraButtonAndAutoHide];
+    }
+}
+
 - (void)hideCameraButton {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCameraButton) object:nil];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCameraButton) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCameraButtonAndAutoHide) object:nil];
     
     if (self.cameraButton.tag == 1) {
         return;
@@ -122,7 +181,11 @@ static CGPoint __recordCenter; // [0,1]
 
 - (void)showCameraButtonWithAnimate:(BOOL)animate {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCameraButton) object:nil];
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCameraButton) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showCameraButtonAndAutoHide) object:nil];
+    
+    if (self.cameraButton.tintColor == [UIColor clearColor]) {
+        return;
+    }
     
     if (self.cameraButton.tag == 2) {
         return;
@@ -138,14 +201,15 @@ static CGPoint __recordCenter; // [0,1]
     }
 }
 
-- (void)showCameraButton {
+- (void)showCameraButtonAndAutoHide {
     [self showCameraButtonWithAnimate:YES];
+    [self performSelector:@selector(hideCameraButton) withObject:nil afterDelay:1];
 }
 
 - (void)move:(UIPanGestureRecognizer *)recognizer {
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
-            [self showCameraButton];
+            [self showCameraButtonWithAnimate:YES];
             _moveCenter = [recognizer translationInView:self];
             break;
         case UIGestureRecognizerStateChanged: {
@@ -176,7 +240,9 @@ static CGPoint __recordCenter; // [0,1]
                     [self setNeedsLayout];
                     [self layoutIfNeeded];
                 } completion:nil];
-                [self performSelector:@selector(hideCameraButton) withObject:nil afterDelay:1];
+                
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCameraButton) object:nil];
+                [self performSelector:@selector(hideCameraButton) withObject:nil afterDelay:2];
             };
             
             if ([_delegate respondsToSelector:@selector(cameraView:endDragButton:layoutBlock:)]) {
@@ -220,7 +286,8 @@ static CGPoint __recordCenter; // [0,1]
     return [self createButton];
 }
 
-- (void)showInView:(UIView *)superView {
+- (void)showInView:(UIView *)superView tintColorEffectView:(UIView *)view {
+    _tintColorEffectView = view;
     
     self.frame = superView.bounds;
     

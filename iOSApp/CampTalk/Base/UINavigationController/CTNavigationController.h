@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum : NSUInteger {
+    CTNavigationBackgroundTypeShadow,
+    CTNavigationBackgroundTypeAllTranslucent,
+    CTNavigationBackgroundTypeNormal,
+} CTNavigationBackgroundType;
+
 @interface CTNavigationController : UINavigationController
+
+@property (nonatomic, assign) CTNavigationBackgroundType type;
+
++ (CTNavigationController *)navigationWithRoot:(UIViewController *)root;
 
 @end

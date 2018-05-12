@@ -38,6 +38,18 @@
     return res ? directory : nil;
 }
 
++ (NSString *)createFolderWithPath:(NSString *)directory {
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL res = [fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
+    if (res) {
+        NSLog(@"succeed");
+    } else {
+        NSLog(@"failed");
+    }
+    return res ? directory : nil;
+}
+
 + (NSString *)pathWithFileName:(NSString *)fileName folderName:(NSString *)folderName {
     NSString *directory = [self pathWithFolderName:folderName];
     NSString *path = [directory stringByAppendingPathComponent:fileName];
@@ -45,10 +57,8 @@
 }
 
 + (NSString *)createFile:(NSString *)fileName atFolder:(NSString *)folderName data:(NSData *)data {
-    
-    [self createFolderWithName:folderName];
-    
     NSString *path = [self pathWithFileName:fileName folderName:folderName];
+    [self createFolderWithPath:[path stringByDeletingLastPathComponent]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     BOOL res = [fileManager createFileAtPath:path contents:data attributes:nil];
@@ -58,6 +68,16 @@
         NSLog(@"failed");
     }
     return res ? path : nil;
+}
+
++ (NSString *)createFile:(NSString *)fileName extension:(NSString *)extension atFolder:(NSString *)folderName data:(NSData *)data {
+    NSString *format = nil;
+    if (extension.length && [extension characterAtIndex:0] == '.') {
+        format = @"%@";
+    } else {
+        format = @".%@";
+    }
+    return [self createFile:[fileName stringByAppendingFormat:format, extension] atFolder:folderName data:data];
 }
 
 @end
