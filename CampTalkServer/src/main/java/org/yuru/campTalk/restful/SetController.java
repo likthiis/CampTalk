@@ -33,7 +33,7 @@ public class SetController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             String jsonifyResponse = ImageService.ReceivePicture(username, extension);
-            ReturnModelHelper.StandardResponse(returnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(returnModel, jsonifyResponse, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,7 +56,7 @@ public class SetController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             String jsonifyResponse = PasswordService.ChangePassword(username, oldPassword, newPassword);
-            ReturnModelHelper.StandardResponse(returnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(returnModel, jsonifyResponse, null);
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(returnModel, e.getClass().getName());
         }
@@ -77,7 +77,7 @@ public class SetController {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
             String jsonifyResponse = NicknameService.ChangeNickname(username,nickname);
-            ReturnModelHelper.StandardResponse(returnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(returnModel, jsonifyResponse, null);
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(returnModel, e.getClass().getName());
         }

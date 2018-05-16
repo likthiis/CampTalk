@@ -3,6 +3,7 @@ package org.yuru.campTalk.dto;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * Author: Rinkako
@@ -11,46 +12,35 @@ import java.io.Serializable;
  */
 @XmlRootElement(name = "xml")
 public class ReturnModel implements Serializable {
-
-    /**
-     * Status code
-     */
-    private StatusCode code;
-
-    /**
-     * Service timestamp.
-     */
+    private String code;
     private String timestamp;
-
-    /**
-     * Element to return
-     */
-    private ReturnElement returnElement;
+    private String token = null;
 
     @XmlElement(name = "code")
-    public StatusCode getCode() {
+    public String getCode() {
         return this.code;
     }
-
-    public void setCode(StatusCode code) {
+    public void setCode(String code) {
         this.code = code;
     }
-
     @XmlElement(name = "timestamp")
     public String getTimestamp() {
         return this.timestamp;
     }
-
     public void setTimestamp(String ts) {
         this.timestamp = ts;
     }
-
-    @XmlElement(name = "return")
-    public ReturnElement getReturnElement() {
-        return this.returnElement;
+    @XmlElement(name = "token")
+    public String getToken() {
+        return token;
+    }
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public void setReturnElement(ReturnElement returnElement) {
-        this.returnElement = returnElement;
+    public void specialDeal() {
+        this.code = "exception_occurred";
+        this.timestamp = new Timestamp(System.currentTimeMillis()).toString();
+        this.token = null;
     }
 }

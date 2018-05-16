@@ -30,6 +30,9 @@
         <mapping class="org.yuru.campTalk.entity.YuruContentEntity"/>
         <mapping class="org.yuru.campTalk.entity.YuruRelationEntity"/>
         <mapping class="org.yuru.campTalk.entity.YuruTalkEntity"/>
+        <mapping class="org.yuru.campTalk.entity.YuruClientidEntity"/>
+        <mapping class="org.yuru.campTalk.entity.YuruPicEntity"/>
+        <mapping class="org.yuru.campTalk.entity.YuruAuthEntity"/>
 
     </session-factory>
 

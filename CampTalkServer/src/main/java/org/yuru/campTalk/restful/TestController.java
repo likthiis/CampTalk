@@ -43,7 +43,7 @@ public class TestController {
             // logic
             String jsonifyResponse = String.format("Welcome to CampTalk Gateway! Echo request: requiredArg(%s), notRequiredArg(%s)", requiredArg, notRequiredArg);
             // return
-            ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(rnModel, jsonifyResponse, null);
         } catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
         }

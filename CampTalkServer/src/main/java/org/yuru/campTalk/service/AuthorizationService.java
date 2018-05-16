@@ -4,107 +4,163 @@ package org.yuru.campTalk.service;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.yuru.campTalk.GlobalConfigContext;
-import org.yuru.campTalk.entity.YuruSessionEntity;
+import org.yuru.campTalk.dto.ReturnModel;
+import org.yuru.campTalk.entity.YuruAuthEntity;
 import org.yuru.campTalk.entity.YuruUserEntity;
 import org.yuru.campTalk.utility.*;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.UUID;
 
 /**
- * Author: Rinkako
+ * Author: Rinkako&Likthiis
  * Date  : 2018/4/21
  * Usage : Authorize registered users to connect with server.
  */
 public class AuthorizationService {
+    public static ReturnModel Auth1(String uid, String rawPassword) {
+        ReturnModel model = new ReturnModel();
+        Session DBsession = HibernateUtil.GetLocalSession();
+        try {
+            int judge = VerificationByPassword(uid, rawPassword, DBsession);
+            model.specialDeal();
+            switch(judge) {
+                case 1:{
+                    model.setCode("user_not_valid");
+                    return model;
+                }
+                case 2:{
+                    model.setCode("blocked_account");
+                    return model;
+                }
+                case 3:{
+                    model.setCode("password_invalid");
+                    return model;
+                }
+            }
+            RuinPassToken(model,uid,DBsession);
+            if(model.getCode().equals("cannot_ruin_old_token")) {
+                return model;
+            }
+            SetUserAuthAndSave(model,uid,DBsession);
+            if(model.getCode().equals("cannot_insert_info")) {
+                return model;
+            }
+            DBsession.close();
+            model.setCode("auth_success");
+            return model;
+        } catch (Exception ex) {
+            String exception = String.format("Request for auth but exception occurred (%s), service rollback, %s", uid, ex);
+            LogUtil.Log(exception, AuthorizationService.class.getName(), LogLevelType.ERROR, "");
+            model.specialDeal();
+            return model;
+        }
+        finally {
+            HibernateUtil.CloseLocalSession();
+        }
+    }
+
     public static int VerificationByPassword(String uid, String rawPassword,Session DBsession) {
         String encryptedPassword = EncryptUtil.EncryptSHA256(rawPassword);
-        // Get the record of user.
         YuruUserEntity user = DBsession.get(YuruUserEntity.class, uid);
-        // Tell the client that user is inexistence.
         if (user == null) {
             return 1;
         }
-        // Tell the client that user is banned.
         if (user.getStatus() != 0) {
             return 2;
         }
-        // Compare the password,and tell the client that password is invaild if it is.
         else if (!user.getPassword().equals(encryptedPassword)) {
             return 3;
         }
         return 0;
     }
 
-    public static Timestamp SetUserLoginAndSave(String uid, Session DBsession) {
-        String tokenId = String.format("AUTH_%s_%s", uid, UUID.randomUUID());
-        YuruSessionEntity loginSession = new YuruSessionEntity();
-        long createTimeStamp = System.currentTimeMillis();
-        loginSession.setLevel(loginSession.getLevel());
-        loginSession.setToken(tokenId);
-        loginSession.setUid(uid);
-        loginSession.setCreateTimestamp(new Timestamp(createTimeStamp));
-        Timestamp untilTimeStamp = new Timestamp(System.currentTimeMillis() + 1000 * GlobalConfigContext.AUTHORITY_TOKEN_VALID_SECOND);
-        // Set the deadline of session.
-        loginSession.setUntilTimestamp(untilTimeStamp);
-        DBsession.save(loginSession);
-        return untilTimeStamp;
-    }
-
-    public static void RuinPassToken(String uid, Session DBsession) {
-        String query = String.format("FROM YuruSessionEntity WHERE uid = '%s' AND destroy_timestamp = NULL", uid);
-        List<YuruSessionEntity> oldUserSessions = DBsession.createQuery(query).list();
-        Timestamp currentTimestamp = TimestampUtil.GetCurrentTimestamp();
-        for (YuruSessionEntity rse : oldUserSessions) {
-            if (rse.getUntilTimestamp().after(currentTimestamp)) {
-                rse.setDestroyTimestamp(currentTimestamp);
-            }
+    public static void SetUserAuthAndSave(ReturnModel model, String uid, Session DBsession) {
+        try {
+            Transaction transaction = DBsession.beginTransaction();
+            long currentTime = System.currentTimeMillis();
+            Timestamp nowTimestamp = new Timestamp(currentTime);
+            String tokenId = String.format("AUTH_%s_%s", uid, UUID.randomUUID());
+            YuruAuthEntity auth = new YuruAuthEntity();
+            auth.setToken(tokenId);
+            auth.setUid(uid);
+            Timestamp destroyTimeStamp = new Timestamp(currentTime + 1000 * GlobalConfigContext.AUTHORITY_TOKEN_VALID_SECOND);
+            auth.setDestroyTimestamp(destroyTimeStamp);
+            DBsession.save(auth);
+            transaction.commit();
+            model.setTimestamp(nowTimestamp.toString());
+            model.setToken(tokenId);
+        } catch(Exception e) {
+            e.printStackTrace();
+            DBsession.getTransaction().rollback();
+            model.setCode("cannot_insert_info");
         }
     }
 
-    /**
-     * Using token to achieve the login function.
-     * @param uid is the only one identifier of user
-     * @param rawPassword will be showed in encryption status
-     * @return token or a string beginning with "#" if failing to login
-     */
-    public static String Login(String uid, String rawPassword) {
-        Session DBsession = HibernateUtil.GetLocalSession();
-        Transaction transaction = DBsession.beginTransaction();
+    public static void RuinPassToken(ReturnModel model, String uid, Session DBsession) {
         try {
-            int judgeException = VerificationByPassword(uid, rawPassword, DBsession);
-            switch(judgeException) {
-                case 1:{
-                    transaction.commit();
-                    return "#user_not_valid";
-                }
-                case 2:{
-                    transaction.commit();
-                    return "#blocked_account";
-                }
-                case 3:{
-                    transaction.commit();
-                    return "#password_invalid";
-                }
+            Transaction transaction = DBsession.beginTransaction();
+            while(DBsession.get(YuruAuthEntity.class, uid) != null) {
+                YuruAuthEntity auth = DBsession.get(YuruAuthEntity.class, uid);
+                    DBsession.delete(auth);
             }
-            // Ruin the existing session in database,if the moment in its record is after the moment of login on this occasion.
-            RuinPassToken(uid,DBsession);
-            // Create a new authorized session.
-            SetUserLoginAndSave(uid,DBsession);
-            //SocketSetAttribute(uid,untilTimeStamp);
-            // Transaction commit.
             transaction.commit();
-            return "#login_success";
+        } catch(Exception e) {
+            e.printStackTrace();
+            DBsession.getTransaction().rollback();
+            model.setCode("cannot_ruin_old_token");
+        }
+    }
+
+    public static ReturnModel Auth2(String uid, String token) {
+        ReturnModel model = new ReturnModel();
+        Session DBsession = HibernateUtil.GetLocalSession();
+        try{
+            model.specialDeal();
+            boolean judge = VerificationByToken(DBsession, uid, token, model);
+            if(judge){
+                RuinPassToken(model,uid,DBsession);
+                if(model.getCode().equals("cannot_ruin_old_token")) {
+                    return model;
+                }
+                SetUserAuthAndSave(model,uid,DBsession);
+                if(model.getCode().equals("cannot_insert_info")) {
+                    return model;
+                }
+                model.setCode("auth_success");
+            }
+            return model;
         } catch (Exception ex) {
-            String exception = String.format("Request for auth but exception occurred (%s), service rollback, %s", uid, ex);
+            String exception = String.format("Request for auth but exception occurred, service rollback, %s", ex);
             LogUtil.Log(exception, AuthorizationService.class.getName(), LogLevelType.ERROR, "");
-            transaction.rollback();
-            return "#exception_occurred";
+            model.specialDeal();
+            return model;
         }
         finally {
-            // Close the session of hibernate.
             HibernateUtil.CloseLocalSession();
         }
+    }
+
+    public static boolean VerificationByToken(Session DBsession, String uid, String token,ReturnModel model) {
+        long currentTime = System.currentTimeMillis();
+        Timestamp nowTimestamp = new Timestamp(currentTime);
+        YuruAuthEntity auth = DBsession.get(YuruAuthEntity.class, uid);
+        if(auth == null) {
+            model.setCode("auth_inexist");
+            return false;
+        }
+        if(!auth.getToken().equals(token)) {
+            model.setCode("auth_differ");
+            return false;
+        }
+        if(nowTimestamp.after(auth.getDestroyTimestamp())) {
+            model.setCode("overdue");
+            return false;
+        }
+        if(auth != null && auth.getToken().equals(token) && nowTimestamp.before(auth.getDestroyTimestamp())) {
+            return true;
+        }
+        model.setCode("other_error");
+        return false;
     }
 }

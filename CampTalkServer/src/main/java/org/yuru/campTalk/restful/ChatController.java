@@ -45,7 +45,7 @@ public class ChatController {
             String jsonifyResponse = ChatService.RelationSetting(target, myself);
 
             // return
-            ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(rnModel, jsonifyResponse, null);
 
         } catch(Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());
@@ -82,7 +82,7 @@ public class ChatController {
             String jsonifyResponse = ChatService.MessageGetting(target, content, myself);
 
             // 返回
-            ReturnModelHelper.StandardResponse(rnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(rnModel, jsonifyResponse, null);
 
         } catch(Exception e) {
             ReturnModelHelper.ExceptionResponse(rnModel, e.getClass().getName());

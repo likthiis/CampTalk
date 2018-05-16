@@ -10,6 +10,7 @@ public class YuruContentEntity {
     private String senderuid;
     private Timestamp timestamp;
     private String sentenceid;
+    private String tid;
 
     @Basic
     @Column(name = "content")
@@ -73,5 +74,15 @@ public class YuruContentEntity {
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         result = 31 * result + (sentenceid != null ? sentenceid.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "tid")
+    public String getTid() {
+        return tid;
+    }
+
+    public void setTid(String tid) {
+        this.tid = tid;
     }
 }

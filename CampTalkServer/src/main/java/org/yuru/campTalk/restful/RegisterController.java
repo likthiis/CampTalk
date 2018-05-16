@@ -45,7 +45,7 @@ public class RegisterController {
             // Register
             String jsonifyResponse = RegisterService.Register(uid, password);
             // Return
-            ReturnModelHelper.StandardResponse(returnModel, StatusCode.OK, jsonifyResponse);
+            ReturnModelHelper.StandardResponse(returnModel, jsonifyResponse, null);
 
         }catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(returnModel, e.getClass().getName());
