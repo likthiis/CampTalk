@@ -1,5 +1,7 @@
 package org.yuru.campTalk.dto;
 
+import com.google.gson.Gson;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -15,6 +17,7 @@ public class ReturnModel implements Serializable {
     private String code;
     private String timestamp;
     private String token = null;
+    private static Gson gson = new Gson();
 
     @XmlElement(name = "code")
     public String getCode() {
@@ -38,8 +41,19 @@ public class ReturnModel implements Serializable {
         this.token = token;
     }
 
+    public String getMessageToJson() {
+        // 将类转换成JSON
+        return gson.toJson(this);
+    }
+
     public void specialDeal() {
         this.code = "exception_occurred";
+        this.timestamp = new Timestamp(System.currentTimeMillis()).toString();
+        this.token = null;
+    }
+
+    public void successDeal(String code) {
+        this.code = code;
         this.timestamp = new Timestamp(System.currentTimeMillis()).toString();
         this.token = null;
     }

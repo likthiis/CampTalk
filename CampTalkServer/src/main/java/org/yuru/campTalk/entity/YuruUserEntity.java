@@ -2,28 +2,22 @@ package org.yuru.campTalk.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
-/**
- * Author: Rinkako
- * Date  : 2018/4/21
- * Usage :
- */
 @Entity
 @Table(name = "yuru_user", schema = "camptalk", catalog = "")
 public class YuruUserEntity {
     private String id;
     private String username;
-    private int level;
+    private Integer level;
     private String password;
-    private int status;
+    private Integer status;
     private Timestamp createtimestamp;
     private Timestamp lastlogin;
     private String location;
-    private String headPid;
+    private String headpid;
 
     @Id
-    @Column(name = "id", nullable = false, length = 255)
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -33,7 +27,7 @@ public class YuruUserEntity {
     }
 
     @Basic
-    @Column(name = "username", nullable = false, length = 255)
+    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -43,17 +37,17 @@ public class YuruUserEntity {
     }
 
     @Basic
-    @Column(name = "level", nullable = false)
-    public int getLevel() {
+    @Column(name = "level")
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -63,17 +57,17 @@ public class YuruUserEntity {
     }
 
     @Basic
-    @Column(name = "status", nullable = false)
-    public int getStatus() {
+    @Column(name = "status")
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
     @Basic
-    @Column(name = "createtimestamp", nullable = true)
+    @Column(name = "createtimestamp")
     public Timestamp getCreatetimestamp() {
         return createtimestamp;
     }
@@ -83,7 +77,7 @@ public class YuruUserEntity {
     }
 
     @Basic
-    @Column(name = "lastlogin", nullable = true)
+    @Column(name = "lastlogin")
     public Timestamp getLastlogin() {
         return lastlogin;
     }
@@ -93,7 +87,7 @@ public class YuruUserEntity {
     }
 
     @Basic
-    @Column(name = "location", nullable = true, length = 255)
+    @Column(name = "location")
     public String getLocation() {
         return location;
     }
@@ -103,34 +97,47 @@ public class YuruUserEntity {
     }
 
     @Basic
-    @Column(name = "headPid", nullable = true, length = 255)
-    public String getHeadPid() {
-        return headPid;
+    @Column(name = "headpid")
+    public String getHeadpid() {
+        return headpid;
     }
 
-    public void setHeadPid(String headPid) {
-        this.headPid = headPid;
+    public void setHeadpid(String headpid) {
+        this.headpid = headpid;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         YuruUserEntity that = (YuruUserEntity) o;
-        return level == that.level &&
-                status == that.status &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(username, that.username) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(createtimestamp, that.createtimestamp) &&
-                Objects.equals(lastlogin, that.lastlogin) &&
-                Objects.equals(location, that.location) &&
-                Objects.equals(headPid, that.headPid);
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (username != null ? !username.equals(that.username) : that.username != null) return false;
+        if (level != null ? !level.equals(that.level) : that.level != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (createtimestamp != null ? !createtimestamp.equals(that.createtimestamp) : that.createtimestamp != null)
+            return false;
+        if (lastlogin != null ? !lastlogin.equals(that.lastlogin) : that.lastlogin != null) return false;
+        if (location != null ? !location.equals(that.location) : that.location != null) return false;
+        if (headpid != null ? !headpid.equals(that.headpid) : that.headpid != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(id, username, level, password, status, createtimestamp, lastlogin, location, headPid);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (level != null ? level.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (createtimestamp != null ? createtimestamp.hashCode() : 0);
+        result = 31 * result + (lastlogin != null ? lastlogin.hashCode() : 0);
+        result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (headpid != null ? headpid.hashCode() : 0);
+        return result;
     }
 }

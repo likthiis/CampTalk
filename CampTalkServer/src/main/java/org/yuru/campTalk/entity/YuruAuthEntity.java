@@ -9,6 +9,7 @@ public class YuruAuthEntity {
     private String token;
     private String uid;
     private Timestamp destroyTimestamp;
+    private Timestamp destroytimestamp;
 
     @Basic
     @Column(name = "token")
@@ -61,5 +62,15 @@ public class YuruAuthEntity {
         result = 31 * result + (uid != null ? uid.hashCode() : 0);
         result = 31 * result + (destroyTimestamp != null ? destroyTimestamp.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "destroytimestamp")
+    public Timestamp getDestroytimestamp() {
+        return destroytimestamp;
+    }
+
+    public void setDestroytimestamp(Timestamp destroytimestamp) {
+        this.destroytimestamp = destroytimestamp;
     }
 }

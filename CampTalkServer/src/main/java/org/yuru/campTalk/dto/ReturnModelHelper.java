@@ -32,8 +32,8 @@ public class ReturnModelHelper {
         ReturnModel returnModel = new ReturnModel();
         //returnModel.setCode(StatusCode.Unauthorized);
         returnModel.setTimestamp(TimestampUtil.GetTimestampString());
-        ReturnElement returnElement = new ReturnElement();
-        returnElement.setMessage(token);
+        //ReturnElement returnElement = new ReturnElement();
+        //returnElement.setMessage(token);
         //returnModel.setReturnElement(returnElement);
         LogUtil.Log(String.format("Unauthorized service request (token:%s)", token),
                 ReturnModelHelper.class.getName(), LogLevelType.UNAUTHORIZED, "");
@@ -49,13 +49,13 @@ public class ReturnModelHelper {
         ReturnModel returnModel = new ReturnModel();
         //returnModel.setCode(StatusCode.Fail);
         returnModel.setTimestamp(TimestampUtil.GetTimestampString());
-        ReturnElement returnElement = new ReturnElement();
+        //ReturnElement returnElement = new ReturnElement();
         StringBuilder sb = new StringBuilder();
         sb.append("miss required parameters:");
         for (String s : params) {
             sb.append(s).append(" ");
         }
-        returnElement.setMessage(sb.toString());
+        //returnElement.setMessage(sb.toString());
         //returnModel.setReturnElement(returnElement);
         return returnModel;
     }

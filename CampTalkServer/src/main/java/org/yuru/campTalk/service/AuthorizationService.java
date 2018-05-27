@@ -160,7 +160,6 @@ public class AuthorizationService {
         if(auth != null && auth.getToken().equals(token) && nowTimestamp.before(auth.getDestroyTimestamp())) {
             return true;
         }
-        model.setCode("other_error");
         return false;
     }
 }

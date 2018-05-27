@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Class-Path: hibernate-commons-annotations-5.0.1.Final.jar spring-tx-4.
+ 3.13.RELEASE.jar spring-boot-starter-websocket-1.5.9.RELEASE.jar java
+ ssist-3.21.0-GA.jar spring-jdbc-4.3.13.RELEASE.jar validation-api-1.1
+ .0.Final.jar spring-boot-starter-aop-1.5.9.RELEASE.jar jul-to-slf4j-1
+ .7.25.jar spring-boot-starter-data-jpa-1.5.9.RELEASE.jar spring-expre
+ ssion-4.3.13.RELEASE.jar spring-boot-starter-jdbc-1.5.9.RELEASE.jar s
+ pring-aspects-4.3.13.RELEASE.jar Java-WebSocket-1.3.5.jar spring-core
+ -4.3.13.RELEASE.jar spring-context-4.3.13.RELEASE.jar logback-core-1.
+ 1.11.jar hibernate-validator-5.3.6.Final.jar jackson-databind-2.8.10.
+ jar spring-boot-1.5.9.RELEASE.jar log4j-over-slf4j-1.7.25.jar gson-2.
+ 8.4.jar hibernate-jpa-2.1-api-1.0.0.Final.jar aspectjweaver-1.8.13.ja
+ r logback-classic-1.1.11.jar spring-messaging-4.3.13.RELEASE.jar antl
+ r-2.7.7.jar hibernate-core-5.0.12.Final.jar spring-orm-4.3.13.RELEASE
+ .jar commons-codec-1.8.jar jackson-core-2.8.10.jar jandex-2.0.0.Final
+ .jar hibernate-entitymanager-5.0.12.Final.jar spring-data-commons-1.1
+ 3.9.RELEASE.jar snakeyaml-1.17.jar spring-web-4.3.13.RELEASE.jar dom4
+ j-1.6.1.jar tomcat-juli-8.5.23.jar spring-beans-4.3.13.RELEASE.jar sp
+ ring-boot-starter-tomcat-1.5.9.RELEASE.jar jboss-logging-3.3.1.Final.
+ jar spring-boot-autoconfigure-1.5.9.RELEASE.jar tomcat-jdbc-8.5.23.ja
+ r jcl-over-slf4j-1.7.25.jar spring-aop-4.3.13.RELEASE.jar jackson-ann
+ otations-2.8.0.jar classmate-1.3.4.jar tomcat-embed-core-8.5.23.jar s
+ pring-boot-starter-logging-1.5.9.RELEASE.jar spring-boot-starter-web-
+ 1.5.9.RELEASE.jar slf4j-api-1.7.25.jar tomcat-embed-websocket-8.5.23.
+ jar spring-webmvc-4.3.13.RELEASE.jar spring-data-jpa-1.11.9.RELEASE.j
+ ar javax.transaction-api-1.2.jar tomcat-embed-el-8.5.23.jar mysql-con
+ nector-java-5.1.44.jar spring-websocket-4.3.13.RELEASE.jar tomcat-ann
+ otations-api-8.5.23.jar spring-boot-starter-1.5.9.RELEASE.jar
+Main-Class: org.yuru.campTalk.CampTalkApp
+
