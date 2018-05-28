@@ -1,6 +1,5 @@
 package com.example.wzf.camptalk.utility;
 
-import com.example.wzf.camptalk.dto.GetModel;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+// 残余代码，留做他用
 public class HttpReq {
     public static String getData() throws Exception {
         try {
@@ -54,23 +54,23 @@ public class HttpReq {
         return outStream.toByteArray();
     }
 
-    public static GetModel toPostdata(List<BasicNameValuePair> parameters) throws IOException {
-        HttpClient client=new DefaultHttpClient();
-        HttpPost postBag=new HttpPost(HttpPath.getUserLoginPath());
-        UrlEncodedFormEntity params=new UrlEncodedFormEntity(parameters,"UTF-8");
-        postBag.setEntity(params);
-
-        HttpResponse response= client.execute(postBag);
-        GetModel getModel = null;
-        if(response.getStatusLine().getStatusCode()==200){
-            String str;
-            HttpEntity entity=response.getEntity();
-            str = EntityUtils.toString(entity, "UTF-8");
-            System.out.println(str);
-            getModel = JsonUtil.getJsonToModel(str);
-        }
-        return getModel;
-    }
+//    public static GetModel toPostdata(List<BasicNameValuePair> parameters) throws IOException {
+//        HttpClient client=new DefaultHttpClient();
+//        HttpPost postBag=new HttpPost(HttpPath.getUserLoginPath());
+//        UrlEncodedFormEntity params=new UrlEncodedFormEntity(parameters,"UTF-8");
+//        postBag.setEntity(params);
+//
+//        HttpResponse response= client.execute(postBag);
+//        GetModel getModel = null;
+//        if(response.getStatusLine().getStatusCode()==200){
+//            String str;
+//            HttpEntity entity=response.getEntity();
+//            str = EntityUtils.toString(entity, "UTF-8");
+//            System.out.println(str);
+//            getModel = JsonUtil.getJsonToModel(str);
+//        }
+//        return getModel;
+//    }
 
     public static String toGetData(){
         String str="获取数据失败";

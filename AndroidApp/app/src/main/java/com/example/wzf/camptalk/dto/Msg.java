@@ -1,8 +1,6 @@
 package com.example.wzf.camptalk.dto;
 
 public class Msg {
-    public static final int TYPE_RECEIVED=0;
-    public static final int TYPE_SENT=1;
     private String content;
     private int type;
     public Msg(String content,int type){

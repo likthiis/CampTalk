@@ -1,97 +1,93 @@
 package com.example.wzf.camptalk;
 
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.wzf.camptalk.dto.GetModel;
-import com.example.wzf.camptalk.utility.HttpReq;
+import com.example.wzf.camptalk.model.message;
 
-import org.apache.http.message.BasicNameValuePair;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+public class AndroidCampTalk extends AppCompatActivity implements View.OnClickListener {
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class AndroidCampTalk extends AppCompatActivity {
-
-    @Bind(R.id.banner)
-    TextView ctBanner;
-    @Bind(R.id.username)
-    EditText ctUsername;
-    @Bind(R.id.password)
-    EditText ctPassword;
-    @Bind(R.id.loginCommit)
-    Button ctLoginCommit;
-
-    private Thread thread;
+    private SocketAppService socketAppService;
+    private static final String TAG = "AndroidCampTalk";
+    private EditText mContent;
+    private Button mSend;
+    private TextView mText;
+    private EditText mUserName;
+    private EditText mToSb;
+    private Button bAct;
+    private Button bJumpTo2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_android_camp_talk);
-        ButterKnife.bind(this);
-
-        ctLoginCommit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                thread = new Thread(new loginRunnable());
-                thread.start();
-            }
-        });
+        bindObject();
+        socketAppService = (SocketAppService)getApplication();
     }
 
-    Handler handler = new Handler() {
-      public void handleMessage(android.os.Message msg) {
-          GetModel model = (GetModel) msg.obj;
-          if(model.getReturnElement().getData().toString().equals("#login_success")) {
-              Toast.makeText(AndroidCampTalk.this, "登录成功！", Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent();
-              intent.setClass(AndroidCampTalk.this, ChatPageActivity.class);
-              startActivity(intent);
-          }
-          else {
-              new AlertDialog.Builder(AndroidCampTalk.this)
-                      .setTitle("CampTalk")
-                      .setMessage("登录失败，请重新尝试！")
-                      .setPositiveButton("确定", null)
-                      .show();
-          }
-      };
-    };
+    private void bindObject() {
+        mContent = (EditText) findViewById(R.id.E_msg);
+        mUserName = (EditText) findViewById(R.id.E_username);
+        mToSb = (EditText) findViewById(R.id.E_tosb);
+        mSend = (Button) findViewById(R.id.B_send);
+        mText = (TextView) findViewById(R.id.T_msg);
+        bAct = (Button) findViewById(R.id.B_act);
+        bJumpTo2 = (Button) findViewById(R.id.B_jumpTo2);
+        mSend.setOnClickListener(this);
+        bAct.setOnClickListener(this);
+        bJumpTo2.setOnClickListener(this);
+    }
 
-    class loginRunnable implements Runnable {
-        @Override
-        public void run() {
-            String username = ctUsername.getText().toString();
-            String password = ctPassword.getText().toString();
+    private void sendMessage(String sender,String receiver,String msg) {
+        // 将消息放进类里面处理，并转化为JSON格式发出
+        if(socketAppService.isConnect()) {
+            message msgModel = new message();// 默认单聊
+            msgModel.setSender(sender);
+            msgModel.setReceiver(receiver);
+            msgModel.setContent(msg);
+            String comMsg = "singlechat:" + msgModel.getMessageToJson();
+            socketAppService.sendMessage(comMsg);
+        } else {
+            Log.i(TAG, "no connection!!");
+        }
+    }
 
-            List<BasicNameValuePair> list = new ArrayList<BasicNameValuePair>();
-            list.add(new BasicNameValuePair("uid",username));
-            list.add(new BasicNameValuePair("password",password));
-            try {
-                GetModel getModel = HttpReq.toPostdata(list);
-                if(getModel == null) {
-                    System.out.println("信息接收出现问题，停止服务");
-                    return;
-                }
-                Message message = handler.obtainMessage();
-                message.obj = getModel;
-                handler.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //mConnect.disconnect();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == bAct) {
+            socketAppService.setEditTextForName(mUserName);
+            socketAppService.socketConnect();
+            socketAppService.getBackMessage(mText);
+        }
+        if(view == mSend) {
+            // 如果是发送键，就执行以下代码
+            Log.i(TAG, "发送信息......");
+            String sender = mUserName.getText().toString();
+            String receiver = mToSb.getText().toString();
+            String msg = mContent.getText().toString();
+
+            sendMessage(sender, receiver, msg);
+        }
+//        if(view == bFriendRequest) {
+//            // 测试好友请求
+//
+//        }
+        if(view == bJumpTo2) {
+            Intent testTwoActivity = new Intent(AndroidCampTalk.this, TestTwoActivity.class);
+            startActivity(testTwoActivity);
         }
     }
 }

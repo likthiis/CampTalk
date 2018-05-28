@@ -8,49 +8,81 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <EditText
+            android:id="@+id/E_username"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="用户名" />
+
+        <EditText
+            android:id="@+id/E_tosb"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/E_username"
+            android:hint="对方用户名" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_below="@+id/E_tosb"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/E_msg"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:hint="消息" />
+
+
+            <Button
+                android:id="@+id/B_send"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="发送" />
+
+            <Button
+                android:id="@+id/B_jumpTo2"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:text="点击跳转" />
+
+
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/banner"
-            android:layout_width="wrap_content"
+            android:layout_width="126dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
-            android:text="CampTalk Login!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="156dp"
+            android:gravity="center"
+            android:text="接受到的内容"
+            android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/T_msg"
+            android:layout_width="126dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="52dp"
-            android:hint="请输入用户名"/>
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/username"
-            android:hint="请输入密码"/>
+            android:layout_marginTop="197dp"
+            android:gravity="center"
+            android:text="新消息"
+            android:textSize="18sp" />
 
         <Button
-            android:id="@+id/loginCommit"
-            android:layout_width="192dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="154dp"
-            android:text="按钮" />
+            android:id="@+id/B_act"
+            android:layout_width="160dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:text="激活连接" />
 
     </RelativeLayout>
-
-
 
 </android.support.constraint.ConstraintLayout>
