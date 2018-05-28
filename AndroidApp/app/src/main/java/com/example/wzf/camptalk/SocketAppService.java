@@ -29,11 +29,12 @@ public class SocketAppService extends Application {
     public void setEditTextForName(EditText editTextForName) {
         this.usernameForInitConnect = editTextForName.getText().toString();
     }
-
+    // 可以直接显示在textView里面
     public void getBackMessage(TextView textView) {
         String msg = connectPrepare.getReturnMsg();
         textView.setText(msg);
     }
+
 
     private void sendUid(String uid) {
         // 这里应该存在将客户端保存的uid设置成user字段的功能，这个字段起到标识符作用。
