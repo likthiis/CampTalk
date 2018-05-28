@@ -7,27 +7,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be3408fa-5abd-4259-bae0-6ee1439f91b5" name="Default" comment="A routine commit.">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/CampTalk_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Icon/qinne.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/FriendRequestModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/entity/YuruFriendEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/entity/YuruFriendEntityPK.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/WebSocketController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/FriendRequestService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/utility/MessageUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/WebSocketService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../AndroidApp/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../AndroidApp/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a738e2eb-edd8-4efe-92f8-7dd71aa2d5a7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a738e2eb-edd8-4efe-92f8-7dd71aa2d5a7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnElement.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModelHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModelHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/entity/YuruAuthEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/entity/YuruAuthEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/entity/YuruUserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/entity/YuruUserEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/WebSocketServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/AuthorizationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/AuthorizationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/WebSocketController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/WebSocketController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/utility/MessageUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/SingleChatModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Docs/CampTalk前后端交互文档.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Docs/CampTalk前后端交互文档.md" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -62,19 +46,28 @@
       <file leaf-file-name="WebSocketController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/WebSocketController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="444">
-              <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
+            <state relative-caret-position="305">
+              <caret line="120" column="23" lean-forward="true" selection-start-line="120" selection-start-column="23" selection-end-line="120" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#647#655#0" expanded="true" />
-                <element signature="e#716#725#0" expanded="true" />
-                <element signature="e#877#894#0" expanded="true" />
-                <element signature="e#6021#6022#0" expanded="true" />
-                <element signature="e#6055#6056#0" expanded="true" />
-                <element signature="e#6111#6112#0" expanded="true" />
-                <element signature="e#6160#6161#0" expanded="true" />
-                <element signature="e#6216#6217#0" expanded="true" />
-                <element signature="e#6265#6266#0" expanded="true" />
+                <element signature="e#6212#6213#0" expanded="true" />
+                <element signature="e#6246#6247#0" expanded="true" />
+                <element signature="e#6302#6303#0" expanded="true" />
+                <element signature="e#6351#6352#0" expanded="true" />
+                <element signature="e#6407#6408#0" expanded="true" />
+                <element signature="e#6456#6457#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WebSocketService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/WebSocketService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="45" column="34" lean-forward="true" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -83,7 +76,7 @@
       <file leaf-file-name="AuthorizationService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/AuthorizationService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
+            <state relative-caret-position="1541">
               <caret line="126" column="59" selection-start-line="126" selection-start-column="59" selection-end-line="126" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -95,7 +88,7 @@
       <file leaf-file-name="FriendRequestService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/FriendRequestService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
+            <state relative-caret-position="192">
               <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -104,11 +97,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/utility/MessageUtil.java">
+      <file leaf-file-name="SingleChatModel.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/SingleChatModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-46">
-              <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+            <state relative-caret-position="207">
+              <caret line="24" column="29" lean-forward="true" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -119,7 +112,7 @@
       <file leaf-file-name="ReturnModel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="803">
+            <state relative-caret-position="690">
               <caret line="47" selection-start-line="47" selection-end-line="47" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -131,7 +124,7 @@
       <file leaf-file-name="ReturnModelHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModelHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="844">
+            <state relative-caret-position="1219">
               <caret line="57" column="10" selection-start-line="57" selection-start-column="10" selection-end-line="57" selection-end-column="10" />
             </state>
           </provider>
@@ -151,25 +144,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="161">
               <caret line="7" selection-start-line="7" selection-end-line="10" />
-              <folding>
-                <element signature="e#351#352#0" expanded="true" />
-                <element signature="e#379#380#0" expanded="true" />
-                <element signature="e#421#422#0" expanded="true" />
-                <element signature="e#455#456#0" expanded="true" />
-                <element signature="e#329#330#0" expanded="true" />
-                <element signature="e#358#359#0" expanded="true" />
-                <element signature="e#402#403#0" expanded="true" />
-                <element signature="e#438#439#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RegisterController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/RegisterController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="759">
-              <caret line="47" column="81" selection-start-line="47" selection-start-column="81" selection-end-line="47" selection-end-column="81" />
             </state>
           </provider>
         </entry>
@@ -177,7 +151,7 @@
       <file leaf-file-name="RegisterService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/RegisterService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
+            <state relative-caret-position="943">
               <caret line="48" selection-start-line="48" selection-end-line="48" selection-end-column="63" />
             </state>
           </provider>
@@ -209,9 +183,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/websocket/MyHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/SocketController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/websocket/MyWebSocketHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/SendThread.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/utility/BasisNetUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/utility/LoginUtil.java" />
@@ -259,6 +230,9 @@
         <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModelHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/FriendRequestService.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/MessageUtil.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/MessageModel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/WebSocketService.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/WebSocketController.java" />
       </list>
     </option>
@@ -283,7 +257,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -314,6 +287,41 @@
               <item name="CampTalkServer" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="campTalk" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CampTalk" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CampTalkServer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="campTalk" type="462c0819:PsiDirectoryNode" />
+              <item name="dto" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CampTalk" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CampTalkServer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="campTalk" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CampTalk" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CampTalkServer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="campTalk" type="462c0819:PsiDirectoryNode" />
+              <item name="WebSocket" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CampTalk" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CampTalkServer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -322,6 +330,7 @@
       </pane>
       <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -502,7 +511,8 @@
       <workItem from="1527345431574" duration="4471000" />
       <workItem from="1527383982140" duration="13675000" />
       <workItem from="1527414838204" duration="8541000" />
-      <workItem from="1527434647287" duration="4826000" />
+      <workItem from="1527434647287" duration="5045000" />
+      <workItem from="1527473657185" duration="4976000" />
     </task>
     <task id="LOCAL-00001" summary="A routine commit.">
       <created>1524069832202</created>
@@ -560,11 +570,18 @@
       <option name="project" value="LOCAL" />
       <updated>1526486034821</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="长链接的基础设施、一对一聊天功能(无数据库参与)、好友请求模块的部分功能">
+      <created>1527439994077</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1527439994078</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="283705000" />
+    <option name="totallyTimeSpent" value="288900000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -587,13 +604,14 @@
       <window_info anchor="bottom" id="Java Enterprise" order="9" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.49947917" weight="0.12765957" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.85260415" visible="true" weight="0.32765958" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.85260415" weight="0.26702127" />
       <window_info anchor="bottom" id="Spring" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info id="Persistence" order="2" sideWeight="0.28955695" side_tool="true" visible="true" weight="0.17083333" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.710443" visible="true" weight="0.17083333" />
+      <window_info id="Persistence" order="2" sideWeight="0.29042554" side_tool="true" visible="true" weight="0.17083333" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.70957446" visible="true" weight="0.17083333" />
       <window_info anchor="right" id="Bean Validation" order="8" />
       <window_info id="Web" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.15531915" />
       <window_info anchor="right" id="SciView" order="10" />
       <window_info anchor="right" id="Theme Preview" order="7" />
       <window_info id="Favorites" order="6" side_tool="true" />
@@ -603,7 +621,6 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Hibernate Console" order="11" sideWeight="0.49947917" weight="0.20851064" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32659575" />
       <window_info anchor="right" id="Coverage" order="10" side_tool="true" weight="0.3296875" />
     </layout>
   </component>
@@ -631,7 +648,8 @@
     <MESSAGE value="Now a WebSocket Connection Station has been built for next step of development.By the way, the system need to finish the method for register and login between clients and server." />
     <MESSAGE value="Now users can upload their headIcon to server." />
     <MESSAGE value="Change a lot in module of validate&amp;authorization." />
-    <option name="LAST_COMMIT_MESSAGE" value="Change a lot in module of validate&amp;authorization." />
+    <MESSAGE value="长链接的基础设施、一对一聊天功能(无数据库参与)、好友请求模块的部分功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="长链接的基础设施、一对一聊天功能(无数据库参与)、好友请求模块的部分功能" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -646,7 +664,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/WiselyResponse.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/SocketController.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot/1.5.9.RELEASE/spring-boot-1.5.9.RELEASE.jar!/org/springframework/boot/SpringApplication.class">
       <provider selected="true" editor-type-id="text-editor">
@@ -839,23 +856,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnElement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnElement.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/RegisterController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="759">
+        <state relative-caret-position="828">
           <caret line="47" column="81" selection-start-line="47" selection-start-column="81" selection-end-line="47" selection-end-column="81" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/RegisterService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
+        <state relative-caret-position="943">
           <caret line="48" selection-start-line="48" selection-end-line="48" selection-end-column="63" />
         </state>
       </provider>
@@ -869,7 +880,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModelHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="844">
+        <state relative-caret-position="1219">
           <caret line="57" column="10" selection-start-line="57" selection-start-column="10" selection-end-line="57" selection-end-column="10" />
         </state>
       </provider>
@@ -891,19 +902,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/AuthorizationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="126" column="59" selection-start-line="126" selection-start-column="59" selection-end-line="126" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/ReturnModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="803">
+        <state relative-caret-position="690">
           <caret line="47" selection-start-line="47" selection-end-line="47" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -915,16 +916,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
           <caret line="7" selection-start-line="7" selection-end-line="10" />
-          <folding>
-            <element signature="e#351#352#0" expanded="true" />
-            <element signature="e#379#380#0" expanded="true" />
-            <element signature="e#421#422#0" expanded="true" />
-            <element signature="e#455#456#0" expanded="true" />
-            <element signature="e#329#330#0" expanded="true" />
-            <element signature="e#358#359#0" expanded="true" />
-            <element signature="e#402#403#0" expanded="true" />
-            <element signature="e#438#439#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -935,20 +926,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/utility/MessageUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/FriendRequestService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-46">
-          <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+        <state relative-caret-position="192">
+          <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/FriendRequestService.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/dto/SingleChatModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
+        <state relative-caret-position="207">
+          <caret line="24" column="29" lean-forward="true" selection-start-line="24" selection-start-column="29" selection-end-line="24" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/AuthorizationService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1541">
+          <caret line="126" column="59" selection-start-line="126" selection-start-column="59" selection-end-line="126" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/service/WebSocketService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="45" column="34" lean-forward="true" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -957,19 +968,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/yuru/campTalk/restful/WebSocketController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
+        <state relative-caret-position="305">
+          <caret line="120" column="23" lean-forward="true" selection-start-line="120" selection-start-column="23" selection-end-line="120" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#647#655#0" expanded="true" />
-            <element signature="e#716#725#0" expanded="true" />
-            <element signature="e#877#894#0" expanded="true" />
-            <element signature="e#6021#6022#0" expanded="true" />
-            <element signature="e#6055#6056#0" expanded="true" />
-            <element signature="e#6111#6112#0" expanded="true" />
-            <element signature="e#6160#6161#0" expanded="true" />
-            <element signature="e#6216#6217#0" expanded="true" />
-            <element signature="e#6265#6266#0" expanded="true" />
+            <element signature="e#6212#6213#0" expanded="true" />
+            <element signature="e#6246#6247#0" expanded="true" />
+            <element signature="e#6302#6303#0" expanded="true" />
+            <element signature="e#6351#6352#0" expanded="true" />
+            <element signature="e#6407#6408#0" expanded="true" />
+            <element signature="e#6456#6457#0" expanded="true" />
           </folding>
         </state>
       </provider>

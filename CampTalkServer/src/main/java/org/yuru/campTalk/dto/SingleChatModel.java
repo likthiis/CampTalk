@@ -1,15 +1,12 @@
-package org.yuru.campTalk.utility;
+package org.yuru.campTalk.dto;
 
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
-public class MessageUtil {
-    // 该类用于将信息从服务端发送至客户端
-    // 聊天，单聊 type = 1，群聊 type = 2
-    private int type;
+// 将该Model改为单聊专用
+public class SingleChatModel {
 
     // 记录了由谁发送信息，将信息发送给谁，以及信息的内容
     private String sender;
@@ -19,7 +16,7 @@ public class MessageUtil {
     // 记录各用户的用户名与其socket的信息，并提供了将数据转化为Json格式的工具
     private static Gson gson = new Gson();
 
-    public MessageUtil(){
+    public SingleChatModel(){
 
     }
 
@@ -38,14 +35,6 @@ public class MessageUtil {
 
     public String getContent() {
         return content;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public String getSender() {

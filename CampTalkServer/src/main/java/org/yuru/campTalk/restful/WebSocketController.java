@@ -6,7 +6,8 @@ import org.yuru.campTalk.WebSocket.GetHttpSessionConfigurator;
 import org.yuru.campTalk.dto.FriendRequestModel;
 import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.service.FriendRequestService;
-import org.yuru.campTalk.utility.MessageUtil;
+import org.yuru.campTalk.dto.SingleChatModel;
+import org.yuru.campTalk.service.WebSocketService;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -85,60 +86,33 @@ public class WebSocketController {
 
     @OnMessage
     public void message(Session session, String message) {
-        // 将websocket的session与其用户名存入键值对。
-        if(message.substring(0, 3).equals("uid")) {
-            // 如果这是uid的传输字段，那么将对uid及其session做一个处理。
-            try {
+        try {
+            // 将websocket的session与其用户名存入键值对。
+            if (session.isOpen() && message.substring(0, 3).equals("uid")) {
+                // 如果这是uid的传输字段，那么将对uid及其session做一个处理。
                 String uid = message.substring(4);
                 sessionMap.put(uid, session);
                 return;
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
 
-        // 我们将通过websocket来处理好友的一些事务
-        // 好友请求
-        // 我们假定好友请求的格式由一个类来承担
-        if(message.substring(0, 13).equals("friendrequest")) {
-            // 如果这是好友请求，那么将进行处理
-            try {
-                String friendRequest = message.substring(14);
-                JSONObject JSONmessage = JSONObject.fromObject(friendRequest);
-                FriendRequestModel friendRe = (FriendRequestModel) JSONObject.toBean(JSONmessage, FriendRequestModel.class);
-
-                // 一个类已经建立起来，下面是数据库处理的内容
-                ReturnModel returnModel = new ReturnModel();
-                returnModel = FriendRequestService.dealRequest(friendRe);
-
-                // 获得返回类，将其转化成JSON发还给客户端
-                session.getBasicRemote().sendText(returnModel.getMessageToJson());
+            // 好友请求(只是测试了链接与数据库插入功能)
+            if (session.isOpen() && message.substring(0, 13).equals("friendrequest")) {
+                // 如果这是好友请求，那么将进行处理
+                WebSocketService.friendRequest(session,message);
                 return;
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
 
-
-        try {
             // message是从客户端传过来的，将其进行JSON的解码，好利用其中的数据
             System.out.println(message);
 
-            if (session.isOpen()) {
-                // 将接受到的websocket内的信息存进实体，并操作这个实体来进行下一步的处理
-                JSONObject JSONmessage = JSONObject.fromObject(message);
-                MessageUtil msg = (MessageUtil) JSONObject.toBean(JSONmessage, MessageUtil.class);
-                if (msg.getType() == 1) { // 单聊
-                    // test
-                    System.out.println("在单聊框架内，我们得到如下消息：" + msg.getMessageToJson());
+            if (session.isOpen() && message.substring(0, 10).equals("singlechat")) {
+                WebSocketService.singleChat(session, message, sessionMap);
 
-                    // test：从这里，服务端将发一个结构体给客户端，给这一次登录的客户端
-                    // 现在，在没有使用数据库的情况下，单聊的模式已经实现。
-                    msg.setContent(msg.getContent());
-                    message = msg.getMessageToJson();
-                    Session target = sessionMap.get(msg.getReceiver());
-                    target.getBasicRemote().sendText(message);
-
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 //                    List<Session> sessionPrivateList = new ArrayList<Session>();
 //                    for (int i = 0; i < msg.getTo().size(); i++) {
@@ -147,14 +121,9 @@ public class WebSocketController {
 //                    }
 //                    sessionPrivateList.add(sessionMap.get(msg.getFrom()));
 //                    this.broadcast(sessionPrivateList, msg.getMessageToJson());
-                } else if (msg.getType() == 2) { // 群聊
+//                } else if (msg.getType() == 2) { // 群聊
 //                    this.broadcast(this.sessions, msg.getMessageToJson());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//                }
 
     @OnError
     public void onError(Session session, Throwable error) {
