@@ -1,5 +1,7 @@
 package org.yuru.campTalk.entity;
 
+import com.google.gson.Gson;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -15,6 +17,7 @@ public class YuruUserEntity {
     private Timestamp lastlogin;
     private String location;
     private String headpid;
+
 
     @Id
     @Column(name = "id")

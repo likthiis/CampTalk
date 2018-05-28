@@ -11,23 +11,7 @@ import java.util.Map;
 
 public class WebSocketService {
 
-    // 好友请求功能函数
-    public static void friendRequest(Session session, String message) {
-        String friendRequest = message.substring(14);
-        JSONObject JSONmessage = JSONObject.fromObject(friendRequest);
-        FriendRequestModel friendRe = (FriendRequestModel) JSONObject.toBean(JSONmessage, FriendRequestModel.class);
 
-        // 一个类已经建立起来，下面是数据库处理的内容
-        ReturnModel returnModel = new ReturnModel();
-        returnModel = FriendRequestService.dealRequest(friendRe);
-
-        try {
-            // 获得返回类，将其转化成JSON发还给客户端
-            session.getBasicRemote().sendText("return:" + returnModel.getMessageToJson());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void singleChat(Session session, String message, Map<String, Session> sessionMap) {
         // 单聊

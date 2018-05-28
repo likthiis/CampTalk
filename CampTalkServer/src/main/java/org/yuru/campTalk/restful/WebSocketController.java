@@ -1,12 +1,10 @@
 package org.yuru.campTalk.restful;
 
-import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.RestController;
 import org.yuru.campTalk.WebSocket.GetHttpSessionConfigurator;
-import org.yuru.campTalk.dto.FriendRequestModel;
 import org.yuru.campTalk.dto.ReturnModel;
-import org.yuru.campTalk.service.FriendRequestService;
-import org.yuru.campTalk.dto.SingleChatModel;
+import org.yuru.campTalk.service.friend_method.FriendModule;
+import org.yuru.campTalk.service.friend_method.FriendRequestService;
 import org.yuru.campTalk.service.WebSocketService;
 
 import javax.websocket.*;
@@ -86,6 +84,7 @@ public class WebSocketController {
 
     @OnMessage
     public void message(Session session, String message) {
+        System.out.println(message);
         try {
             // 将websocket的session与其用户名存入键值对。
             if (session.isOpen() && message.substring(0, 3).equals("uid")) {
@@ -98,7 +97,7 @@ public class WebSocketController {
             // 好友请求(只是测试了链接与数据库插入功能)
             if (session.isOpen() && message.substring(0, 13).equals("friendrequest")) {
                 // 如果这是好友请求，那么将进行处理
-                WebSocketService.friendRequest(session,message);
+                FriendModule.friendRequest(session,message);
                 return;
             }
 
@@ -108,6 +107,11 @@ public class WebSocketController {
             if (session.isOpen() && message.substring(0, 10).equals("singlechat")) {
                 WebSocketService.singleChat(session, message, sessionMap);
 
+            }
+
+            System.out.println(message.substring(0, 10));
+            if (session.isOpen() && message.substring(0, 10).equals("usersearch")) {
+                FriendModule.userSearch(session, message);
             }
         } catch (Exception e) {
             e.printStackTrace();
