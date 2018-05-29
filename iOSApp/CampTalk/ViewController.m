@@ -12,9 +12,13 @@
 #import "CTLoginViewController.h"
 #import "CTNavigationController.h"
 
+#import "UIImage+Read.h"
+
 @interface ViewController ()
 
 @property (nonatomic, strong) AVAudioPlayer *player;
+@property (weak, nonatomic) IBOutlet UIImageView *corverImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *corverImageBgView;
 
 @end
 
@@ -24,6 +28,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    NSString *imageName = [NSString stringWithFormat:@"corver%d.jpg", arc4random()%2];
+    
+    _corverImageView.image = [UIImage imageWithName:imageName];
+    _corverImageBgView.image = _corverImageView.image;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
     
     NSURL *fileUrl = [[NSBundle mainBundle] URLForResource:@"linJiang" withExtension:@"m4a"];

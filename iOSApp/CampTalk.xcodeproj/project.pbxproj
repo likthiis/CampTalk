@@ -13,7 +13,7 @@
 		6BD76635208504E3003FD599 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BD76634208504E3003FD599 /* Assets.xcassets */; };
 		6BD76638208504E3003FD599 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BD76636208504E3003FD599 /* LaunchScreen.storyboard */; };
 		6BD7663B208504E3003FD599 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD7663A208504E3003FD599 /* main.m */; };
-		6BD766432085085A003FD599 /* corver.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766422085085A003FD599 /* corver.jpg */; };
+		6BD766432085085A003FD599 /* corver0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766422085085A003FD599 /* corver0.jpg */; };
 		6BD76674208508F5003FD599 /* UIView+LayoutHelp.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76651208508F4003FD599 /* UIView+LayoutHelp.m */; };
 		6BD76675208508F5003FD599 /* UIView+JTParentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76652208508F4003FD599 /* UIView+JTParentVC.m */; };
 		6BD76676208508F5003FD599 /* UIView+Radius.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76654208508F4003FD599 /* UIView+Radius.m */; };
@@ -39,7 +39,7 @@
 		6BD766AB20850E11003FD599 /* UIImage+Read.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76667208508F5003FD599 /* UIImage+Read.m */; };
 		6BD766AE20850E11003FD599 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BD76636208504E3003FD599 /* LaunchScreen.storyboard */; };
 		6BD766AF20850E11003FD599 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BD76634208504E3003FD599 /* Assets.xcassets */; };
-		6BD766B020850E11003FD599 /* corver.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766422085085A003FD599 /* corver.jpg */; };
+		6BD766B020850E11003FD599 /* corver0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766422085085A003FD599 /* corver0.jpg */; };
 		6BD766B120850E11003FD599 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6BD76631208504E3003FD599 /* Main.storyboard */; };
 		6BD766BA208515B8003FD599 /* linJiang.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766B7208511D1003FD599 /* linJiang.m4a */; };
 		6BD766BB208515B9003FD599 /* linJiang.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 6BD766B7208511D1003FD599 /* linJiang.m4a */; };
@@ -81,6 +81,8 @@
 		E6312BC820A2ECA60090054C /* CTFileManger.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312BC620A2ECA60090054C /* CTFileManger.m */; };
 		E64713532096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */; };
 		E64713542096EC1700A304BC /* UIViewController+DragBarItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */; };
+		E671495720B50971009070D0 /* corver1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E671495620B50971009070D0 /* corver1.jpg */; };
+		E671495820B50971009070D0 /* corver1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E671495620B50971009070D0 /* corver1.jpg */; };
 		E684BCF020A6020900C3E973 /* CTInputTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E684BCEF20A6020900C3E973 /* CTInputTableViewCell.m */; };
 		E684BCF120A6020900C3E973 /* CTInputTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E684BCEF20A6020900C3E973 /* CTInputTableViewCell.m */; };
 		E684BCF320A6FD3A00C3E973 /* camp07.gif in Resources */ = {isa = PBXBuildFile; fileRef = E684BCF220A6FD3900C3E973 /* camp07.gif */; };
@@ -114,7 +116,7 @@
 		6BD76637208504E3003FD599 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6BD76639208504E3003FD599 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6BD7663A208504E3003FD599 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6BD766422085085A003FD599 /* corver.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = corver.jpg; sourceTree = "<group>"; };
+		6BD766422085085A003FD599 /* corver0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = corver0.jpg; sourceTree = "<group>"; };
 		6BD7664F208508F4003FD599 /* UIView+JTParentVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+JTParentVC.h"; sourceTree = "<group>"; };
 		6BD76650208508F4003FD599 /* UIView+Radius.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Radius.h"; sourceTree = "<group>"; };
 		6BD76651208508F4003FD599 /* UIView+LayoutHelp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutHelp.m"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 		E6312BC620A2ECA60090054C /* CTFileManger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTFileManger.m; sourceTree = "<group>"; };
 		E64713512096EC1600A304BC /* UIViewController+DragBarItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+DragBarItem.h"; sourceTree = "<group>"; };
 		E64713522096EC1600A304BC /* UIViewController+DragBarItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+DragBarItem.m"; sourceTree = "<group>"; };
+		E671495620B50971009070D0 /* corver1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = corver1.jpg; sourceTree = "<group>"; };
 		E684BCEE20A6020900C3E973 /* CTInputTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTInputTableViewCell.h; sourceTree = "<group>"; };
 		E684BCEF20A6020900C3E973 /* CTInputTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTInputTableViewCell.m; sourceTree = "<group>"; };
 		E684BCF220A6FD3900C3E973 /* camp07.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = camp07.gif; sourceTree = "<group>"; };
@@ -332,7 +335,8 @@
 				E684BCF520A7009F00C3E973 /* yuru_camp_login.gif */,
 				E684BCF220A6FD3900C3E973 /* camp07.gif */,
 				E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */,
-				6BD766422085085A003FD599 /* corver.jpg */,
+				6BD766422085085A003FD599 /* corver0.jpg */,
+				E671495620B50971009070D0 /* corver1.jpg */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -621,11 +625,12 @@
 				6BD766BA208515B8003FD599 /* linJiang.m4a in Resources */,
 				E684BCF620A700A000C3E973 /* yuru_camp_login.gif in Resources */,
 				6BD76635208504E3003FD599 /* Assets.xcassets in Resources */,
-				6BD766432085085A003FD599 /* corver.jpg in Resources */,
+				6BD766432085085A003FD599 /* corver0.jpg in Resources */,
 				E684BCF320A6FD3A00C3E973 /* camp07.gif in Resources */,
 				E6E05AD7209C358C00C54A24 /* chatBg_1.jpg in Resources */,
 				9E7276512088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD76633208504E3003FD599 /* Main.storyboard in Resources */,
+				E671495720B50971009070D0 /* corver1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,11 +642,12 @@
 				6BD766BB208515B9003FD599 /* linJiang.m4a in Resources */,
 				E684BCF720A700A000C3E973 /* yuru_camp_login.gif in Resources */,
 				6BD766AF20850E11003FD599 /* Assets.xcassets in Resources */,
-				6BD766B020850E11003FD599 /* corver.jpg in Resources */,
+				6BD766B020850E11003FD599 /* corver0.jpg in Resources */,
 				E684BCF420A6FD3A00C3E973 /* camp07.gif in Resources */,
 				E6E05AD8209C358C00C54A24 /* chatBg_1.jpg in Resources */,
 				9E7276522088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD766B120850E11003FD599 /* Main.storyboard in Resources */,
+				E671495820B50971009070D0 /* corver1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
