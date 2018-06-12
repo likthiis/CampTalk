@@ -1,20 +1,25 @@
 package org.yuru.campTalk.restful;
 
+import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.RestController;
 import org.yuru.campTalk.WebSocket.GetHttpSessionConfigurator;
+import org.yuru.campTalk.dto.RequestModel;
 import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.service.friend_method.FriendModule;
 import org.yuru.campTalk.service.friend_method.FriendRequestService;
 import org.yuru.campTalk.service.WebSocketService;
+import org.yuru.campTalk.service.query_method.QueryModule;
+import org.yuru.campTalk.service.query_method.QueryService;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ServerEndpoint(value = "/websocket", configurator = GetHttpSessionConfigurator.class)
+@ServerEndpoint(value = "/websocket/{userId}", configurator = GetHttpSessionConfigurator.class)
 @RestController
 public class WebSocketController {
     private static int onlineCount = 0;
@@ -27,10 +32,11 @@ public class WebSocketController {
     private static Map<String, Session> sessionMap = new HashMap<String, Session>();
 
     @OnOpen
-    public void onOpen(Session session,EndpointConfig config) { // 打开websocket
+    public void onOpen(@PathParam("userId")String userId, Session session, EndpointConfig config) { // 打开websocket
         try {
             // test
             System.out.println("the session is : " + session.getId());
+            System.out.println("the uid is : " + userId);
 
 //            String sessionMsg = session.getQueryString();
 //            if(sessionMsg == null) {
@@ -44,8 +50,8 @@ public class WebSocketController {
 //            MessageUtil message = new MessageUtil(welcome, usernames);
 //            this.broadcast(this.sessions, message.getMessageToJson());
 
-//            addOnlineCount();
-//            System.out.println("有新连接加入！当前在线人数为" + getOnlineCount() + "人");
+            addOnlineCount();
+            System.out.println("有新连接加入！当前在线人数为" + getOnlineCount() + "人");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,8 +80,8 @@ public class WebSocketController {
             sessionMap.remove(this.uid);
 //            this.broadcast(this.sessions, message.getMessageToJson());
 //            System.out.println("websocket is closed.");
-//            subOnlineCount();
-//            System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount() + "人");
+            subOnlineCount();
+            System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount() + "人");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,6 +92,30 @@ public class WebSocketController {
     public void message(Session session, String message) {
         System.out.println(message);
         try {
+            // 测试用
+            if (session.isOpen() && message.equals("test")) {
+                String backMsg = "从服务端返回的消息";
+                session.getBasicRemote().sendText(backMsg);
+                return;
+            }
+
+            // 从客户端会发过来一个结构体
+            RequestModel requestModel = new Gson().fromJson(message, RequestModel.class);
+            String action = requestModel.getAction();
+            String token = requestModel.getToken();
+            // 对照token
+
+            Boolean rightToken = QueryModule.checkToken(session, token);
+            if(!rightToken) {
+                session.getBasicRemote().sendText("invaild_token");
+                return;
+            }
+
+            // 查询用户
+            if (session.isOpen() && action.equals("usersearch")) {
+                QueryModule.userSearch(session, (String)requestModel.getReq());
+            }
+
             // 将websocket的session与其用户名存入键值对。
             if (session.isOpen() && message.substring(0, 3).equals("uid")) {
                 // 如果这是uid的传输字段，那么将对uid及其session做一个处理。
@@ -95,24 +125,18 @@ public class WebSocketController {
             }
 
             // 好友请求(只是测试了链接与数据库插入功能)
-            if (session.isOpen() && message.substring(0, 13).equals("friendrequest")) {
+            if (session.isOpen() && action.equals("friendrequest")) {
                 // 如果这是好友请求，那么将进行处理
                 FriendModule.friendRequest(session,message);
                 return;
             }
 
-            // message是从客户端传过来的，将其进行JSON的解码，好利用其中的数据
-            System.out.println(message);
-
-            if (session.isOpen() && message.substring(0, 10).equals("singlechat")) {
+            if (session.isOpen() && action.equals("singlechat")) {
                 WebSocketService.singleChat(session, message, sessionMap);
 
             }
 
-            System.out.println(message.substring(0, 10));
-            if (session.isOpen() && message.substring(0, 10).equals("usersearch")) {
-                FriendModule.userSearch(session, message);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

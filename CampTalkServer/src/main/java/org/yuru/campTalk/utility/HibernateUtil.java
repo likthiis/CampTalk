@@ -48,20 +48,15 @@ public class HibernateUtil {
      * Get session for hibernate in this thread.
      * @return hibernate session instance
      */
-    //从这个线程中获得会话，并返回会话的实例(里面应该有相关的数据)。
-
-    //告诉编译器出现警告也要跳过。
     @SuppressWarnings("unchecked")
     public static Session GetLocalSession() {
-        Session s = (Session) session.get(); //会话获得。(好像是组键值对)
-        if (s == null) {  //如果这个会话是不存在的。
-            s = HibernateUtil.GetSessionFactory().openSession(); //就调用上面的获得会话工厂的实例，并将里面的实例提取出来。
-            HibernateUtil.session.set(s); //设置一下里面的数据。
+        Session s = (Session) session.get();
+        if (s == null) {
+            s = HibernateUtil.GetSessionFactory().openSession();
+            HibernateUtil.session.set(s);
         }
         return s;
     }
-
-    //(20180418)get和set还没有被写出来的样子...
 
     /**
      * Close active session in this thread.
@@ -71,17 +66,17 @@ public class HibernateUtil {
     @SuppressWarnings("unchecked")
     public static void CloseLocalSession() {
         try {  //安全模式。
-            Session s = (Session) session.get(); //获得对话
-            if (s != null) {  //确实有会话。
-                if (s.isOpen()) { //而且还是开着的。
-                    s.close(); //就关掉它。
+            Session s = (Session) session.get();
+            if (s != null) {
+                if (s.isOpen()) {
+                    s.close();
                 }
-                session.set(null); //处理掉，内存减负。
+                session.set(null);
             }
         }
         catch (Exception ex) {
             LogUtil.Echo("Close hibernate session failed, " + ex,
-                    HibernateUtil.class.getName(), LogLevelType.ERROR); //应急手段。
+                    HibernateUtil.class.getName(), LogLevelType.ERROR);
         }
     }
 

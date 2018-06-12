@@ -12,52 +12,58 @@ CampTalk是一个基本动画"摇曳露营"的动漫元素设计而成的聊天�
 
 ---
 
+
+
 ##设计蓝图
 ###接口说明
 ####0.事先说明
 服务端再返回数据时统一用一个结构体写成JSON格式传回客户端，该结构体的内容如下代码所示例：
 ```
 {
-    "code": "OK",
-    "timestamp": "2018-05-11 18:44:54",
-    "returnElement": {
-        "sign": null,
-        "message": null,
-        "data": "#wrong_password"
-    }
+    "code": "auth_success",
+    "timestamp": "2018-05-16 23:44:15.075",
+    "token": "AUTH_qinne_f87e6e76-6b93-4936-ae42-829de6d65485"
 }
 ```
 具体参数描述
 | 参数名         | 必选   | 类型  |说明                  |
 | :------------: | :-----:| :----:|:--------------------:|
-|code            | yes    |String |说明处理结果的大体情况|
+|code            | yes    |String |状态值|
 |timestamp       | yes    |String |时间戳                |
-|returnElement   | yes    |String |返回具体的数据        |
+|token   | yes    |String |令牌        |
 
-returnElement作为内层JSON存在，其具体参数如下
-| 参数名         | 必选   | 类型  |说明                  |
-| :------------: | :-----:| :----:|:--------------------:|
-|sign            | yes    |String |                      |
-|message         | yes    |String |                      |
-|data            | yes    |String |记录具体的处理结果    |
-####1.登录
-#####具体描述
-用户登录
-#####流程描述
-用户输入用户名(注意不是昵称)和密码--->客户端将信息递交给服务端--->服务端进行数据操作，并将结果回传给客户端--->用户得知登录情况
+####1.验证(包括登录验证与启动验证)
+#####接口名(仅云服务器地址)
+http://211.159.166.251:16233/auth/login
 #####具体接口说明
 | 参数名     | 必选   | 类型  |说明          |
 | :--------: | :-----:| :----:|:------------:|
-|uid         | yes    |String |用户唯一标识符|
-|password    | yes    |String |密码          |
+|uid         |看情况   |String |用户唯一标识符|
+|password    |看情况    |String |密码          |
+|token|看情况|Stirng|令牌|
 #####返回说明
+(用户登录，需输入uid和password)
 | 返回值             |说明        |
 | :--------:         | :---------:|
-|\#user_not_valid    |用户不存在  |
-|\#blocked_account   |账号已封禁  |
-|\#password_invalid  |密码错误    |
-|\#login_success     |登录成功    |
-|\#exception_occurred|其他未知错误|
+|user_not_valid    |用户不存在(该用户尚未注册)  |
+|blocked_account   |账号已封禁  |
+|password_invalid  |密码错误    |
+|cannot_ruin_old_token|(数据库问题)无法删除旧令牌|
+|cannot_insert_info|(数据库问题)无法添加新令牌|
+|auth_success|授权成功|
+|exception_occurred|其他未知错误|
+
+(自启授权，需输入uid和token)
+| 返回值             |说明        |
+| :--------:         | :---------:|
+|auth_inexist|令牌不存在|
+|auth_differ|令牌不一致|
+|overdue|令牌过期|
+|other_error|其他未知问题|
+|cannot_ruin_old_token|(数据库问题)无法删除旧令牌|
+|cannot_insert_info|(数据库问题)无法添加新令牌|
+|auth_success|授权成功|
+|exception_occurred|其他未知错误|
 #####验证签名
 千咲好温柔！
 #####请求URL
@@ -66,6 +72,8 @@ returnElement作为内层JSON存在，其具体参数如下
 POST
 
 ####2.密码修改
+#####接口名
+/setting/password
 #####具体描述
 用户在手机上输入原密码和新密码，服务端接收到之后处理，并告诉用户具体的处理结果。
 #####流程描述
@@ -92,6 +100,8 @@ POST
 POST
 
 ####3.头像修改
+#####接口名
+/setting/picset
 #####具体描述
 服务端会在用户注册时给与一张初始头像，用户若需要更改头像，在这之后可以根据自己需要更改头像。
 #####流程描述
@@ -115,6 +125,8 @@ POST
 POST
 
 ####4.昵称修改
+#####接口名
+/setting/nickname
 #####具体描述
 用户可以对昵称进行修改。
 #####流程描述

@@ -31,43 +31,18 @@ public class FriendRequestService {
 
             // 业务收尾
             transaction.commit();
-            DBsession.close();
             returnModel.successDeal("friend_transaction_success");
             return returnModel;
         } catch (Exception ex) {
-            // 异常处理
-            String exception = String.format("Request for auth but exception occurred, service rollback, %s", ex);
+            // 异常处理：在回滚事务后，将异常情况告知客户端
+            String exception = String.format("好友请求出现问题，存在异常： %s", ex);
             LogUtil.Log(exception, FriendRequestService.class.getName(), LogLevelType.ERROR, "");
             returnModel.specialDeal();
+            transaction.rollback();
             return returnModel;
         } finally {
             HibernateUtil.CloseLocalSession();
         }
     }
 
-    public static ReturnModel SearchFriend(String uid) {
-        ReturnModel returnModel = new ReturnModel();
-        Session DBsession = HibernateUtil.GetLocalSession();
-        Transaction transaction = DBsession.beginTransaction();
-
-        try {
-            YuruUserEntity yuruUserEntity = (YuruUserEntity) DBsession.load(YuruUserEntity.class, uid);
-            ShowSearchUser showSearchUser = new ShowSearchUser(yuruUserEntity);
-            String userMsg = showSearchUser.getMessageToJson();
-            // 业务收尾
-            transaction.commit();
-            DBsession.close();
-            // 这里做一点小小的新尝试，将userMsg的返回JSON数据放入returnModel的code里面
-            returnModel.successDeal(userMsg);
-            return returnModel;
-        } catch (Exception ex) {
-            // 异常处理
-            String exception = String.format("Request for auth but exception occurred, service rollback, %s", ex);
-            LogUtil.Log(exception, FriendRequestService.class.getName(), LogLevelType.ERROR, "");
-            returnModel.specialDeal();
-            return returnModel;
-        } finally {
-            HibernateUtil.CloseLocalSession();
-        }
-    }
 }

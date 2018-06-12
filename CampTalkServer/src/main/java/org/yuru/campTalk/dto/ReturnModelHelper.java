@@ -12,15 +12,16 @@ import java.util.List;
  * Usage : Helper methods for ReturnModel construction.
  */
 public class ReturnModelHelper {
-    public static void StandardResponse(ReturnModel model, String code, String token) {
-        model.setCode(code);
+    public static void StandardResponse(ReturnModel model, String status, String token) {
+        model.setStatus(status);
         model.setTimestamp(TimestampUtil.GetTimestampString());
         model.setToken(token);
     }
 
     public static void ExceptionResponse(ReturnModel model, String exception) {
-        model.setCode(exception);
+        model.setStatus(exception);
         model.setTimestamp(TimestampUtil.GetTimestampString());
+        model.setToken(null);
     }
 
     /**
@@ -46,17 +47,16 @@ public class ReturnModelHelper {
      * @return response package
      */
     public static ReturnModel MissingParametersResponse(List<String> params) {
-        ReturnModel returnModel = new ReturnModel();
-        //returnModel.setCode(StatusCode.Fail);
-        returnModel.setTimestamp(TimestampUtil.GetTimestampString());
-        //ReturnElement returnElement = new ReturnElement();
+        ReturnModel model = new ReturnModel();
+        model.setTimestamp(TimestampUtil.GetTimestampString());
         StringBuilder sb = new StringBuilder();
         sb.append("miss required parameters:");
         for (String s : params) {
             sb.append(s).append(" ");
         }
-        //returnElement.setMessage(sb.toString());
-        //returnModel.setReturnElement(returnElement);
-        return returnModel;
+        model.setStatus(sb.toString());
+        model.setToken(null);
+        model.setRequest(null);
+        return model;
     }
 }

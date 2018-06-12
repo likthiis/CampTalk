@@ -1,7 +1,9 @@
 package org.yuru.campTalk.service.friend_method;
 
+import com.google.gson.Gson;
 import net.sf.json.JSONObject;
 import org.yuru.campTalk.dto.FriendRequestModel;
+import org.yuru.campTalk.dto.RequestModel;
 import org.yuru.campTalk.dto.ReturnModel;
 
 import javax.websocket.Session;
@@ -20,20 +22,7 @@ public class FriendModule {
 
         try {
             // 获得返回类，将其转化成JSON发还给客户端
-            session.getBasicRemote().sendText("return:" + returnModel.getMessageToJson());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void userSearch(Session session, String message) {
-        ReturnModel returnModel = new ReturnModel();
-        message = message.substring(11);
-        returnModel = FriendRequestService.SearchFriend(message);
-
-        try {
-            // 获得返回类，将其转化成JSON发还给客户端
-            session.getBasicRemote().sendText("return:" + returnModel.getMessageToJson());
+            session.getBasicRemote().sendText(new Gson().toJson(returnModel));
         } catch (IOException e) {
             e.printStackTrace();
         }

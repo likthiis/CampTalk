@@ -2,13 +2,13 @@ package com.example.wzf.camptalk.model;
 
 import com.google.gson.Gson;
 
-public class message {
+public class SingleChat {
     private String sender;
     private String receiver;
     private String content;
     private static Gson gson = new Gson();
 
-    public message() {
+    public SingleChat() {
 
     }
 

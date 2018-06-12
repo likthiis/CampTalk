@@ -1,8 +1,9 @@
-package com.example.wzf.camptalk.utility;
+package com.example.wzf.camptalk.netService;
 
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -10,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -18,10 +20,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
-// 残余代码，留做他用
-public class HttpReq {
+
+public class HttpUtil {
+    // GETPOST设施类
+    public static String TAG = "HTTP设施类";
+
     public static String getData() throws Exception {
         try {
             URL url=new URL(HttpPath.getUserLoginPath());
@@ -54,23 +60,25 @@ public class HttpReq {
         return outStream.toByteArray();
     }
 
-//    public static GetModel toPostdata(List<BasicNameValuePair> parameters) throws IOException {
-//        HttpClient client=new DefaultHttpClient();
-//        HttpPost postBag=new HttpPost(HttpPath.getUserLoginPath());
-//        UrlEncodedFormEntity params=new UrlEncodedFormEntity(parameters,"UTF-8");
-//        postBag.setEntity(params);
-//
-//        HttpResponse response= client.execute(postBag);
-//        GetModel getModel = null;
-//        if(response.getStatusLine().getStatusCode()==200){
-//            String str;
-//            HttpEntity entity=response.getEntity();
-//            str = EntityUtils.toString(entity, "UTF-8");
-//            System.out.println(str);
-//            getModel = JsonUtil.getJsonToModel(str);
-//        }
-//        return getModel;
-//    }
+    // 使用POST方法递交login所需的数据
+    public static String loginPOST(ArrayList<NameValuePair> data) throws ClientProtocolException, IOException {
+        String path = HttpPath.getUserLoginPath();
+        HttpPost httpPost = new HttpPost(path);
+        // 传递变量用NameValuePair[]数据存储，通过httpRequest.setEntity()方法来发出HTTP请求
+        List<NameValuePair> list = data;
+        httpPost.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
+
+        // 取得HTTP response
+        HttpResponse response = new DefaultHttpClient().execute(httpPost);
+        // 若状态码为200
+        if(response.getStatusLine().getStatusCode() == 200){
+            // 取出应答字符串
+            HttpEntity entity = response.getEntity();
+            String result = EntityUtils.toString(entity, HTTP.UTF_8);
+            return result;
+        }
+        return "POST ERROR!";
+    }
 
     public static String toGetData(){
         String str="获取数据失败";

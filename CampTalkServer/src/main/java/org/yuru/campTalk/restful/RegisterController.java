@@ -42,10 +42,8 @@ public class RegisterController {
             if (missingParams.size() > 0) {
                 return ReturnModelHelper.MissingParametersResponse(missingParams);
             }
-            // Register
-            String jsonifyResponse = RegisterService.Register(uid, password);
             // Return
-            ReturnModelHelper.StandardResponse(returnModel, jsonifyResponse, null);
+            returnModel = RegisterService.Register(uid, password);
 
         }catch (Exception e) {
             ReturnModelHelper.ExceptionResponse(returnModel, e.getClass().getName());

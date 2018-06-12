@@ -2,7 +2,7 @@ package com.example.wzf.camptalk.model;
 
 import com.google.gson.Gson;
 
-public class friendRequest {
+public class FriendRequest {
     private String myUid;
     private String itsUid;
     private static Gson gson = new Gson();

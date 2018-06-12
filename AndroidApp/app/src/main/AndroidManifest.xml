@@ -3,23 +3,27 @@
     package="com.example.wzf.camptalk">
 
     <application
-        android:name=".SocketAppService"
+        android:name=".netService.Token"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AndroidCampTalk">
+        <activity android:name=".Activity.LoginMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TestTwoActivity"></activity>
+        <activity android:name=".Activity.SelectPage"></activity>
+        <activity android:name=".AndroidCampTalk"></activity>
+        <activity android:name=".Activity.SearchUser"></activity>
+        <service android:name=".Service.BaseService"></service>
+        <service android:name=".netService.SocketAppService"></service>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

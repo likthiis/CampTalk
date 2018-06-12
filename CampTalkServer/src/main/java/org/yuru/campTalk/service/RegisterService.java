@@ -3,6 +3,7 @@ package org.yuru.campTalk.service;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.entity.YuruUserEntity;
 import org.yuru.campTalk.utility.EncryptUtil;
 import org.yuru.campTalk.utility.HibernateUtil;
@@ -44,7 +45,7 @@ public class RegisterService {
     /**
      * Bring the uid and password to the database.
      */
-    public static String Register(String uid, String rawPassword) {
+    public static ReturnModel Register(String uid, String rawPassword) {
         Session DBsession = HibernateUtil.GetLocalSession();
         Transaction transaction = DBsession.beginTransaction();
         try{
@@ -53,23 +54,28 @@ public class RegisterService {
             judgeDuplicate = CheckDuplicateUser(DBsession,uid);
             if(judgeDuplicate) {
                 transaction.commit();
-                return "#duplicate_uid";
+                ReturnModel returnModel = new ReturnModel();
+                returnModel.successDeal("duplicate_name");
+                return returnModel;
             }
-            if(!judgeDuplicate) {
+            else {
                 InsertUserInfo(DBsession,uid,encryptedPassword);
                 ImageService.DefaultPicture(uid);
-                // transaction finish
                 transaction.commit();
+                ReturnModel returnModel = new ReturnModel();
+                returnModel.successDeal("register_success");
+                return returnModel;
             }
-            DBsession.close();
-            // return the information
-            return "#login_success";
-
-        }catch (Exception ex){
+        } catch (Exception ex){
             LogUtil.Log(String.format("Request for login but exception occurred, service rollback, %s", ex),
                     RegisterService.class.getName(), LogLevelType.ERROR, "");
+            ReturnModel returnModel = new ReturnModel();
+            returnModel.successDeal("exception_occurred");
             transaction.rollback();
-            return "#exception_occurred";
+            return returnModel;
+        } finally {
+            // 关闭数据库交互
+            HibernateUtil.CloseLocalSession();
         }
     }
 }

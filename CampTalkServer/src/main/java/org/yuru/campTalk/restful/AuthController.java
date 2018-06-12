@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.dto.ReturnModelHelper;
-import org.yuru.campTalk.dto.StatusCode;
 import org.yuru.campTalk.service.AuthorizationService;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: Rinkako
@@ -30,16 +27,16 @@ public class AuthController {
         ReturnModel returnModel = new ReturnModel();
         try {
             if(uid == null && password != null){
-                returnModel.setCode("missing_uid");
+                returnModel.setStatus("missing_uid");
             }
             if(uid != null && password == null){
-                returnModel.setCode("missing_password");
+                returnModel.setStatus("missing_password");
             }
             if(uid == null && password == null&&token == null){
-                returnModel.setCode("missing_token");
+                returnModel.setStatus("missing_token");
             }
             if(uid == null && token != null){
-                returnModel.setCode("missing_uid");
+                returnModel.setStatus("missing_uid");
             }
             if(uid != null && password != null) {
                 returnModel = AuthorizationService.Auth1(uid, password);
