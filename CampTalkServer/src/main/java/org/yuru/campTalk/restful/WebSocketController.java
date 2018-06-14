@@ -14,6 +14,8 @@ import org.yuru.campTalk.service.query_method.QueryService;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +37,13 @@ public class WebSocketController {
     public void onOpen(@PathParam("userId")String userId, Session session, EndpointConfig config) { // 打开websocket
         try {
             // test
-            System.out.println("the session is : " + session.getId());
-            System.out.println("the uid is : " + userId);
+            String test = String.format("the sessionId is %s and the uid is %s", session.getId(), userId);
+            System.out.println(test);
+
+            // 将userid与session以键值对形式保存
+            sessionMap.put(userId, session);
+            addOnlineCount();
+            System.out.println("有新连接加入！当前在线人数为" + getOnlineCount() + "人");
 
 //            String sessionMsg = session.getQueryString();
 //            if(sessionMsg == null) {
@@ -50,8 +57,6 @@ public class WebSocketController {
 //            MessageUtil message = new MessageUtil(welcome, usernames);
 //            this.broadcast(this.sessions, message.getMessageToJson());
 
-            addOnlineCount();
-            System.out.println("有新连接加入！当前在线人数为" + getOnlineCount() + "人");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,25 +76,93 @@ public class WebSocketController {
 //    }
 
     @OnClose
-    public void close(Session session) { // 关闭websocket
+    public void close(@PathParam("userId")String userId, Session session) { // 关闭websocket
         try {
-            this.sessions.remove(session);
-            this.usernames.remove(this.uid);
-//            String leaveMsg = this.username + "已经离开聊天室";
-//            MessageUtil message = new MessageUtil(leaveMsg, this.usernames);
-            sessionMap.remove(this.uid);
-//            this.broadcast(this.sessions, message.getMessageToJson());
-//            System.out.println("websocket is closed.");
+            // test
+            String test = String.format("现在移除用户名为%s的session", userId);
+            System.out.println(test);
+            // 将键值对移除
+            sessionMap.remove(userId);
+
+            // 将token从数据库中移除
+            QueryService.DeleteTokenByUid(userId);
+
             subOnlineCount();
             System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount() + "人");
+//            this.sessions.remove(session);
+//            this.usernames.remove(this.uid);
+//            String leaveMsg = this.username + "已经离开聊天室";
+//            MessageUtil message = new MessageUtil(leaveMsg, this.usernames);
+//            sessionMap.remove(this.uid);
+//            this.broadcast(this.sessions, message.getMessageToJson());
+//            System.out.println("websocket is closed.");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         //webSocketSet.remove(this);
     }
 
+    private boolean Verification (Session session, String token, String userId) {
+        Boolean rightToken = QueryModule.checkToken(token);
+        String uid = QueryModule.checkUidByToken(token);
+        int valiateStatus = QueryModule.checkTimeByToken(token);
+        Boolean isTrue = false;
+
+        try {
+            // 对照token
+            if (!rightToken) {
+                session.getBasicRemote().sendText("invaild_token");
+                isTrue = false;
+            } else {
+                System.out.println("token内容正确");
+                isTrue = true;
+            }
+
+            // 对照uid
+            if (!(uid.equals("can_not_found") && uid.equals("exception_error")) && userId.equals(uid)) {
+                Session existenceSession = sessionMap.get(uid);
+                if (existenceSession.equals(session)) {
+                    // 是同一个session，证明了是该用户的链接
+                    System.out.println("用户名正确");
+                    isTrue = true;
+                }
+            } else {
+                if (uid.equals("can_not_found")) {
+                    session.getBasicRemote().sendText("invaild_token");
+                    isTrue = false;
+                }
+                if (uid.equals("exception_error")) {
+                    session.getBasicRemote().sendText("invaild_token");
+                    isTrue = false;
+                }
+            }
+
+            // token过期验证
+            if (valiateStatus == 1) {
+                session.getBasicRemote().sendText("token_check_sql_wrong");
+                isTrue = false;
+            }
+            if (valiateStatus == 2) {
+                session.getBasicRemote().sendText("token_check_rollback_wrong");
+                isTrue = false;
+            }
+            if (valiateStatus == 3) {
+                session.getBasicRemote().sendText("token_check_overdue");
+                isTrue = false;
+            }
+            if (valiateStatus == 4) {
+                System.out.println("token未过期");
+                isTrue = true;
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return isTrue;
+    }
+
     @OnMessage
-    public void message(Session session, String message) {
+    public void message(@PathParam("userId")String userId, Session session, String message) {
         System.out.println(message);
         try {
             // 测试用
@@ -103,12 +176,15 @@ public class WebSocketController {
             RequestModel requestModel = new Gson().fromJson(message, RequestModel.class);
             String action = requestModel.getAction();
             String token = requestModel.getToken();
-            // 对照token
 
-            Boolean rightToken = QueryModule.checkToken(session, token);
-            if(!rightToken) {
-                session.getBasicRemote().sendText("invaild_token");
+            Boolean legal = Verification(session, token, userId);
+            if(!legal) {
                 return;
+            }
+
+            // 返回好友列表
+            if (session.isOpen() && action.equals("showmyfriends")) {
+                QueryModule.showFriends(session, userId);
             }
 
             // 查询用户
@@ -116,17 +192,8 @@ public class WebSocketController {
                 QueryModule.userSearch(session, (String)requestModel.getReq());
             }
 
-            // 将websocket的session与其用户名存入键值对。
-            if (session.isOpen() && message.substring(0, 3).equals("uid")) {
-                // 如果这是uid的传输字段，那么将对uid及其session做一个处理。
-                String uid = message.substring(4);
-                sessionMap.put(uid, session);
-                return;
-            }
-
             // 好友请求(只是测试了链接与数据库插入功能)
             if (session.isOpen() && action.equals("friendrequest")) {
-                // 如果这是好友请求，那么将进行处理
                 FriendModule.friendRequest(session,message);
                 return;
             }
@@ -135,6 +202,17 @@ public class WebSocketController {
                 WebSocketService.singleChat(session, message, sessionMap);
 
             }
+
+
+//            // 将websocket的session与其用户名存入键值对。
+//            if (session.isOpen() && message.substring(0, 3).equals("uid")) {
+//                // 如果这是uid的传输字段，那么将对uid及其session做一个处理。
+//                String _uid = message.substring(4);
+//                sessionMap.put(_uid, session);
+//                return;
+//            }
+
+
 
 
         } catch (Exception e) {

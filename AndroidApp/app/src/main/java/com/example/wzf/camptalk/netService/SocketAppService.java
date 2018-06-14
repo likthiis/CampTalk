@@ -25,10 +25,9 @@ public class SocketAppService extends Service {
 
     private String wsurl;
     private static final String TAG = "SocketAppService";
-    private WebSocketClient mClient;
-    private static SocketAppService mInstance;
+    private static WebSocketClient mClient;
     private Draft_6455 mDraft_17 = new Draft_6455();
-    public static final String WEBSOCKET_SERVICE = "com.wsconn.MESSAGEHANDLE";
+    public static final String MESSAGEBACK = "com.wsconn.MESSAGEHANDLE";
     // handler模式的标识
     private final int SUCCESS_HANDLE = 0x01;
     private final int ERROR_HANDLE = 0x02;
@@ -46,8 +45,6 @@ public class SocketAppService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "onCreate() executed");
-
-        startThreadOfWebSocket();
     }
 
     @Override
@@ -60,15 +57,18 @@ public class SocketAppService extends Service {
         Log.i(TAG, "uid是：" + uid);
         this.token = token;
         this.wsurl = HttpPath.getWebSocketPath(uid);
+        startThreadOfWebSocket();
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         // 关闭连接并处理掉这个类
+        mClient.close();
         super.onDestroy();
         Log.i(TAG, "onDestroy() executed");
     }
+
 
     // 使用绑定函数建立监听器
     @Override
@@ -100,11 +100,11 @@ public class SocketAppService extends Service {
     }
 
     // 通过广播向中介广播类发送由服务端返回的数据
-    public void sendByBroadCast(Bundle bundle) {
+    public void sendByBroadCast(Bundle bundle, String action) {
         Intent intent = new Intent();
         intent.putExtras(bundle);
-        intent.setAction(WEBSOCKET_SERVICE);
-        Log.i(TAG, "bundle message : " + bundle.getString("return_msg"));
+        intent.setAction(action);
+        Log.i(TAG, "bundle message back");
         sendBroadcast(intent);
     }
 
@@ -123,6 +123,8 @@ public class SocketAppService extends Service {
             }
         }
     };
+
+
 
     // 启动webcosket线程
     public void startThreadOfWebSocket() {
@@ -148,14 +150,29 @@ public class SocketAppService extends Service {
                     public void onMessage(String message) {
                         // 处理token
                         if(message.equals("invaild_token")) {
-                            Log.i(TAG, "token过期出现问题，停止websocket服务");
+                            Log.i(TAG, "token出现问题");
+                            // 临时
+                            return;
+                        }
+                        if(message.equals("token_check_sql_wrong")) {
+                            Log.i(TAG, "token查询出现问题");
+                            // 临时
+                            return;
+                        }
+                        if(message.equals("token_check_rollback_wrong")) {
+                            Log.i(TAG, "token查询出现问题");
+                            // 临时
+                            return;
+                        }
+                        if(message.equals("token_check_overdue")) {
+                            Log.i(TAG, "token过期");
                             // 临时
                             return;
                         }
                         Log.i(TAG, "获得信息为: " + message);
                         Bundle bundle = new Bundle();
                         bundle.putString("return_msg", message);
-                        sendByBroadCast(bundle);
+                        sendByBroadCast(bundle, MESSAGEBACK);
                     }
 
                     @Override
@@ -174,7 +191,7 @@ public class SocketAppService extends Service {
                 Log.i(TAG, "URISyntaxException: " + e.getMessage());
                 e.printStackTrace();
             } catch (Exception e) {
-                Log.i(TAG, "未知错误: " + e.getMessage());
+                Log.i(TAG, "未知错误: ");
                 e.printStackTrace();
             }
         }

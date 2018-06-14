@@ -1,12 +1,12 @@
 package org.yuru.campTalk.service.query_method;
 
-import com.google.gson.Gson;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.transaction.annotation.Transactional;
 import org.yuru.campTalk.dto.ReturnModel;
 import org.yuru.campTalk.dto.ReturnModelHelper;
 import org.yuru.campTalk.entity.YuruAuthEntity;
+import org.yuru.campTalk.entity.YuruFriendEntity;
 import org.yuru.campTalk.entity.YuruUserEntity;
 import org.yuru.campTalk.service.friend_method.FriendRequestService;
 import org.yuru.campTalk.service.friend_method.ShowSearchUser;
@@ -14,7 +14,8 @@ import org.yuru.campTalk.utility.HibernateUtil;
 import org.yuru.campTalk.utility.LogLevelType;
 import org.yuru.campTalk.utility.LogUtil;
 
-import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -94,8 +95,13 @@ public class QueryService {
         try {
             String query = String.format("from YuruAuthEntity as auth where auth.token = '%s'", token);
             List<YuruAuthEntity> auth = DBsession.createQuery(query).list();
+            transaction.commit();
             if(auth.size() > 0) {
-                return true;
+                if(auth.get(0).getToken().equals(token)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
             return false;
         } catch (Exception ex) {
@@ -104,6 +110,108 @@ public class QueryService {
             LogUtil.Log(exception, QueryService.class.getName(), LogLevelType.ERROR, "");
             transaction.rollback();
             return false;
+        } finally {
+            // 关闭数据库交互
+            HibernateUtil.CloseLocalSession();
+        }
+    }
+
+    public static String SearchUidByToken(String token) {
+        Session DBsession = HibernateUtil.GetLocalSession();
+        Transaction transaction = DBsession.beginTransaction();
+        try {
+            String query = String.format("from YuruAuthEntity as auth where auth.token = '%s'", token);
+            List<YuruAuthEntity> auth = DBsession.createQuery(query).list();
+            transaction.commit();
+            if(auth.size() > 0) {
+                return auth.get(0).getUid();
+            } else {
+                return "can_not_found";
+            }
+        } catch (Exception ex) {
+            // 异常处理：在回滚事务后，将异常情况告知客户端
+            String exception = String.format("查找过程出现问题，存在异常： %s", ex);
+            LogUtil.Log(exception, QueryService.class.getName(), LogLevelType.ERROR, "");
+            transaction.rollback();
+            return "exception_error";
+        } finally {
+            // 关闭数据库交互
+            HibernateUtil.CloseLocalSession();
+        }
+    }
+
+    public static void DeleteTokenByUid(String userId) {
+        Session DBsession = HibernateUtil.GetLocalSession();
+        Transaction transaction = DBsession.beginTransaction();
+        try {
+            String query = String.format("delete from YuruAuthEntity as auth where auth.uid = '%s'", userId);
+            Query queryUpdate = DBsession.createQuery(query);
+            int ret = queryUpdate.executeUpdate();
+            if (ret != 0) {
+                String test = String.format("用户%s的口令清除", userId);
+                System.out.println(test);
+            }
+        } catch (Exception ex) {
+            // 异常处理：在回滚事务后，将异常情况告知客户端
+            String exception = String.format("查找过程出现问题，存在异常： %s", ex);
+            LogUtil.Log(exception, QueryService.class.getName(), LogLevelType.ERROR, "");
+            transaction.rollback();
+        } finally {
+            // 关闭数据库交互
+            HibernateUtil.CloseLocalSession();
+        }
+    }
+
+    public static ArrayList<String> getFriendsList(String userId) {
+        Session DBsession = HibernateUtil.GetLocalSession();
+        Transaction transaction = DBsession.beginTransaction();
+        ArrayList<String> friendsName = new ArrayList<>();
+        try {
+            String query = String.format("from YuruFriendEntity as friend where friend.name1 = '%s' or friend.name2 = '%s'", userId, userId);
+            List<YuruFriendEntity> friends = DBsession.createQuery(query).list();
+            if(friends.size() > 0) {
+                for(YuruFriendEntity o : friends) {
+                    if(!o.getName1().equals(userId)) {
+                        friendsName.add(o.getName1());
+                    } else {
+                        friendsName.add(o.getName2());
+                    }
+                }
+            }
+            transaction.commit();
+            return friendsName;
+        } catch (Exception ex) {
+            // 异常处理：在回滚事务后，将异常情况告知客户端
+            String exception = String.format("查找过程出现问题，存在异常： %s", ex);
+            LogUtil.Log(exception, QueryService.class.getName(), LogLevelType.ERROR, "");
+            transaction.rollback();
+            friendsName.add("rollback_wrong");
+            return friendsName;
+        } finally {
+            // 关闭数据库交互
+            HibernateUtil.CloseLocalSession();
+        }
+    }
+
+    public static String getTimeByToken(String token) {
+        Session DBsession = HibernateUtil.GetLocalSession();
+        Transaction transaction = DBsession.beginTransaction();
+        try {
+            String query = String.format("from YuruAuthEntity as auth where auth.token = '%s'", token);
+            List<YuruAuthEntity> auths = DBsession.createQuery(query).list();
+            transaction.commit();
+            if(auths.size() > 0) {
+                Timestamp timestamp = auths.get(0).getDestroyTimestamp();
+                return timestamp.toString();
+            } else {
+                return "sql_error";
+            }
+        } catch (Exception ex) {
+            // 异常处理：在回滚事务后，将异常情况告知客户端
+            String exception = String.format("查找过程出现问题，存在异常： %s", ex);
+            LogUtil.Log(exception, QueryService.class.getName(), LogLevelType.ERROR, "");
+            transaction.rollback();
+            return "rollback_wrong";
         } finally {
             // 关闭数据库交互
             HibernateUtil.CloseLocalSession();

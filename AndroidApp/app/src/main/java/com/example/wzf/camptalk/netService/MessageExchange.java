@@ -13,7 +13,6 @@ public class MessageExchange extends BroadcastReceiver {
     public MessageExchange(){
 
     }
-
     public MessageExchange(final OnMessageListener onMessageListener, Context context) {
         this.onMessageListener = onMessageListener;
         this.context = context;
@@ -24,9 +23,18 @@ public class MessageExchange extends BroadcastReceiver {
         if(intent.getAction().equals("com.wsconn.MESSAGEHANDLE")) {
             Bundle bundle = intent.getExtras();
             String returnMsg = bundle.getString("return_msg");
-
             // 回调
             onMessageListener.onMessage(returnMsg);
         }
+
+//        if(intent.getAction().equals("com.wsconn.TOKENUID")) {
+//            Bundle bundle = intent.getExtras();
+//            String token = bundle.getString("token");
+//            String uid = bundle.getString("uid");
+//            onMessageListener.getToken(token);
+//            onMessageListener.getUid(uid);
+//        }
     }
+
+
 }

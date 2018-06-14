@@ -20,6 +20,7 @@
         <activity android:name=".Activity.SelectPage"></activity>
         <activity android:name=".AndroidCampTalk"></activity>
         <activity android:name=".Activity.SearchUser"></activity>
+        <activity android:name=".Activity.ShowFriends"></activity>
         <service android:name=".Service.BaseService"></service>
         <service android:name=".netService.SocketAppService"></service>
     </application>

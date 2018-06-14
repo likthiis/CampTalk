@@ -1,6 +1,5 @@
 package com.example.wzf.camptalk.Activity;
 
-import android.app.VoiceInteractor;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -13,12 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.wzf.camptalk.R;
 import com.example.wzf.camptalk.dto.RequestModel;
 import com.example.wzf.camptalk.dto.ReturnModel;
-import com.example.wzf.camptalk.model.ShowSearchUser;
 import com.example.wzf.camptalk.netService.MessageExchange;
 import com.example.wzf.camptalk.netService.OnMessageListener;
 import com.example.wzf.camptalk.netService.OnSend;
@@ -26,14 +23,13 @@ import com.example.wzf.camptalk.netService.SocketAppService;
 import com.google.gson.Gson;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class SearchUser extends AppCompatActivity implements View.OnClickListener,OnMessageListener {
-
-    private TextView tSearchUser;
-    private EditText eInputSearchUid;
-    private Button bSubmit;
-    private TextView tShowUser;
+public class ShowFriends extends AppCompatActivity implements View.OnClickListener,OnMessageListener {
+    private TextView tShowFriends;
+    private EditText eInputFriendUid;
+    private Button bChatGo;
     private OnSend onSendBinder;
     private BindService bindService;
     private BroadcastReceiver mBroadcastReceiver;
@@ -42,6 +38,8 @@ public class SearchUser extends AppCompatActivity implements View.OnClickListene
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             onSendBinder = (OnSend)service;
+            // 展示好友
+            showFriends();
         }
 
         @Override
@@ -53,67 +51,84 @@ public class SearchUser extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_search);
+        setContentView(R.layout.activity_list_friends);
         bindObject();
-
         // 动态注册广播
         mBroadcastReceiver = new MessageExchange(this,this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.wsconn.MESSAGEHANDLE");
         registerReceiver(mBroadcastReceiver, intentFilter);
 
+
         // 设置websocket连接服务的监听器
         Intent intent = new Intent(this, SocketAppService.class);
         bindService = new BindService();
         bindService(intent, bindService, BIND_AUTO_CREATE);
+
+    }
+
+    private void showFriends() {
+
+        // 请注意：token在安卓服务区提供，活动界面无需干涉
+        RequestModel requestModel = new RequestModel.Builder<>()
+                .action("showmyfriends")
+                .timestamp(new Timestamp(new Date().getTime()).toString())
+                .token("stand_by")
+                .req("stand_by") // 发送自己的uid让服务端提取好友数据
+                .build();
+
+        onSendBinder.sendMessage(new Gson().toJson(requestModel));
     }
 
     private void bindObject() {
-        tSearchUser = (TextView) findViewById(R.id.T_searchUser);
-        eInputSearchUid = (EditText) findViewById(R.id.E_inputSearchUid);
-        bSubmit = (Button) findViewById(R.id.B_submit);
-        tShowUser = (TextView) findViewById(R.id.T_showUser);
-        bSubmit.setOnClickListener(this);
+        tShowFriends = findViewById(R.id.T_showFriends);
+        eInputFriendUid = findViewById(R.id.E_inputSearchUid);
+        bChatGo = findViewById(R.id.B_chatGo);
+        bChatGo.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if(view == bSubmit) {
-            if(eInputSearchUid.getText().toString().equals("")) {
-                Toast.makeText(getApplicationContext(), "该字段不能为空", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                String uid = eInputSearchUid.getText().toString();
+        if(view == bChatGo) {
 
-                RequestModel requestModel = new RequestModel.Builder<>()
-                        .action("usersearch")
-                        .timestamp(new Timestamp(new Date().getTime()).toString())
-                        .token("stand_by") // 获取放在服务里面的口令
-                        .req(uid)
-                        .build();
-
-                onSendBinder.sendMessage(new Gson().toJson(requestModel));
-            }
         }
     }
+
+    private String token;
+    private String uid;
 
     @Override
     public void onMessage(String msg) {
-        // 返回一个结构体
         ReturnModel returnModel = new Gson().fromJson(msg, ReturnModel.class);
-        if(returnModel.getStatus().equals("can_not_find")) {
-            tShowUser.setText("查找不到此用户");
-        } else if(returnModel.getStatus().equals("success_query")) {
-            String request = new Gson().toJson(returnModel.getRequest());
-            ShowSearchUser showSearchUser = new Gson().fromJson(request, ShowSearchUser.class);
-//            ShowSearchUser showSearchUser = new Gson().fromJson(returnModel.getRequest(), ShowSearchUser.class);
-            String showText = String.format("用户名称：%s，用户等级：%s，用户地点：%s", showSearchUser.getUsername(),
-                    showSearchUser.getLevel(), showSearchUser.getLocation());
-            tShowUser.setText(showText);
-        } else {
-            tShowUser.setText("查询出现错误");
+        if(returnModel.getStatus().equals("friends_null")) {
+            tShowFriends.setText("无好友");
+            return;
+        }
+        if(returnModel.getStatus().equals("get_fail")) {
+            tShowFriends.setText("查询出现错误");
+            return;
+        }
+        if(returnModel.getStatus().equals("get_success")) {
+            ArrayList<String> friends = (ArrayList) returnModel.getRequest();
+            String result = "你的好友：\n";
+            for(String o : friends) {
+                result += o + "\n";
+            }
+            tShowFriends.setText(result);
         }
     }
+
+//    @Override
+//    public void getToken(String token) {
+//        this.token = token;
+//        return;
+//    }
+//
+//    @Override
+//    public void getUid(String uid) {
+//        this.uid = uid;
+//        return;
+//    }
 
     @Override
     protected void onDestroy() {

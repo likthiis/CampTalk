@@ -38,7 +38,9 @@ public class SelectPage extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View view) {
         if(view == bSingleChat) {
-
+            // 先去好友界面
+            Intent nextPage = new Intent(SelectPage.this, ShowFriends.class);
+            startActivity(nextPage);
         }
         if(view == bSearchUser) {
             // 进入下一页面
