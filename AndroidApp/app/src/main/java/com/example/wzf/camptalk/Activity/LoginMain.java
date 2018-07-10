@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,32 +29,30 @@ import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginMain extends AppCompatActivity implements View.OnClickListener {
-
-    private static LoginMain instance;
+public class Login extends AppCompatActivity implements View.OnClickListener {
     private Button bLogin;
     private EditText eLoginPassword;
     private EditText eLoginName;
 
     private static final String TAG = "LoginMain";
 
-    public static LoginMain getInstance() {
-        return instance;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
+
         setContentView(R.layout.activity_login);
 
         bindObject();
     }
 
     private void bindObject() {
-        bLogin = (Button) findViewById(R.id.B_login);
-        eLoginName = (EditText) findViewById(R.id.E_loginName);
-        eLoginPassword = (EditText) findViewById(R.id.E_loginPassword);
+//        bLogin = (Button) findViewById(R.id.B_login);
+//        eLoginName = (EditText) findViewById(R.id.E_loginName);
+//        eLoginPassword = (EditText) findViewById(R.id.E_loginPassword);
         bLogin.setOnClickListener(this);
     }
 
@@ -68,7 +68,7 @@ public class LoginMain extends AppCompatActivity implements View.OnClickListener
         if(eLoginName.getText().toString().equals("test") && eLoginPassword.getText().toString().equals("test")) {
             //startWebsocket();
             // 进入下一页面
-            Intent nextPage = new Intent(LoginMain.this, SelectPage.class);
+            Intent nextPage = new Intent(Login.this, SelectPage.class);
             startActivity(nextPage);
         }
     }
@@ -122,7 +122,7 @@ public class LoginMain extends AppCompatActivity implements View.OnClickListener
                 startWebsocket(returnModel.getToken(), userId);
 
                 // 进入下一页面
-                Intent nextPage = new Intent(LoginMain.this, SelectPage.class);
+                Intent nextPage = new Intent(Login.this, SelectPage.class);
                 startActivity(nextPage);
             } else {
                 handlerError(returnModel.getStatus());

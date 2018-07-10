@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //@ComponentScan(basePackages = "org.yuru.campTalk.service")
 public class CampTalkApp implements EmbeddedServletContainerCustomizer {
     /**
-     * In the view of programmer,the infomation coming from a user should
+     * In the view of programmer,the information coming from a user should
      * be written in database of server and be sent to another user by
      * server.
      */
