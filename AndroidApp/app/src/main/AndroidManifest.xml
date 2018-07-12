@@ -18,7 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.SelectPage"></activity>
+
+        <activity android:name=".Activity.Register"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+
+        <activity android:name=".Activity.Menu"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".AndroidCampTalk"></activity>
         <activity android:name=".Activity.SearchUser"></activity>
         <activity android:name=".Activity.ShowFriends"></activity>
