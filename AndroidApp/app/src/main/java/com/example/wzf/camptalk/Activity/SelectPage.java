@@ -24,10 +24,10 @@ public class SelectPage extends AppCompatActivity implements View.OnClickListene
     }
 
     private void bindObject() {
-        bSingleChat = (Button) findViewById(R.id.B_singleChat);
-        bSearchUser = (Button) findViewById(R.id.B_searchUser);
-        bFriendRequest = (Button) findViewById(R.id.B_friendRequest);
-        bBackToLoginPage = (Button) findViewById(R.id.B_backToLoginPage);
+//        bSingleChat = (Button) findViewById(R.id.B_singleChat);
+//        bSearchUser = (Button) findViewById(R.id.B_searchUser);
+//        bFriendRequest = (Button) findViewById(R.id.B_friendRequest);
+//        bBackToLoginPage = (Button) findViewById(R.id.B_backToLoginPage);
         bSingleChat.setOnClickListener(this);
         bSearchUser.setOnClickListener(this);
         bFriendRequest.setOnClickListener(this);
@@ -55,7 +55,7 @@ public class SelectPage extends AppCompatActivity implements View.OnClickListene
             Intent WSConnect = new Intent(this, SocketAppService.class);
             stopService(WSConnect);
             // 返回上一级页面
-            Intent nextPage = new Intent(SelectPage.this, LoginMain.class);
+            Intent nextPage = new Intent(SelectPage.this, Login.class);
             startActivity(nextPage);
         }
     }

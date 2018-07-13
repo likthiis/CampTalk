@@ -53,7 +53,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 //        bLogin = (Button) findViewById(R.id.B_login);
 //        eLoginName = (EditText) findViewById(R.id.E_loginName);
 //        eLoginPassword = (EditText) findViewById(R.id.E_loginPassword);
-        bLogin.setOnClickListener(this);
+//        bLogin.setOnClickListener(this);
     }
 
     private boolean judgeEmpty() {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.example.wzf.camptalk.Activity.LoginMain;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
@@ -93,20 +92,20 @@ public class RequestModel<T> {
     }
 
     // 借鉴的
-    private boolean isNetConnect() {
-        ConnectivityManager connectivity = (ConnectivityManager) LoginMain.getInstance()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo info = connectivity.getActiveNetworkInfo();
-            if (info != null && info.isConnected()) {
-                // 当前网络是连接的
-                if (info.getState() == NetworkInfo.State.CONNECTED) {
-                    // 当前所连接的网络可用
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    private boolean isNetConnect() {
+//        ConnectivityManager connectivity = (ConnectivityManager) LoginMain.getInstance()
+//                .getSystemService(Context.CONNECTIVITY_SERVICE);
+//        if (connectivity != null) {
+//            NetworkInfo info = connectivity.getActiveNetworkInfo();
+//            if (info != null && info.isConnected()) {
+//                // 当前网络是连接的
+//                if (info.getState() == NetworkInfo.State.CONNECTED) {
+//                    // 当前所连接的网络可用
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
 }

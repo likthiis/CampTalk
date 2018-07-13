@@ -1,133 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="#FF83FA"
-            android:gravity="center"
-            android:orientation="vertical">
+        <!--PagerTabStrip标题标签-->
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="top"
+            >
+        </android.support.v4.view.PagerTabStrip>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/app_name"
-                android:textColor="#ffffff"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="384dp"
-            android:layout_weight="1">
-
-        </android.support.v4.view.ViewPager>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:background="#FF83FA"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/llChat"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/ivChat"
-                    android:layout_width="40dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:background="#00000000"
-                    android:src="@drawable/tab_chat" />
-
-                <TextView
-                    android:id="@+id/tvChat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="top|center"
-                    android:text="聊天"
-                    android:textSize="20sp"
-                    android:clickable="true"
-                    android:textColor="@drawable/tab_textview" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llFriends"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/ivFriends"
-                    android:layout_width="40dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:src="@drawable/tab_friends" />
-
-                <TextView
-                    android:id="@+id/tvFriends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="top|center"
-                    android:text="朋友"
-                    android:textSize="20sp"
-                    android:clickable="true"
-                    android:textColor="@drawable/tab_textview" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llContacts"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/ivContacts"
-                    android:layout_width="40dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="#00000000"
-                    android:src="@drawable/tab_contacts" />
-
-                <TextView
-                    android:id="@+id/tvContacts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="top|center"
-                    android:text="内容"
-                    android:textSize="20sp"
-                    android:clickable="true"
-                    android:textColor="@drawable/tab_textview" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.v4.view.ViewPager>
+</LinearLayout>
