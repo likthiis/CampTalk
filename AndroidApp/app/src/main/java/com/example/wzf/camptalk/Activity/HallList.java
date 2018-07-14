@@ -39,6 +39,7 @@ public class HallList extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.hall_list, container, false);
         return view;
     }
@@ -67,16 +68,29 @@ public class HallList extends Fragment {
 
     }
 
+    private List<Integer> imageIds = new ArrayList<>();
+    private List<String> names = new ArrayList<>();
+
     private void getData() {
-        int[] imageIds = { R.drawable.hall1, R.drawable.hall2 };
+        // 清空原有数据，重新加载新数据
+        emptyData();
 
-        String[] names = { "大厅一", "大厅二" };
+        imageIds.add(R.drawable.hall1);
+        imageIds.add(R.drawable.hall2);
 
-        for(int i = 0 ; i < imageIds.length ; i++){                  //将数据添加到集合中
-            hallArrayList.add(new Hall(imageIds[i],names[i]));  //将图片id和对应的name存储到一起
+        names.add("大厅一");
+        names.add("大厅二");
+
+        for(int i = 0 ; i < imageIds.size() ; i++){                  //将数据添加到集合中
+            hallArrayList.add(new Hall(imageIds.get(i),names.get(i)));  //将图片id和对应的name存储到一起
         }
+    }
 
 
+    private void emptyData() {
+        imageIds = new ArrayList<>();
+        names = new ArrayList<>();
+        hallArrayList = new ArrayList<>();
     }
 
 //    @Override
