@@ -29,13 +29,14 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
 
         initView();
 
 
         fragmentList = new ArrayList<>();
         fragmentList.add(new HallList());
-        fragmentList.add(new Space());
+        fragmentList.add(new FriendsList());
         fragmentList.add(new Space());
 
         //创建pagerAdapter适配器
