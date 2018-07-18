@@ -29,8 +29,6 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         // 隐藏原有的标题栏
         android.support.v7.app.ActionBar actionBar=getSupportActionBar();
         if(actionBar!=null)
@@ -97,6 +95,9 @@ public class Menu extends AppCompatActivity {
         hallTitle = (TextView) findViewById(R.id.hall_title);
         friendTitle = (TextView) findViewById(R.id.friend_title);
         spaceTitle = (TextView) findViewById(R.id.space_title);
+
+        // 将大厅按钮设为按下去的颜色
+        hallTitle.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
     private void setTextColor(int position) {
