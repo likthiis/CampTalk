@@ -44,7 +44,7 @@ public class SelectPage extends AppCompatActivity implements View.OnClickListene
         }
         if(view == bSearchUser) {
             // 进入下一页面
-            Intent nextPage = new Intent(SelectPage.this, SearchUser.class);
+            Intent nextPage = new Intent(SelectPage.this, Search.class);
             startActivity(nextPage);
         }
         if(view == bFriendRequest) {

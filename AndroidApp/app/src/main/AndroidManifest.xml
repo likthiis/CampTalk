@@ -24,6 +24,11 @@
         </activity>
 
         <activity android:name=".Activity.Settings">
+
+        </activity>
+
+        <activity android:name=".Activity.Search"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,9 +37,6 @@
         </activity>
 
         <activity android:name=".AndroidCampTalk">
-
-        </activity>
-        <activity android:name=".Activity.SearchUser">
 
         </activity>
         <activity android:name=".Activity.ShowFriends">

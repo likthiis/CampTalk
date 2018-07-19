@@ -1,7 +1,6 @@
 package com.example.wzf.camptalk.Activity;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,10 @@ import com.example.wzf.camptalk.R;
 
 import java.util.List;
 
-public class HallAdapter extends ArrayAdapter<Hall> {
-
+public class FriendAdapter extends ArrayAdapter<Friend> {
     private int resourceId;
 
-    public HallAdapter(Context context, int textViewResourceId, List<Hall> objects) {
+    public FriendAdapter(Context context, int textViewResourceId, List<Friend> objects) {
         super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
     }
@@ -38,15 +36,10 @@ public class HallAdapter extends ArrayAdapter<Hall> {
             viewHolder=(ViewHolder) view.getTag();
         }
 
-        Hall hall = getItem(position);//实例指定位置的水果
+        Friend friend = getItem(position);//实例指定位置的水果
 
-        viewHolder.ivImage.setImageResource(hall.getImageId());//获得指定位置水果的id
-        viewHolder.tvName.setText(hall.getImageName());        //获得指定位置水果的名字
+        viewHolder.ivImage.setImageResource(friend.getImageId());//获得指定位置水果的id
+        viewHolder.tvName.setText(friend.getImageName());        //获得指定位置水果的名字
         return view;
     }
 }
-
-//class ViewHolder{      //当布局加载过后，保存获取到的控件信息。
-//    ImageView ivImage;
-//    TextView tvName;
-//}

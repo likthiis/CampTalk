@@ -51,7 +51,7 @@ public class ShowFriends extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_friends);
+        setContentView(R.layout.test1);
         bindObject();
         // 动态注册广播
         mBroadcastReceiver = new MessageExchange(this,this);
@@ -81,9 +81,9 @@ public class ShowFriends extends AppCompatActivity implements View.OnClickListen
     }
 
     private void bindObject() {
-        tShowFriends = findViewById(R.id.T_showFriends);
-        eInputFriendUid = findViewById(R.id.E_inputSearchUid);
-        bChatGo = findViewById(R.id.B_chatGo);
+//        tShowFriends = findViewById(R.id.test1);
+//        eInputFriendUid = findViewById(R.id.E_inputSearchUid);
+//        bChatGo = findViewById(R.id.B_chatGo);
         bChatGo.setOnClickListener(this);
     }
 

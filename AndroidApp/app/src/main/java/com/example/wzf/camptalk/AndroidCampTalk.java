@@ -27,19 +27,19 @@ public class AndroidCampTalk extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_android_camp_talk);
+        setContentView(R.layout.test1);
         bindObject();
         //socketAppService = (SocketAppService)getApplication();
     }
 
     private void bindObject() {
-        mContent = (EditText) findViewById(R.id.E_msg);
-        mUserName = (EditText) findViewById(R.id.E_username);
-        mToSb = (EditText) findViewById(R.id.E_tosb);
-        bSend = (Button) findViewById(R.id.B_send);
-        mText = (TextView) findViewById(R.id.T_msg);
-        bAct = (Button) findViewById(R.id.B_act);
-        bJumpTo2 = (Button) findViewById(R.id.B_jumpTo2);
+//        mContent = (EditText) findViewById(R.id.E_msg);
+//        mUserName = (EditText) findViewById(R.id.E_username);
+//        mToSb = (EditText) findViewById(R.id.E_tosb);
+//        bSend = (Button) findViewById(R.id.B_send);
+//        mText = (TextView) findViewById(R.id.T_msg);
+//        bAct = (Button) findViewById(R.id.B_act);
+//        bJumpTo2 = (Button) findViewById(R.id.B_jumpTo2);
         bSend.setOnClickListener(this);
         bAct.setOnClickListener(this);
         bJumpTo2.setOnClickListener(this);
