@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.wzf.camptalk.R;
 
-public class Menu extends AppCompatActivity {
+import org.w3c.dom.Text;
+
+public class Menu extends AppCompatActivity implements View.OnClickListener {
     private List<Fragment> fragmentList;
 
     private ViewPager pager;  //实例
@@ -66,7 +68,41 @@ public class Menu extends AppCompatActivity {
         });
     }
 
+    private TextView search;
+    private TextView setting;
+    private LinearLayout searchLL;
+    private LinearLayout settingLL;
+
+
+    @Override
+    public void onClick(View view) {
+        // 业务目标：改变颜色、实现页面跳转
+        if(view == search) {
+
+        }
+        if(view == setting) {
+
+        }
+        if(view == searchLL) {
+
+        }
+        if(view == settingLL) {
+
+        }
+        if(view == hallList) {
+            pager.setCurrentItem(1);
+        }
+        if(view == space) {
+            pager.setCurrentItem(2);
+        }
+    }
+
     private void initView() {
+        search = (TextView) findViewById(R.id.search);
+        setting = (TextView) findViewById(R.id.search);
+        searchLL = (LinearLayout) findViewById(R.id.searchLL);
+        settingLL = (LinearLayout) findViewById(R.id.settingLL);
+
         pager = (ViewPager) findViewById(R.id.main_pager);
         hallList = (LinearLayout) findViewById(R.id.hall_list);
         hallList.setOnClickListener(new View.OnClickListener() {
@@ -77,20 +113,20 @@ public class Menu extends AppCompatActivity {
         });
 
         friendList = (LinearLayout) findViewById(R.id.friend_list);
-        friendList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pager.setCurrentItem(1);
-            }
-        });
+//        friendList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         space = (LinearLayout) findViewById(R.id.space);
-        space.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pager.setCurrentItem(2);
-            }
-        });
+//        space.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                pager.setCurrentItem(2);
+//            }
+//        });
 
         hallTitle = (TextView) findViewById(R.id.hall_title);
         friendTitle = (TextView) findViewById(R.id.friend_title);

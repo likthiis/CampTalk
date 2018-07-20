@@ -32,8 +32,8 @@ public class Search extends AppCompatActivity {
 
 
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new HallList());
-        fragments.add(new FriendsList());
+        fragments.add(new SearchUser());
+        fragments.add(new SearchGroup());
 
         TitleFragmentPagerAdapter adapter = new TitleFragmentPagerAdapter(getSupportFragmentManager(), fragments, new String[]{"第一栏", "第二栏"});
         viewpager.setAdapter(adapter);

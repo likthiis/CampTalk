@@ -7,13 +7,14 @@
     android:background="#ff69b4">
 
     <LinearLayout
+        android:id="@+id/backLL"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:gravity="center|left">
 
         <TextView
-            android:id="@+id/setting"
+            android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

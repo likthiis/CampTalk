@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CampTalk</string>
+    <string name="searchTips">输入全部或部分关键字来搜索用户或者群。如果你输入了用户或者群的昵称，那么有可能得到多个结果。在输入uid并在uid正确的情况下将得到唯一的结果。</string>
 </resources>

@@ -8,12 +8,14 @@
     android:background="#ff69b4">
 
     <LinearLayout
+        android:id="@+id/searchLL"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:gravity="left">
 
         <TextView
+            android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -40,6 +42,7 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/settingLL"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
