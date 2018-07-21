@@ -1,5 +1,6 @@
 package com.example.wzf.camptalk.Activity;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +26,6 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout hallList, friendList, space;
     private TextView hallTitle, friendTitle, spaceTitle;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +84,12 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
 
         }
         if(view == searchLL) {
-
+            Intent intent = new Intent(Menu.this, Search.class);
+            startActivity(intent);
         }
         if(view == settingLL) {
-
+            Intent intent = new Intent(Menu.this, Settings.class);
+            startActivity(intent);
         }
         if(view == hallList) {
             pager.setCurrentItem(1);
@@ -134,6 +136,10 @@ public class Menu extends AppCompatActivity implements View.OnClickListener {
 
         // 将大厅按钮设为按下去的颜色
         hallTitle.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        // 为布局设置监听事件
+        settingLL.setOnClickListener(this);
+        searchLL.setOnClickListener(this);
     }
 
     private void setTextColor(int position) {

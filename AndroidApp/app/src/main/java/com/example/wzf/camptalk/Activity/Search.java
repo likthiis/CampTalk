@@ -1,10 +1,14 @@
 package com.example.wzf.camptalk.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.TabLayout;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.wzf.camptalk.R;
 
@@ -14,11 +18,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class Search extends AppCompatActivity {
+public class Search extends AppCompatActivity implements View.OnClickListener {
     @Bind(R.id.tab)
     TabLayout tabLayout;
     @Bind(R.id.viewpager)
     ViewPager viewpager;
+    @Bind(R.id.backLL)
+    LinearLayout backLL;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,5 +46,18 @@ public class Search extends AppCompatActivity {
         viewpager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(viewpager);
+
+        // 对布局添加监听
+        backLL.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == backLL) {
+            // 返回主界面
+            Log.i("backLL", "点击触发");
+            Intent intent = new Intent(Search.this, Menu.class);
+            startActivity(intent);
+        }
     }
 }

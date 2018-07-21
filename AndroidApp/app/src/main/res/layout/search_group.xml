@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp"
-            android:queryHint="输入用户uid"/>
+            android:queryHint="输入群uid"/>
 
     </LinearLayout>
 

@@ -12,6 +12,9 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/ll_click"
         android:gravity="left">
 
         <TextView
@@ -46,6 +49,9 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/ll_click"
         android:gravity="center|right">
 
         <TextView
@@ -54,7 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:background="#00000000"
             android:text="设置   "
             android:textColor="#ffffff"
             android:textSize="20sp" />

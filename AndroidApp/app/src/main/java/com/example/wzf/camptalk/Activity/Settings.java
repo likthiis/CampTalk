@@ -1,7 +1,9 @@
 package com.example.wzf.camptalk.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -79,8 +81,10 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     private TextView back;
 
     private void bindObject() {
-        TextView back = (TextView) findViewById(R.id.back);
-        LinearLayout backLL = (LinearLayout) findViewById(R.id.backLL);
+        back = (TextView) findViewById(R.id.back);
+        backLL = (LinearLayout) findViewById(R.id.backLL);
+
+        backLL.setOnClickListener(this);
     }
 
 
@@ -90,7 +94,9 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
         }
         if(view == backLL) {
-
+            Log.i("backLL","设置->主界面");
+            Intent intent = new Intent(Settings.this, Menu.class);
+            startActivity(intent);
         }
     }
 }
