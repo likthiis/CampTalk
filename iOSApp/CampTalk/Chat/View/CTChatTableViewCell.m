@@ -7,7 +7,8 @@
 //
 
 #import "CTChatTableViewCell.h"
-#import "UIImage+Tint.h"
+#import <RGUIKit/RGUIKit.h>
+#import "RGBubbleView.h"
 
 static CGSize _maxIconSize = {40, 40};
 static CGFloat _chatCelIIconWidth = 40;
@@ -20,6 +21,9 @@ static CGFloat _marginTop = 20;
 NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
 
 @interface CTChatTableViewCell ()
+
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet RGBubbleView *thumbWapper;
 
 @end
 
@@ -35,8 +39,23 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     self.thumbWapper.layer.anchorPoint = CGPointMake(0, 1);
 }
 
-- (UIView *)thumbWapper {
-    return self.thumbView.superview;
+- (void)setIconImage:(UIImage *)iconImage {
+    if (_myDirection) {
+        _iconImage = [iconImage rg_imageFlippedForRightToLeftLayoutDirection];
+    } else {
+        _iconImage = iconImage;
+    }
+    self.iconView.image = _iconImage;
+}
+
+- (void)setMyDirection:(BOOL)myDirection {
+    if (_myDirection == myDirection) {
+        return;
+    }
+    _myDirection = myDirection;
+    self.chatBubbleLabel.bubbleRightToLeft = myDirection;
+    self.thumbWapper.bubbleRightToLeft = myDirection;
+    [self.contentView setNeedsLayout];
 }
 
 - (void)layoutSubviews {
@@ -47,7 +66,7 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     
     // 头像布局，头像宽不超出 _chatCelIIconWidth，高度不超出父视图的高度，否则按比例缩放头像至全部显示
     
-    CGSize iconSize = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(_chatCelIIconWidth, height) imageSize:self.iconView.image.logicSize];
+    CGSize iconSize = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(_chatCelIIconWidth, height) imageSize:self.iconView.image.rg_logicSize];
     
     self.iconView.frame =
     CGRectMake(
@@ -61,9 +80,32 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     
     if (self.displayThumb) {
         //图片布局
-        bounds.size = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(bounds.size.width, height - _marginTop) imageSize:self.thumbView.image.logicSize];
-        bounds.origin.y = self.bounds.size.height - bounds.size.height;
-        self.thumbWapper.frame = bounds;
+        bounds.size = [CTChatTableViewCell imageSizeThatFits:CGSizeMake(bounds.size.width, height - _marginTop) imageSize:self.thumbView.image.rg_logicSize];
+        
+        UIEdgeInsets bubbleEdge = self.thumbWapper.contentViewEdge;
+        if (self.thumbWapper.bubbleRightToLeft) {
+            CGFloat left = bubbleEdge.left;
+            bubbleEdge.left = bubbleEdge.right;
+            bubbleEdge.right = left;
+        }
+        
+        if (bubbleEdge.left * 4 <= self.thumbView.image.rg_logicSize.width) {
+            [self.thumbWapper.backgroundView addSubview:self.thumbView];
+            
+            bounds.origin.y = self.bounds.size.height - bounds.size.height;
+            self.thumbWapper.frame = bounds;
+            self.thumbView.frame = self.thumbWapper.backgroundView.bounds;
+            
+        } else {
+            [self.thumbWapper.contentView addSubview:self.thumbView];
+            
+            bounds.size.width += (bubbleEdge.left + bubbleEdge.right);
+            bounds.size.height += (bubbleEdge.top + bubbleEdge.bottom);
+            bounds.origin.y = self.bounds.size.height - bounds.size.height;
+            
+            self.thumbWapper.frame = bounds;
+            self.thumbView.frame = self.thumbWapper.contentView.bounds;
+        }
         
         self.chatBubbleLabel.hidden = YES;
         self.thumbWapper.hidden = NO;
@@ -71,13 +113,13 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     } else {
         
         //文字布局
-        CGSize labelSize;
-        if (bounds.size.height - _maxIconSize.height - _marginTop < 1e-7) {
-            labelSize = [self.chatBubbleLabel sizeThatFits:bounds.size];
-        } else {
-            labelSize = bounds.size;
-            labelSize.height -= _marginTop;
-        }
+        CGSize labelSize = [self.chatBubbleLabel sizeThatFits:bounds.size];
+//        if (bounds.size.height - _maxIconSize.height - _marginTop < 1e-7) {
+//            labelSize = [self.chatBubbleLabel sizeThatFits:bounds.size];
+//        } else {
+//            labelSize = bounds.size;
+//            labelSize.height -= _marginTop;
+//        }
         
         bounds.origin.y = bounds.size.height - labelSize.height;
         bounds.size = labelSize;
@@ -85,6 +127,12 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
         
         self.chatBubbleLabel.hidden = NO;
         self.thumbWapper.hidden = YES;
+    }
+    
+    if (self.myDirection) {
+        [self.contentView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [obj rg_setFrameToFitRTL];
+        }];
     }
 }
 
@@ -174,6 +222,17 @@ NSString * const CTChatTableViewCellId = @"kCTChatTableViewCellId";
     transformAnimation.removedOnCompletion = YES;
     transformAnimation.autoreverses = YES;
     
+    if (_myDirection) {
+        CGPoint position = animateView.layer.position;
+        position.x = CGRectGetMaxX(animateView.frame);
+        animateView.layer.anchorPoint = CGPointMake(1, 1);
+        animateView.layer.position = position;
+    } else {
+        CGPoint position = animateView.layer.position;
+        position.x = CGRectGetMinX(animateView.frame);
+        animateView.layer.anchorPoint = CGPointMake(0, 1);
+        animateView.layer.position = position;
+    }
     [animateView.layer addAnimation:transformAnimation forKey:@"transformAnimation"];
 }
 

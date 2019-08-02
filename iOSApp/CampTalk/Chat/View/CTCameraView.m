@@ -7,8 +7,7 @@
 //
 
 #import "CTCameraView.h"
-#import "UIImage+Tint.h"
-#import "UIImage+JCPictureEdit.h"
+#import <RGUIKit/RGUIKit.h>
 
 NSString * const kRecordCenter = @"kRecordCenter";
 
@@ -85,7 +84,7 @@ static CGPoint __recordCenter; // [0,1]
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(adjustTintColor) object:nil];
     if (_tintColorEffectView) {
         CGRect rect = [self convertRect:_cameraButton.frame toView:_tintColorEffectView];
-        UIImage *image = [UIImage cropView:_tintColorEffectView inRect:rect scale:[UIScreen mainScreen].scale];
+        UIImage *image = [UIImage rg_convertViewToImage:_tintColorEffectView rect:rect];
         [self adjustTintColorWithBackgroundImage:image];
     }
 }
@@ -108,21 +107,20 @@ static CGPoint __recordCenter; // [0,1]
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCameraButton) object:nil];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        UIColor *mainColor = backgroundImage.mainColor;
+    dispatch_barrier_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        UIColor *mainColor = backgroundImage.rg_mainColor;
         
         if (!mainColor) {
             return;
         }
-        CGFloat white;
-        [mainColor getWhite:&white alpha:nil];
+        BOOL isDarkColor = mainColor.rg_isDarkColor;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             UIColor *tintColor = nil;
-            if (white > 0.5) {
-                tintColor = [UIColor colorWithWhite:0.f alpha:1.f];
-            } else {
+            if (isDarkColor) {
                 tintColor = [UIColor colorWithWhite:1.f alpha:1.f];
+            } else {
+                tintColor = [UIColor colorWithWhite:0.f alpha:1.f];
             }
             
             if (self.cameraButton.tintColor == [UIColor clearColor]) {
@@ -175,7 +173,7 @@ static CGPoint __recordCenter; // [0,1]
     self.cameraButton.tag = 1;
     
     [UIView animateWithDuration:0.3 delay:0.f options:UIViewAnimationOptionAllowUserInteraction animations:^{
-        self.cameraButton.alpha = 0.2f;
+        self.cameraButton.alpha = 0.25f;
     } completion:nil];
 }
 

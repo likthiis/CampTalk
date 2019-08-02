@@ -9,10 +9,10 @@
 #import "ViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "CTChatTableViewController.h"
+#import "CTChatListTableViewController.h"
 #import "CTLoginViewController.h"
-#import "CTNavigationController.h"
 
-#import "UIImage+Read.h"
+#import <RGUIKit/RGUIKit.h>
 
 @interface ViewController ()
 
@@ -28,9 +28,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    self.rg_navigationController.tintColor = [UIColor whiteColor];
+    
     NSString *imageName = [NSString stringWithFormat:@"corver%d.jpg", arc4random()%2];
     
-    _corverImageView.image = [UIImage imageWithName:imageName];
+    _corverImageView.image = [UIImage rg_imageWithName:imageName];
     _corverImageBgView.image = _corverImageView.image;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
     
@@ -67,14 +69,18 @@
 }
 
 - (IBAction)chat:(id)sender {
-    CTChatTableViewController *vc = [CTChatTableViewController new];
+    CTChatListTableViewController *vc = [CTChatListTableViewController new];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)login:(id)sender {
-    CTNavigationController *ngv = [CTNavigationController navigationWithRoot:[[CTLoginViewController alloc] initWithStyle:UITableViewStylePlain]];
-    ngv.type = CTNavigationBackgroundTypeAllTranslucent;
+    RGNavigationController *ngv = [RGNavigationController navigationWithRoot:[[CTLoginViewController alloc] initWithStyle:UITableViewStylePlain] style:RGNavigationBackgroundStyleAllTranslucent];
+    ngv.tintColor = UIColor.blackColor;
     [self presentViewController:ngv animated:YES completion:nil];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 @end

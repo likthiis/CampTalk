@@ -14,5 +14,10 @@
 @property (nonatomic, strong) CAShapeLayer *bubbleBorder;
 
 @property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UIView *backgroundView;
+
+@property (nonatomic, assign) BOOL bubbleRightToLeft;
+
+- (UIEdgeInsets)contentViewEdge;
 
 @end

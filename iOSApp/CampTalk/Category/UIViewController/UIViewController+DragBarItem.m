@@ -7,7 +7,7 @@
 //
 
 #import "UIViewController+DragBarItem.h"
-#import "UIViewController+BarFrame.h"
+#import <RGUIKit/RGUIKit.h>
 #import "UIView+PanGestureHelp.h"
 #import <objc/runtime.h>
 
@@ -16,11 +16,11 @@
 - (void)addRightDragBarItemWithDragIcon:(UIView *)dragIcon
                                  itmeId:(NSInteger)itemId
                         ignoreIntersect:(BOOL)ignoreIntersect
-                               copyIcon:(UIView *(^)(void))copyIcon
+                               copyIcon:(NS_NOESCAPE UIView *(^)(void))copyIcon
                             syncAnimate:(void (^)(UIView *))syncAnimate
                              completion:(void (^)(BOOL))completion {
     if (!ignoreIntersect) {
-        UINavigationBar *bar = self.displayedNavigationBar ?  self.navigationController.navigationBar : nil;
+        UINavigationBar *bar = self.rg_displayedNavigationBar ?  self.navigationController.navigationBar : nil;
         if (bar) {
             if (!CGRectIntersectsRect([bar convertRect:bar.bounds toView:dragIcon.superview], dragIcon.frame)) {
                 if (completion) {
@@ -129,7 +129,7 @@
 }
 
 - (BOOL)iconIsIntersect:(UIView *)icon {
-    UINavigationBar *bar = self.displayedNavigationBar ?  self.navigationController.navigationBar : nil;
+    UINavigationBar *bar = self.rg_displayedNavigationBar ?  self.navigationController.navigationBar : nil;
     if (bar) {
         if (CGRectIntersectsRect([bar convertRect:bar.bounds toView:icon.superview], icon.frame)) {
             return YES;

@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) UIImageView *bubbleView;
 @property (nonatomic, strong) RGBorderLabel *label;
+@property (nonatomic, assign) BOOL bubbleRightToLeft;
 
 + (CGSize)heightWithString:(NSString *)string fits:(CGSize)size;
 

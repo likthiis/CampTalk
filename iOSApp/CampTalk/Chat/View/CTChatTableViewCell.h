@@ -13,10 +13,13 @@ extern NSString *const CTChatTableViewCellId;
 
 @interface CTChatTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UIImageView *thumbView;
 
 @property (weak, nonatomic) IBOutlet CTChatBubbleLabel *chatBubbleLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *thumbView;
+
+@property (copy, nonatomic) UIImage *iconImage;
+
+@property (assign, nonatomic) BOOL myDirection;
 
 + (void)registerForTableView:(UITableView *)tableView;
 

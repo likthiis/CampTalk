@@ -7,6 +7,7 @@
 //
 
 #import "CTChatBubbleLabel.h"
+#import <RGUIKit/RGUIKit.h>
 
 #define kChatLabelTriangleWidth (12)
 #define kChatLabelBubbleBorder (3)
@@ -57,9 +58,34 @@ static UIFont *_chatBubbleLabelFont;
     return self;
 }
 
+- (void)setBubbleRightToLeft:(BOOL)bubbleRightToLeft {
+    _bubbleRightToLeft = bubbleRightToLeft;
+    [self configBubbleView];
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     [self configBubbleView];
+}
+
+- (UIImageView *)bubbleView {
+    if (!_bubbleView) {
+        _bubbleView = [[UIImageView alloc] init];
+        _bubbleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _bubbleView.frame = self.bounds;
+        [self addSubview:_bubbleView];
+    }
+    return _bubbleView;
+}
+
+- (RGBorderLabel *)label {
+    if (!_label) {
+        _label = [[RGBorderLabel alloc] init];
+        _label.numberOfLines = 0;
+        _label.font = _chatBubbleLabelFont;
+        [self addSubview:_label];
+    }
+    return _label;
 }
 
 - (void)configBubbleView {
@@ -67,20 +93,25 @@ static UIFont *_chatBubbleLabelFont;
     self.backgroundColor = [UIColor clearColor];
     
     UIImage *bubble = [UIImage imageNamed:@"bubble_bg"];
+    UIEdgeInsets cap;
     
-    UIEdgeInsets cap = UIEdgeInsetsMake(kChatLabelBubbleBorder, kChatLabelTriangleWidth, bubble.size.height - kChatLabelBubbleBorder, kChatLabelBubbleBorder);
+    if (_bubbleRightToLeft) {
+        bubble = [bubble rg_imageFlippedForRightToLeftLayoutDirection];
+        cap = UIEdgeInsetsMake(kChatLabelBubbleBorder,
+                               kChatLabelBubbleBorder + kChatLabelTriangleWidth,
+                               bubble.size.height - kChatLabelBubbleBorder,
+                               bubble.size.width - kChatLabelBubbleBorder - kChatLabelTriangleWidth);
+    } else {
+        cap = UIEdgeInsetsMake(kChatLabelBubbleBorder, kChatLabelTriangleWidth, bubble.size.height - kChatLabelBubbleBorder, kChatLabelBubbleBorder);
+    }
     
-    bubble = [bubble resizableImageWithCapInsets:cap resizingMode:UIImageResizingModeTile];
+    bubble = [bubble resizableImageWithCapInsets:cap resizingMode:UIImageResizingModeStretch];
+
     
-    _bubbleView = [[UIImageView alloc] initWithImage:bubble highlightedImage:bubble];
-    _bubbleView.frame = self.bounds;
-    _bubbleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self addSubview:_bubbleView];
+    self.bubbleView.image = bubble;
+    [self label];
     
-    _label = [[RGBorderLabel alloc] init];
-    _label.numberOfLines = 0;
-    _label.font = _chatBubbleLabelFont;
-    [self addSubview:_label];
+    [self setNeedsLayout];
 }
 
 - (void)layoutSubviews {
@@ -89,6 +120,9 @@ static UIFont *_chatBubbleLabelFont;
     bounds = UIEdgeInsetsInsetRect(bounds, _boundsInsets);
     bounds = UIEdgeInsetsInsetRect(bounds, _bubbleInsets);
     self.label.frame = bounds;
+    if (_bubbleRightToLeft) {
+        [self.label rg_setFrameToFitRTL];
+    }
 }
 
 - (void)sizeToFit {

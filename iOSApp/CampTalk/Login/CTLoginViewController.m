@@ -8,19 +8,32 @@
 
 #import "CTLoginViewController.h"
 #import "FLAnimatedImage.h"
+#import "AFNetworking.h"
 
-#import "CTInputTableViewCell.h"
+#import <RGUIKit/RGUIKit.h>
 
-@interface CTLoginViewController () <UITextFieldDelegate>
+@interface CTLoginViewController () <RGInputCellDelegate>
 
-@property (nonatomic, strong) CTInputTableViewCell *accountId;
-@property (nonatomic, strong) CTInputTableViewCell *password;
+@property (nonatomic, strong) RGInputTableViewCell *accountId;
+@property (nonatomic, strong) RGInputTableViewCell *password;
 
-@property (nonatomic, strong) CTInputTableViewCell *login;
+@property (nonatomic, strong) RGInputTableViewCell *login;
 
-@property (nonatomic, strong) FLAnimatedImageView *gitView;
+@property (nonatomic, strong) FLAnimatedImageView *gifView;
+
+@property (nonatomic, strong) UIActivityIndicatorView *loadingView;
+@property (nonatomic, strong) UIButton *resultButton;
+
+@property (nonatomic, assign) BOOL autoCancelAnimate;
 
 @end
+
+typedef enum : NSUInteger {
+    CTLoginResultButtonStateNone,
+    CTLoginResultButtonStateOK,
+    CTLoginResultButtonStateExisted,
+    CTLoginResultButtonStateError,
+} CTLoginResultButtonState;
 
 @implementation CTLoginViewController
 
@@ -32,13 +45,14 @@
     NSData *data = [NSData dataWithContentsOfURL:url];
     
     FLAnimatedImage *gif = [FLAnimatedImage animatedImageWithGIFData:data];
-    _gitView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, gif.size.width, gif.size.height)];
-    _gitView.contentMode = UIViewContentModeCenter;
-    _gitView.animatedImage = gif;
+    _gifView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, gif.size.width, gif.size.height)];
+    _gifView.contentMode = UIViewContentModeCenter;
+    _gifView.animatedImage = gif;
     
     [self startAnimate];
+    self.autoCancelAnimate = YES;
     
-    self.tableView.tableHeaderView = _gitView;
+    self.tableView.tableHeaderView = _gifView;
     self.tableView.backgroundColor = [UIColor colorWithRed:146.f/255.f green:224.f/255.f blue:205.f/255.f alpha:1.f];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
@@ -48,17 +62,40 @@
 }
 
 - (void)startAnimate {
-    if (!_gitView.isAnimating) {
-        [_gitView startAnimating];
+    if (!_gifView.isAnimating) {
+        [_gifView startAnimating];
     }
     
-    [NSObject cancelPreviousPerformRequestsWithTarget:_gitView selector:@selector(stopAnimating) object:nil];
-    [_gitView performSelector:@selector(stopAnimating) withObject:nil afterDelay:3.f];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopAnimating) object:nil];
+    [self performSelector:@selector(stopAnimating) withObject:nil afterDelay:3.f];
 }
 
-- (CTInputTableViewCell *)accountId {
+- (void)stopAnimating {
+    if (!_autoCancelAnimate) {
+        return;
+    }
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopAnimating) object:nil];
+    [_gifView stopAnimating];
+}
+
+- (void)setAutoCancelAnimate:(BOOL)autoCancelAnimate {
+    
+    if (_autoCancelAnimate == autoCancelAnimate) {
+        return;
+    }
+    _autoCancelAnimate = autoCancelAnimate;
+    
+    if (_autoCancelAnimate) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopAnimating) object:nil];
+        [self performSelector:@selector(stopAnimating) withObject:nil afterDelay:3.f];
+    } else {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(stopAnimating) object:nil];
+    }
+}
+
+- (RGInputTableViewCell *)accountId {
     if (!_accountId) {
-        _accountId = [[CTInputTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CTInputTableViewCellId];
+        _accountId = [[RGInputTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RGInputTableViewCellID];
         _accountId.backgroundColor = [UIColor clearColor];
         _accountId.textFieldEdge = UIEdgeInsetsMake(0, 20, 0, 20);
         _accountId.textField.tintColor = [UIColor blackColor];
@@ -67,15 +104,30 @@
         left.contentMode = UIViewContentModeLeft;
         _accountId.textField.leftViewMode = UITextFieldViewModeAlways;
         _accountId.textField.leftView = left;
+        _accountId.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _accountId.textField.returnKeyType = UIReturnKeyDone;
-        _accountId.textField.delegate = self;
+        _accountId.delegate = self;
+        
+        _loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [_loadingView sizeToFit];
+        
+        UIView *wapper = [[UIView alloc] initWithFrame:_loadingView.bounds];
+        
+        _resultButton = [[UIButton alloc] initWithFrame:_loadingView.bounds];
+        _resultButton.alpha = 0.f;
+        [_resultButton addTarget:self action:@selector(checkUserId:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [wapper addSubview:_resultButton];
+        [wapper addSubview:_loadingView];
+        
+        _accountId.rightView = wapper;
     }
     return _accountId;
 }
 
-- (CTInputTableViewCell *)password {
+- (RGInputTableViewCell *)password {
     if (!_password) {
-        _password = [[CTInputTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CTInputTableViewCellId];
+        _password = [[RGInputTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RGInputTableViewCellID];
         _password.backgroundColor = [UIColor clearColor];
         _password.textField.secureTextEntry = YES;
         _password.textFieldEdge = UIEdgeInsetsMake(0, 20, 0, 20);
@@ -85,19 +137,15 @@
         left.contentMode = UIViewContentModeLeft;
         _password.textField.leftViewMode = UITextFieldViewModeAlways;
         _password.textField.leftView = left;
+        _password.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _password.textField.returnKeyType = UIReturnKeyDone;
-        _password.textField.delegate = self;
+        _password.delegate = self;
     }
     return _password;
 }
 
 - (void)dismiss {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -131,13 +179,128 @@
     [self startAnimate];
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+- (void)rg_inputCellTextDidChange:(RGInputTableViewCell *)cell text:(NSString *)text {
     [self startAnimate];
-    return YES;
+    if (cell == self.accountId) {
+        
+        self.resultButton.alpha = 0.f;
+        [self.loadingView startAnimating];
+        
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(doCheckUser) object:nil];
+        
+        if (text.length) {
+            [self performSelector:@selector(doCheckUser) withObject:nil afterDelay:2.f];
+        } else {
+            [self.loadingView stopAnimating];
+            self.resultButton.alpha = 0.f;
+        }
+    }
+}
+
+- (void)checkUserId:(UIButton *)sender {
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        
+        sender.transform = CGAffineTransformMakeRotation(M_PI);
+        sender.alpha = 0.7f;
+        
+    } completion:^(BOOL finished) {
+        
+        if (!self.accountId.inputText.length) {
+            self.resultButton.alpha = 0.f;
+            return;
+        }
+        
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            
+            sender.alpha = 0.f;
+            sender.transform = CGAffineTransformMakeRotation(0);
+            [self.loadingView startAnimating];
+            [self doCheckUser];
+            
+        } completion:nil];
+    }];
+}
+
+- (void)doCheckUser {
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(doCheckUser) object:nil];
+    
+    [self startAnimate];
+    self.autoCancelAnimate = NO;
+    
+    NSString *text = [self.accountId.inputText copy];
+    
+    [[AFHTTPSessionManager manager] POST:@"http:211.159.166.251:16233//query/query_existence" parameters:@{@"uid":text} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        if (![self.accountId.inputText isEqualToString:text]) {
+            return;
+        }
+        
+        self.autoCancelAnimate = YES;
+        [self.loadingView stopAnimating];
+        
+        self.resultButton.alpha = 1.f;
+        self.resultButton.transform = CGAffineTransformMakeRotation(0);
+        
+        NSString *status = responseObject[@"status"];
+        if ([status isEqualToString:@"user_existence"]) {
+            [self setResultButtonState:CTLoginResultButtonStateExisted];
+        } else if ([status isEqualToString:@"user_inexistence"]) {
+            [self setResultButtonState:CTLoginResultButtonStateOK];
+        } else {
+            [self setResultButtonState:CTLoginResultButtonStateNone];
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        if (![self.accountId.inputText isEqualToString:text]) {
+            return;
+        }
+        
+        self.autoCancelAnimate = YES;
+        [self.loadingView stopAnimating];
+        
+        self.resultButton.transform = CGAffineTransformMakeRotation(M_PI);
+        self.resultButton.alpha = 0.f;
+        [self setResultButtonState:CTLoginResultButtonStateError];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            
+            self.resultButton.transform = CGAffineTransformMakeRotation(2 * M_PI);
+            self.resultButton.alpha = 1.f;
+            
+        } completion:^(BOOL finished) {
+            if (!self.accountId.inputText.length) {
+                self.resultButton.alpha = 0.f;
+            }
+        }];
+    }];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self startAnimate];
     return [textField resignFirstResponder];
 }
+
+- (void)setResultButtonState:(CTLoginResultButtonState)state {
+    switch (state) {
+        case CTLoginResultButtonStateExisted:
+            [self.resultButton setBackgroundImage:[UIImage imageNamed:@"user_check_exist"] forState:UIControlStateNormal];
+            self.resultButton.userInteractionEnabled = NO;
+            break;
+        case CTLoginResultButtonStateError:
+            [self.resultButton setBackgroundImage:[UIImage imageNamed:@"user_check_refresh"] forState:UIControlStateNormal];
+            self.resultButton.userInteractionEnabled = YES;
+            break;
+        case CTLoginResultButtonStateOK:
+            [self.resultButton setBackgroundImage:[UIImage imageNamed:@"user_check_ok"] forState:UIControlStateNormal];
+            self.resultButton.userInteractionEnabled = NO;
+            break;
+        default:
+            [self.resultButton setImage:nil forState:UIControlStateNormal];
+            self.resultButton.userInteractionEnabled = NO;
+            break;
+    }
+}
+
 @end

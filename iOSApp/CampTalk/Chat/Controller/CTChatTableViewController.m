@@ -7,7 +7,7 @@
 //
 
 #import "CTChatTableViewController.h"
-#import "CTImagePickerViewController.h"
+#import "RGImagePicker.h"
 
 #import "CTChatTableViewCell.h"
 #import "CTChatInputView.h"
@@ -15,11 +15,7 @@
 #import "CTCameraView.h"
 #import "CTMusicButton.h"
 
-#import "UIImage+Read.h"
-#import "UIImage+Tint.h"
-#import "UIImage+JCPictureEdit.h"
-#import "UINavigationController+ShouldPop.h"
-#import "UIViewController+SafeArea.h"
+#import <RGUIKit/RGUIKit.h>
 #import "UIViewController+DragBarItem.h"
 #import "UIView+PanGestureHelp.h"
 
@@ -27,26 +23,11 @@
 #import "CTFileManger.h"
 
 #import "CTChatModel.h"
+#import "CTChatIconConfig.h"
 
 static CGFloat kMinInputViewHeight = 60.f;
 
-static NSString * const kCTChatToolConfig = @"kCTChatToolConfig";
-static NSMutableDictionary <NSString *, NSArray <NSNumber *> *> *__toolConfig;
-
-typedef enum : NSUInteger {
-    CTChatToolIconIdCamara = 100,
-    CTChatToolIconIdMusic,
-} CTChatToolIconId;
-
-typedef enum : NSUInteger {
-    CTChatToolIconUnknow = 0,
-    CTChatToolIconPlaceNavigation,
-    CTChatToolIconPlaceMainView,
-    CTChatToolIconPlaceInputView,
-    CTChatToolIconPlaceCount,
-} CTChatToolIconPlace;
-
-@interface CTChatTableViewController () <CTChatInputViewDelegate, UINavigationControllerShouldPopDelegate, CTCameraViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface CTChatTableViewController () <CTChatInputViewDelegate, RGUINavigationControllerShouldPopDelegate, CTCameraViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) CTStubbornView *tableViewCover;
@@ -72,7 +53,7 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"海拉尔草原野炊";
+    self.navigationItem.title = @"Princess Principal";
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.delegate = self;
@@ -90,7 +71,7 @@ typedef enum : NSUInteger {
     
     // fake data
     _data = [NSMutableArray array];
-    int i = 0;
+    int i = 10;
     NSMutableString *string = [[NSMutableString alloc] init];
     while (i--) {
         [string appendString:@"啊"];
@@ -98,19 +79,21 @@ typedef enum : NSUInteger {
         [_data addObject:model];
         
         if (i > 0 && i <= 3) {
-            NSString *size = [NSString stringWithFormat:@"@{%f,%f}", powf(10, i), powf(10, i)];
+            NSString *size = [NSString stringWithFormat:@"@{%f,%f}", powf(40, i), powf(40, i)];
             model.thumbSize = CGSizeFromString(size);
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"corver" ofType:@"jpg"];
+            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"chatBg_1" ofType:@"jpg"];
             model.thumbUrl = [NSURL fileURLWithPath:filePath].absoluteString;
         } else {
             model.message = string;
         }
+        model.userId = @"lin";
     }
     
     _needScrollToBottom = YES;
     
     _inputView = [[CTChatInputView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kMinInputViewHeight, self.view.bounds.size.width, kMinInputViewHeight)];
     _inputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    [_inputView.actionButton setImage:[[UIImage imageNamed:@"fuzi"] rg_imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
     _inputView.delegate = self;
     [self.view addSubview:_inputView];
     [self __configInputViewLayout];
@@ -148,7 +131,7 @@ typedef enum : NSUInteger {
     CGFloat recordTBHeight = self.tableView.frame.size.height;
     
     self.tableView.frame = self.view.bounds;
-    _cameraView.frame = self.safeBounds;
+    _cameraView.frame = self.rg_safeAreaBounds;
     
     [self __configStubbornViewLayout];
     
@@ -187,28 +170,15 @@ typedef enum : NSUInteger {
 }
 
 - (void)__configIconPlace {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSDictionary *dic = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kCTChatToolConfig];
-        if (dic) {
-            __toolConfig = [NSMutableDictionary dictionaryWithDictionary:dic];
-        } else {
-            NSDictionary *dic = @{
-                                  @(CTChatToolIconPlaceNavigation).stringValue : @[@(CTChatToolIconIdMusic)],
-                                  @(CTChatToolIconPlaceMainView).stringValue : @[@(CTChatToolIconIdCamara)],
-                                };
-            __toolConfig = [NSMutableDictionary dictionaryWithDictionary:dic];
-        }
-    });
     
     [_inputView removeAllToolBarItem];
     [self removeAllRightDragBarItem];
     
-    NSArray <NSString *> *allkeys = [__toolConfig allKeys];
+    NSArray <NSString *> *allkeys = [CTChatIconConfig.toolConfig allKeys];
     for (NSString *placeNumber in allkeys) {
         CTChatToolIconPlace place = placeNumber.integerValue;
         
-        NSArray <NSNumber *> *allIcon = __toolConfig[placeNumber];
+        NSArray <NSNumber *> *allIcon = CTChatIconConfig.toolConfig[placeNumber];
         
         for (NSNumber *iconIdNumber in allIcon) {
             
@@ -249,7 +219,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)__updateIconConfig {
-    
+    NSMutableDictionary *toolConfig = CTChatIconConfig.toolConfig;
     NSMutableArray <NSNumber *> *icons = [NSMutableArray arrayWithArray:@[@(CTChatToolIconIdCamara), @(CTChatToolIconIdMusic)]];
     
     for (CTChatToolIconPlace place = CTChatToolIconPlaceNavigation; place < CTChatToolIconPlaceCount; place ++) {
@@ -288,20 +258,18 @@ typedef enum : NSUInteger {
                 break;
         }
         if (newArray.count) {
-            [__toolConfig setObject:newArray forKey:@(place).stringValue];
+            [toolConfig setObject:newArray forKey:@(place).stringValue];
         } else {
-            [__toolConfig removeObjectForKey:@(place).stringValue];
+            [toolConfig removeObjectForKey:@(place).stringValue];
         }
         [icons removeObjectsInArray:newArray];
     }
-    
-    [[NSUserDefaults standardUserDefaults] setObject:__toolConfig forKey:kCTChatToolConfig];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [CTChatIconConfig updateConfig:toolConfig];
 }
 
 - (void)__changeBg:(UILongPressGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
-        [CTImagePickerViewController presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
+        [RGImagePicker presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
             
             [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             
@@ -381,13 +349,20 @@ typedef enum : NSUInteger {
     [_tableViewCover setGradientBegain:begain end:end];
 }
 
-- (BOOL)navigationControllerShouldPop:(UINavigationController *)navigationController isInteractive:(BOOL)isInteractive {
+#pragma mark - RGUINavigationControllerShouldPopDelegate
+
+- (BOOL)rg_navigationControllerShouldPop:(UINavigationController *)navigationController isInteractive:(BOOL)isInteractive {
     _viewControllerWillPop = YES;
     _recordOffSet = self.tableView.contentOffset;
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setViewControllerWillPop:) object:@(NO)];
+    [self performSelector:@selector(setViewControllerWillPop:) withObject:@(NO) afterDelay:0.5f];
+    
     return YES;
 }
 
-- (void)navigationController:(UINavigationController *)navigationController interactivePopResult:(BOOL)finished {
+- (void)rg_navigationController:(UINavigationController *)navigationController interactivePopResult:(BOOL)finished {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setViewControllerWillPop:) object:@(NO)];
     _viewControllerWillPop = finished;
     if (!finished) {
         self.tableView.contentOffset = _recordOffSet;
@@ -426,9 +401,16 @@ typedef enum : NSUInteger {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     CTChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CTChatTableViewCellId forIndexPath:indexPath];
-    cell.iconView.image = [UIImage imageNamed:@"zhimalin"];
     
     CTChatModel *model = _data[indexPath.row];
+    if ([model.userId isEqualToString:@"lin"]) {
+        cell.myDirection = NO;
+        cell.iconImage = [UIImage imageNamed:@"zhimalin"];
+    } else {
+        cell.myDirection = YES;
+        cell.iconImage = [UIImage imageNamed:@"fuzi"];
+    }
+    
     if (model.thumbUrl) {
         NSURL *url = [NSURL URLWithString:model.thumbUrl];
         if (url.isFileURL) {
@@ -441,6 +423,10 @@ typedef enum : NSUInteger {
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -536,7 +522,7 @@ typedef enum : NSUInteger {
     CGFloat inputHeight = MAX(kMinInputViewHeight, _inputView.contentHeight);
     CGFloat bottomMargin = 10.f;
     
-    //    CGFloat lastBottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
+    //    CGFloat lastBottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.rg_viewSafeAreaInsets.bottom;
     
     _inputView.frame = CGRectMake(0, bounds.size.height - inputHeight - _keyboardHeight, bounds.size.width, inputHeight);
     
@@ -546,19 +532,19 @@ typedef enum : NSUInteger {
         _inputView.frame = UIEdgeInsetsInsetRect(_inputView.frame, UIEdgeInsetsMake(-safeAreaBottom, 0, 0, 0));
     }
     
-    CGFloat bottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.viewSafeAreaInsets.bottom;
+    CGFloat bottom = bounds.size.height - CGRectGetMinY(_inputView.frame) + bottomMargin - self.rg_viewSafeAreaInsets.bottom;
     
     CGPoint contentOffset = self.tableView.contentOffset;
     UIEdgeInsets contentInset = self.tableView.contentInset;
     
-    CGFloat contentBottom = self.tableView.frame.size.height - self.viewSafeAreaInsets.bottom - self.tableView.contentSize.height;
+    CGFloat contentBottom = self.tableView.frame.size.height - self.rg_viewSafeAreaInsets.bottom - self.tableView.contentSize.height;
     
-    if (_keyboardHeight >= 0 && contentBottom - inputHeight - self.viewSafeAreaInsets.top > 0) {
+    if (_keyboardHeight >= 0 && contentBottom - inputHeight - self.rg_viewSafeAreaInsets.top > 0) {
         if (_keyboardHeight == 0) {
-            contentOffset.y = -self.viewSafeAreaInsets.top;
+            contentOffset.y = -self.rg_viewSafeAreaInsets.top;
         } else {
             CGFloat offSetY = bottom - contentBottom;
-            contentOffset.y = MAX(offSetY, -self.viewSafeAreaInsets.top);
+            contentOffset.y = MAX(offSetY, -self.rg_viewSafeAreaInsets.top);
         }
     } else {
         contentOffset.y += bottom - contentInset.bottom;
@@ -578,7 +564,7 @@ typedef enum : NSUInteger {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
     
     CGSize boundsSize = self.view.bounds.size;
-    UIEdgeInsets edge = self.viewSafeAreaInsets;
+    UIEdgeInsets edge = self.rg_viewSafeAreaInsets;
     CGRect toolBarFrame = _inputView.toolBarFrame;
     
     CGFloat toolBarHeight = CTChatInputToolBarHeight + edge.bottom;
@@ -589,15 +575,15 @@ typedef enum : NSUInteger {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         
-        CGSize size = [image sizeThatFill:boundsSize];
-        CGSize pixSize = image.pixSize;
+        CGSize size = [image rg_sizeThatFill:boundsSize];
+        CGSize pixSize = image.rg_pixSize;
         CGFloat scale = pixSize.width / size.width;
         
         CGFloat x = (size.width - boundsSize.width) / 2.f + edge.left;
         CGFloat y = size.height - (size.height - boundsSize.height) / 2.f - toolBarHeight;
         
         
-        UIImage *cropImage = [image cropInRect:
+        UIImage *cropImage = [image rg_cropInPixRect:
                               CGRectMake(x * scale,
                                          y * scale,
                                          toolBarWidth * scale,
@@ -657,7 +643,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)shareMedia:(UIButton *)sender {
-    [CTImagePickerViewController presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
+    [RGImagePicker presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
         
         [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         
@@ -683,18 +669,23 @@ typedef enum : NSUInteger {
         options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
         options.resizeMode = PHImageRequestOptionsResizeModeFast;
         [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-        
-            NSData *data = nil;
-            if (result.hasAlpha) {
-                data = UIImagePNGRepresentation(result);
-            } else {
-                data = UIImageJPEGRepresentation(result, 1);
+            
+            NSString *path = [CTFileManger fileExistedWithFileName:asset.localIdentifier folderName:UCChatDataFolderName];
+            
+            if (!path) {
+                NSData *data = nil;
+                if (result.rg_hasAlpha) {
+                    data = UIImagePNGRepresentation(result);
+                } else {
+                    data = UIImageJPEGRepresentation(result, 1);
+                }
+                
+                path = [CTFileManger createFile:asset.localIdentifier atFolder:UCChatDataFolderName data:data];
+                if (!path.length) {
+                    return;
+                }
             }
             
-            NSString *path = [CTFileManger createFile:asset.localIdentifier atFolder:UCChatDataFolderName data:data];
-            if (!path.length) {
-                return;
-            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (inserted) {
                     return;
@@ -720,6 +711,13 @@ typedef enum : NSUInteger {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (inserted) {
                     // find the message and update originalUrl
+                    NSInteger index = [self.data indexOfObject:model];
+                    CTChatTableViewCell *cell = (CTChatTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+                    model.originalImageUrl = [NSURL fileURLWithPath:path].absoluteString;
+                    model.thumbUrl = [NSURL fileURLWithPath:path].absoluteString;
+                    if (cell) {
+                        cell.thumbView.image = [UIImage imageWithContentsOfFile:path];
+                    }
                 } else {
                     inserted = YES;
                     CTChatModel *model = [CTChatModel new];
@@ -738,7 +736,7 @@ typedef enum : NSUInteger {
 - (CTMusicButton *)createMusicButton {
     CTMusicButton *music = [CTMusicButton new];
     [music sizeToFit];
-    music.tintColor = [UIColor whiteColor];
+//    music.tintColor = [UIColor whiteColor];
     
     __weak typeof(self) wSelf = self;
     music.clickBlock = ^(CTMusicButton *button) {
@@ -815,14 +813,18 @@ typedef enum : NSUInteger {
                 [self.tableView performBatchUpdates:^{
                     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
                 } completion:^(BOOL finished) {
-                    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//                    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionBottom];
+                    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
                 }];
             } else {
                 [self.tableView beginUpdates];
                 [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
                 [self.tableView endUpdates];
                 
-                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionBottom];
+                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
             }
         }];
     };
@@ -898,6 +900,10 @@ typedef enum : NSUInteger {
             
         }];
     }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)dealloc {

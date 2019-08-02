@@ -8,8 +8,7 @@
 
 #import "CTChatInputView.h"
 #import "UIView+PanGestureHelp.h"
-#import "UIImage+JCPictureEdit.h"
-#import "UIImage+Tint.h"
+#import <RGUIKit/RGUIKit.h>
 
 @implementation CTChatInputViewToolBarItem
 
@@ -310,7 +309,7 @@ static CGFloat kSendButtonSide = 50.f;
     return index;
 }
 
-- (void)updateInputViewDragIcon:(UIView *)dragIcon toolId:(NSInteger)toolId copyIconBlock:(UIView *(^)(void))copyIconBlock {
+- (void)updateInputViewDragIcon:(UIView *)dragIcon toolId:(NSInteger)toolId copyIconBlock:(NS_NOESCAPE UIView *(^)(void))copyIconBlock {
     CGRect frame = [dragIcon convertRect:dragIcon.bounds toView:self.superview];
     BOOL add = CGRectIntersectsRect(frame, self.frame);
     if (add) {
@@ -324,7 +323,7 @@ static CGFloat kSendButtonSide = 50.f;
     }
 }
 
-- (void)addOrRemoveInputViewToolBarWithDragIcon:(UIView *)dragIcon toolId:(NSInteger)toolId copyIconBlock:(UIView *(^)(void))copyIconBlock customAnimate:(void(^)(void))customAnimate completion:(void(^)(BOOL added))completion {
+- (void)addOrRemoveInputViewToolBarWithDragIcon:(UIView *)dragIcon toolId:(NSInteger)toolId copyIconBlock:(NS_NOESCAPE UIView *(^)(void))copyIconBlock customAnimate:(void(^)(void))customAnimate completion:(void(^)(BOOL added))completion {
     
     CGRect frame = [dragIcon convertRect:dragIcon.bounds toView:self.superview];
     BOOL add = CGRectIntersectsRect(frame, self.frame);
@@ -453,20 +452,19 @@ static CGFloat kSendButtonSide = 50.f;
 }
 
 - (void)updateNormalTintColorWithBackgroundImage:(UIImage *)image {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        UIColor *mainColor = image.mainColor;
+    dispatch_barrier_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        UIColor *mainColor = image.rg_mainColor;
         
         if (!mainColor) {
             return;
         }
-        CGFloat white;
-        [mainColor getWhite:&white alpha:nil];
+        BOOL isDarkColor = mainColor.rg_isDarkColor;
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (white > 0.5) {
-                self.normalTintColor = [UIColor colorWithWhite:0.f alpha:1.f];
-            } else {
+            if (isDarkColor) {
                 self.normalTintColor = [UIColor colorWithWhite:1.f alpha:1.f];
+            } else {
+                self.normalTintColor = [UIColor colorWithWhite:0.f alpha:1.f];
             }
             [self __configBackgroundAlphaWithAnimate:YES];
         });
@@ -474,7 +472,7 @@ static CGFloat kSendButtonSide = 50.f;
 }
 
 - (void)updateNormalTintColorWithBackgroundView:(UIView *)view frame:(CGRect)rect {
-    UIImage *image = [UIImage cropView:view inRect:rect scale:[[UIScreen mainScreen] scale]];
+    UIImage *image = [UIImage rg_convertViewToImage:view rect:rect];
     [self updateNormalTintColorWithBackgroundImage:image];
 }
 

@@ -56,6 +56,16 @@
     return path;
 }
 
++ (NSString *)fileExistedWithFileName:(NSString *)fileName folderName:(NSString *)folderName {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *path = [self pathWithFileName:fileName folderName:folderName];
+    if ([fileManager fileExistsAtPath:path]) {
+        return path;
+    } else {
+        return nil;
+    }
+}
+
 + (NSString *)createFile:(NSString *)fileName atFolder:(NSString *)folderName data:(NSData *)data {
     NSString *path = [self pathWithFileName:fileName folderName:folderName];
     [self createFolderWithPath:[path stringByDeletingLastPathComponent]];
