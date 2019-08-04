@@ -39,4 +39,6 @@
 - (void)hideCameraButton;
 - (void)adjustTintColor;
 
+- (void)shadow:(BOOL)show;
+
 @end

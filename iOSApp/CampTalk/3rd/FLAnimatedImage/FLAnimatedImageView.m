@@ -49,9 +49,17 @@
 // Using -initWithImage: doesn't call any of the other designated initializers.
 - (instancetype)initWithImage:(UIImage *)image
 {
+    FLAnimatedImage *aImage = nil;
+    if ([image isKindOfClass:FLAnimatedImage.class]) {
+        aImage = (FLAnimatedImage *)image;
+        image = nil;
+    }
     self = [super initWithImage:image];
     if (self) {
         [self commonInit];
+        if (aImage) {
+            self.animatedImage = aImage;
+        }
     }
     return self;
 }

@@ -28,6 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
+    self.rg_navigationController.barBackgroundStyle = RGNavigationBackgroundStyleShadow;
     self.rg_navigationController.tintColor = [UIColor whiteColor];
     
     NSString *imageName = [NSString stringWithFormat:@"corver%d.jpg", arc4random()%2];

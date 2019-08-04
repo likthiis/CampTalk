@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RGImagePickerConst.h"
 
 @interface RGImagePickerViewController : UIViewController
-
-@property (nonatomic, strong) PHAssetCollection *collection;
 
 @end

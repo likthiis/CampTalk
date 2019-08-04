@@ -92,10 +92,15 @@ static CGFloat kSendButtonSide = 50.f;
     [self addSubview:_contentView];
     
     _actionButton = [[UIButton alloc] init];
-    [_actionButton setImage:[UIImage imageNamed:@"fuzi"] forState:UIControlStateNormal];
+//    [_actionButton setImage:[UIImage imageNamed:@"fuzi"] forState:UIControlStateNormal];
     _actionButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [_actionButton addTarget:self action:@selector(actionButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [_contentView addSubview:_actionButton];
+    
+    _contentView.layer.shadowColor = [UIColor blackColor].CGColor;
+    _contentView.layer.shadowRadius = 2.f;
+    _contentView.layer.shadowOpacity = 0.6;
+    _contentView.layer.shadowOffset = CGSizeMake(0, 1);
     
     _textView = [[UITextView alloc] init];
     _textView.backgroundColor = [UIColor clearColor];

@@ -9,6 +9,7 @@
 #import "CTChatTableViewCell.h"
 #import <RGUIKit/RGUIKit.h>
 #import "RGBubbleView.h"
+#import "UIImageView+RGGif.h"
 
 static CGSize _maxIconSize = {40, 40};
 static CGFloat _chatCelIIconWidth = 40;

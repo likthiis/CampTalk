@@ -89,6 +89,20 @@ static CGPoint __recordCenter; // [0,1]
     }
 }
 
+- (void)shadow:(BOOL)show {
+    UIView *view = self.cameraButton;
+    if (show) {
+        view.layer.shadowColor = [UIColor blackColor].CGColor;
+        view.layer.shadowRadius = 2.f;
+        view.layer.shadowOpacity = 0.6;
+        view.layer.shadowOffset = CGSizeMake(0, 1);
+    } else {
+        view.layer.shadowColor = nil;
+        view.layer.shadowRadius = 0.f;
+        view.layer.shadowOpacity = 0.0;
+    }
+}
+
 - (UIButton *)cameraButton {
     if (!_cameraButton) {
         _cameraButton = [self createButton];

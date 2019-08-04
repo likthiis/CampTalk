@@ -23,7 +23,7 @@ NSString * const UCChatDataBackgroundFileName = @"chat_bg";
     if (imageName.length) {
         return [CTFileManger pathWithFileName:imageName folderName:UCChatDataFolderName];
     } else {
-        return [[NSBundle mainBundle] pathForResource:@"chatBg_1" ofType:@"jpg"];
+        return [[NSBundle mainBundle] pathForResource:@"chat_list_bg" ofType:@"png"];
     }
 }
 

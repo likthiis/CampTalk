@@ -15,6 +15,8 @@
 #import "CTCameraView.h"
 #import "CTMusicButton.h"
 
+#import "UIImageView+RGGif.h"
+
 #import <RGUIKit/RGUIKit.h>
 #import "UIViewController+DragBarItem.h"
 #import "UIView+PanGestureHelp.h"
@@ -53,7 +55,7 @@ static CGFloat kMinInputViewHeight = 60.f;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Princess Principal";
+    self.navigationItem.title = @"CampTalk";
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     self.tableView.delegate = self;
@@ -70,30 +72,13 @@ static CGFloat kMinInputViewHeight = 60.f;
     self.tableView.delaysContentTouches = NO;
     
     // fake data
-    _data = [NSMutableArray array];
-    int i = 10;
-    NSMutableString *string = [[NSMutableString alloc] init];
-    while (i--) {
-        [string appendString:@"啊"];
-        CTChatModel *model = [CTChatModel new];
-        [_data addObject:model];
-        
-        if (i > 0 && i <= 3) {
-            NSString *size = [NSString stringWithFormat:@"@{%f,%f}", powf(40, i), powf(40, i)];
-            model.thumbSize = CGSizeFromString(size);
-            NSString *filePath = [[NSBundle mainBundle] pathForResource:@"chatBg_1" ofType:@"jpg"];
-            model.thumbUrl = [NSURL fileURLWithPath:filePath].absoluteString;
-        } else {
-            model.message = string;
-        }
-        model.userId = @"lin";
-    }
+    _data = [CTChatModel fakeList];
     
-    _needScrollToBottom = YES;
+    [self setNeedScrollToBottom:YES];
     
     _inputView = [[CTChatInputView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kMinInputViewHeight, self.view.bounds.size.width, kMinInputViewHeight)];
     _inputView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    [_inputView.actionButton setImage:[[UIImage imageNamed:@"fuzi"] rg_imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
+    [_inputView.actionButton setImage:[[UIImage rg_imageWithName:@"fuzi_hd"] rg_imageFlippedForRightToLeftLayoutDirection] forState:UIControlStateNormal];
     _inputView.delegate = self;
     [self.view addSubview:_inputView];
     [self __configInputViewLayout];
@@ -101,6 +86,7 @@ static CGFloat kMinInputViewHeight = 60.f;
     _cameraView = [[CTCameraView alloc] init];
     _cameraView.delegate = self;
     _cameraView.hidden = YES;
+    [_cameraView shadow:YES];
     [_cameraView showInView:self.view tintColorEffectView:nil];
     
     [self __configIconPlace];
@@ -270,37 +256,30 @@ static CGFloat kMinInputViewHeight = 60.f;
 - (void)__changeBg:(UILongPressGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
         [RGImagePicker presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
-            
-            [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-            
-            PHAsset *asset = phassets.firstObject;
-            if (!asset) {
-                return;
-            }
-            
-            PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-            options.deliveryMode = PHImageRequestOptionsVersionOriginal;
-            options.synchronous = NO;
-            options.networkAccessAllowed = YES;
-            
-            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                if (!imageData) {
+            [RGImagePicker loadResourceFromAssets:phassets completion:^(NSArray<NSData *> * _Nonnull imageData, NSError * _Nullable error) {
+                if (error) {
                     return;
                 }
-                [CTUserConfig setChatBackgroundImageData:imageData];
+                [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                if (!imageData.count) {
+                    return;
+                }
+                [CTUserConfig setChatBackgroundImageData:imageData.firstObject];
             }];
         }];
     }
 }
 
 - (void)__configBackgroundImage {
-    UIImage *image = [UIImage imageWithContentsOfFile:[CTUserConfig chatBackgroundImagePath]];
+//    NSData *data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:]];
+    NSString *path = [CTUserConfig chatBackgroundImagePath];
     if ([self.tableView.backgroundView isKindOfClass:UIImageView.class]) {
-        [(UIImageView *)self.tableView.backgroundView setImage:image];
+        [(UIImageView *)self.tableView.backgroundView rg_setImagePath:path];
     } else {
-        UIImageView *bgView = [[UIImageView alloc] initWithImage:image];
+        UIImageView *bgView = [[UIImageView alloc] init];
         bgView.contentMode = UIViewContentModeScaleAspectFill;
         bgView.clipsToBounds = YES;
+        [bgView rg_setImagePath:path];
         self.tableView.backgroundView = bgView;
         _cameraView.tintColorEffectView = bgView;
     }
@@ -311,7 +290,7 @@ static CGFloat kMinInputViewHeight = 60.f;
         [_tableViewCover setGradientDirection:YES];
         [self.tableView addSubview:_tableViewCover];
     }
-    _tableViewCover.image = image;
+    [_tableViewCover rg_setImagePath:path];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__configInputViewTintColor) object:nil];
     [self performSelector:@selector(__configInputViewTintColor) withObject:nil afterDelay:0.3];
     
@@ -408,13 +387,15 @@ static CGFloat kMinInputViewHeight = 60.f;
         cell.iconImage = [UIImage imageNamed:@"zhimalin"];
     } else {
         cell.myDirection = YES;
-        cell.iconImage = [UIImage imageNamed:@"fuzi"];
+        cell.iconImage = [UIImage rg_imageWithName:@"fuzi_hd"];
     }
     
     if (model.thumbUrl) {
         NSURL *url = [NSURL URLWithString:model.thumbUrl];
         if (url.isFileURL) {
-            cell.thumbView.image = [UIImage imageWithContentsOfFile:url.path];
+            [cell.thumbView rg_setImagePath:url.path async:YES completion:^{
+                [cell setNeedsLayout];
+            }];
         } else {
             // load from server
         }
@@ -431,10 +412,10 @@ static CGFloat kMinInputViewHeight = 60.f;
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (!_recordMaxIndexPath) {
-        [self recordMaxIndexPathIfNeed];
+        [self __recordMaxIndexPathIfNeed];
     } else {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(recordMaxIndexPathIfNeed) object:nil];
-        [self performSelector:@selector(recordMaxIndexPathIfNeed) withObject:nil afterDelay:0.3f inModes:@[NSRunLoopCommonModes]];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__recordMaxIndexPathIfNeed) object:nil];
+        [self performSelector:@selector(__recordMaxIndexPathIfNeed) withObject:nil afterDelay:0.3f inModes:@[NSRunLoopCommonModes]];
     }
 }
 
@@ -442,8 +423,8 @@ static CGFloat kMinInputViewHeight = 60.f;
     _tableViewCover.frame = scrollView.bounds;
 }
 
-- (void)recordMaxIndexPathIfNeed {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(recordMaxIndexPathIfNeed) object:nil];
+- (void)__recordMaxIndexPathIfNeed {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(__recordMaxIndexPathIfNeed) object:nil];
     _recordMaxIndexPath = self.tableView.indexPathsForVisibleRows.lastObject.copy;
 }
 
@@ -643,91 +624,51 @@ static CGFloat kMinInputViewHeight = 60.f;
 }
 
 - (void)shareMedia:(UIButton *)sender {
-    [RGImagePicker presentByViewController:self pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
+    
+    __block BOOL loading;
+    
+    [RGImagePicker presentByViewController:self maxCount:10 pickResult:^(NSArray<PHAsset *> *phassets, UIViewController *pickerViewController) {
         
-        [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-        
-        PHAsset *asset = phassets.firstObject;
-        if (!asset) {
+        if (loading) {
             return;
         }
         
-        __block BOOL inserted = NO;
-        CGFloat scale = [UIScreen mainScreen].scale;
-        CGFloat height = MIN(asset.pixelHeight, 120 * scale);
-        CGFloat width = height / asset.pixelHeight * asset.pixelWidth;
-        CGSize size = CGSizeMake(width, MIN(asset.pixelHeight, 120 * scale));
+        loading = YES;
         
-        CTChatModel *model = [CTChatModel new];
-        model.thumbSize = size;
-        
-        PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-        options.synchronous = NO;
-        options.networkAccessAllowed = YES;
-        
-        // thumb
-        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-        options.resizeMode = PHImageRequestOptionsResizeModeFast;
-        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        [RGImagePicker loadResourceFromAssets:phassets completion:^(NSArray<NSData *> * _Nonnull imageData, NSError * _Nullable error) {
+            loading = NO;
+            if (error) {
+                return;
+            }
             
-            NSString *path = [CTFileManger fileExistedWithFileName:asset.localIdentifier folderName:UCChatDataFolderName];
+            [pickerViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             
-            if (!path) {
-                NSData *data = nil;
-                if (result.rg_hasAlpha) {
-                    data = UIImagePNGRepresentation(result);
-                } else {
-                    data = UIImageJPEGRepresentation(result, 1);
+            [imageData enumerateObjectsUsingBlock:^(NSData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                
+                if (!obj.length) {
+                    return;
                 }
                 
-                path = [CTFileManger createFile:asset.localIdentifier atFolder:UCChatDataFolderName data:data];
+                PHAsset *asset = phassets[idx];
+                
+                CGFloat scale = [UIScreen mainScreen].scale;
+                CGFloat height = MIN(asset.pixelHeight, 120 * scale);
+                CGFloat width = height / asset.pixelHeight * asset.pixelWidth;
+                CGSize size = CGSizeMake(width, MIN(asset.pixelHeight, 120 * scale));
+                
+                NSString *path = [CTFileManger createFile:asset.localIdentifier atFolder:UCChatDataFolderName data:obj];
                 if (!path.length) {
                     return;
                 }
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (inserted) {
-                    return;
-                }
-                inserted = YES;
+                CTChatModel *model = [CTChatModel new];
                 model.thumbUrl = [NSURL fileURLWithPath:path].absoluteString;
+                model.originalImageUrl = [NSURL fileURLWithPath:path].absoluteString;
                 model.thumbSize = size;
                 [self insertChatData:model];
-            });
+            }];
         }];
         
-        // original
-        options.resizeMode = PHImageRequestOptionsResizeModeNone;
-        options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
-        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            if (!imageData) {
-                return;
-            }
-            NSString *path = [CTFileManger createFile:asset.localIdentifier atFolder:UCChatDataFolderName data:imageData];
-            if (!path.length) {
-                return;
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (inserted) {
-                    // find the message and update originalUrl
-                    NSInteger index = [self.data indexOfObject:model];
-                    CTChatTableViewCell *cell = (CTChatTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-                    model.originalImageUrl = [NSURL fileURLWithPath:path].absoluteString;
-                    model.thumbUrl = [NSURL fileURLWithPath:path].absoluteString;
-                    if (cell) {
-                        cell.thumbView.image = [UIImage imageWithContentsOfFile:path];
-                    }
-                } else {
-                    inserted = YES;
-                    CTChatModel *model = [CTChatModel new];
-                    model.thumbUrl = [NSURL fileURLWithPath:path].absoluteString;
-                    model.originalImageUrl = [NSURL fileURLWithPath:path].absoluteString;
-                    model.thumbSize = size;
-                    [self insertChatData:model];
-                }
-            });
-        }];
+        
     }];
 }
 

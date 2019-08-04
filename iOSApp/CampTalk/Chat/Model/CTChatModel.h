@@ -35,4 +35,6 @@
 @property (nonatomic, assign) NSInteger sendTime;
 @property (nonatomic, assign) NSInteger version;
 
++ (NSMutableArray <CTChatModel *> *)fakeList;
+
 @end

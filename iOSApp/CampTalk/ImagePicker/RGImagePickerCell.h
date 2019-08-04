@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "RGImagePickerConst.h"
+#import "RGImagePickerCache.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,7 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol RGImagePickerCellDelegate <NSObject>
 
-- (void)RGImagePickerCell:(RGImagePickerCell *)cell touchForce:(CGFloat)force maximumPossibleForce:(CGFloat)maximumPossibleForce;
+- (void)imagePickerCell:(RGImagePickerCell *)cell touchForce:(CGFloat)force maximumPossibleForce:(CGFloat)maximumPossibleForce;
+
+- (void)didCheckForImagePickerCell:(RGImagePickerCell *)cell;
 
 @end
 
@@ -23,17 +26,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *imageViewMask;
+
+@property (nonatomic, strong) RGImagePickerCache *cache;
 @property (nonatomic, strong) PHAsset *asset;
+
+@property (nonatomic, assign) PHImageRequestID lastRequestId;
 
 @property (nonatomic, strong) CAShapeLayer *checkMarkLayer;
 @property (nonatomic, strong) CAShapeLayer *selectedLayer;
+@property (nonatomic, strong) UIButton *selectedButton;
 
 @property (nonatomic, weak) id <RGImagePickerCellDelegate> delegate;
 @property (nonatomic, assign) CGFloat lastTouchForce;
 
 - (void)setAsset:(PHAsset *)asset targetSize:(CGSize)targetSize;
-- (BOOL)needLoadWithAsset:(PHAsset *)asset;
-- (void)loadOriginalWithAsset:(PHAsset *)asset;
++ (void)needLoadWithAsset:(PHAsset *)asset result:(void(^)(BOOL needLoad))result;
+
+- (BOOL)isCurrentAsset:(PHAsset *)asset;
++ (void)loadOriginalWithAsset:(PHAsset *)asset updateCell:(RGImagePickerCell *)cell;
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated;
 
 @end
 

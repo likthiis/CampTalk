@@ -59,7 +59,7 @@
     
     [self.tableView registerClass:RGTableViewCell.class forCellReuseIdentifier:RGCellIDValue1];
     
-    UIBarButtonItem *down = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(callBack)];
+    UIBarButtonItem *down = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(rg_dismiss)];
     self.navigationItem.rightBarButtonItem = down;
 }
 
@@ -107,7 +107,7 @@
         cell.detailTextLabel.text = @(result.count).stringValue;
     }
     
-    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(40, 40) contentMode:PHImageContentModeAspectFill options:0 resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+    [[PHCachingImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(40, 40) contentMode:PHImageContentModeAspectFill options:0 resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
         cell.imageView.image = result;
         [cell setNeedsLayout];
     }];

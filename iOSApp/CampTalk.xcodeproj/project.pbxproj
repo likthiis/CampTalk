@@ -49,6 +49,10 @@
 		E618C3B020A5F9290072B6F8 /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E618C3AA20A5F9280072B6F8 /* FLAnimatedImage.m */; };
 		E618C3B120A5F9290072B6F8 /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = E618C3AB20A5F9280072B6F8 /* FLAnimatedImageView.m */; };
 		E618C3B220A5F9290072B6F8 /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = E618C3AB20A5F9280072B6F8 /* FLAnimatedImageView.m */; };
+		E61DA3DB22F645920008DC68 /* fuzi_hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E61DA3DA22F645920008DC68 /* fuzi_hd.png */; };
+		E61DA3DC22F645920008DC68 /* fuzi_hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E61DA3DA22F645920008DC68 /* fuzi_hd.png */; };
+		E61DA3E122F6928B0008DC68 /* sad.png in Resources */ = {isa = PBXBuildFile; fileRef = E61DA3E022F6928B0008DC68 /* sad.png */; };
+		E61DA3E222F6928B0008DC68 /* sad.png in Resources */ = {isa = PBXBuildFile; fileRef = E61DA3E022F6928B0008DC68 /* sad.png */; };
 		E6312B6B20A0565F0090054C /* RGImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312B6A20A0565F0090054C /* RGImagePickerViewController.m */; };
 		E6312B6C20A0565F0090054C /* RGImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312B6A20A0565F0090054C /* RGImagePickerViewController.m */; };
 		E6312B7020A0619F0090054C /* RGImageAlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312B6F20A0619F0090054C /* RGImageAlbumListViewController.m */; };
@@ -91,6 +95,16 @@
 		E6D3BAD922F3D25C00A6E595 /* RGImagePickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E6D3BAD722F3D25C00A6E595 /* RGImagePickerCell.m */; };
 		E6D3BADB22F3F0D500A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BADA22F3F0D400A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png */; };
 		E6D3BADC22F3F0D500A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BADA22F3F0D400A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png */; };
+		E6D3BADE22F40B0000A6E595 /* fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BADD22F40AFF00A6E595 /* fire.gif */; };
+		E6D3BADF22F40B0000A6E595 /* fire.gif in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BADD22F40AFF00A6E595 /* fire.gif */; };
+		E6D3BAE122F40DA600A6E595 /* 8bit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BAE022F40DA600A6E595 /* 8bit.jpg */; };
+		E6D3BAE222F40DA600A6E595 /* 8bit.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BAE022F40DA600A6E595 /* 8bit.jpg */; };
+		E6D3BAE422F4123300A6E595 /* 8bit2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BAE322F4123300A6E595 /* 8bit2.jpg */; };
+		E6D3BAE522F4123300A6E595 /* 8bit2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6D3BAE322F4123300A6E595 /* 8bit2.jpg */; };
+		E6D3BAE922F5326200A6E595 /* ImageGallery.m in Sources */ = {isa = PBXBuildFile; fileRef = E6D3BAE722F5326200A6E595 /* ImageGallery.m */; };
+		E6D3BAEA22F5326200A6E595 /* ImageGallery.m in Sources */ = {isa = PBXBuildFile; fileRef = E6D3BAE722F5326200A6E595 /* ImageGallery.m */; };
+		E6D3BAF122F5B55300A6E595 /* UIImageView+RGGif.m in Sources */ = {isa = PBXBuildFile; fileRef = E6D3BAF022F5B55300A6E595 /* UIImageView+RGGif.m */; };
+		E6D3BAF222F5B55300A6E595 /* UIImageView+RGGif.m in Sources */ = {isa = PBXBuildFile; fileRef = E6D3BAF022F5B55300A6E595 /* UIImageView+RGGif.m */; };
 		E6E05AD7209C358C00C54A24 /* chatBg_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */; };
 		E6E05AD8209C358C00C54A24 /* chatBg_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */; };
 		E6FA14A020BEEC1000F097C8 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FA149F20BEEC1000F097C8 /* CFNetwork.framework */; };
@@ -168,6 +182,8 @@
 		E618C3AB20A5F9280072B6F8 /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		E618C3AC20A5F9280072B6F8 /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
 		E618C3AD20A5F9280072B6F8 /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
+		E61DA3DA22F645920008DC68 /* fuzi_hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fuzi_hd.png; sourceTree = "<group>"; };
+		E61DA3E022F6928B0008DC68 /* sad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sad.png; sourceTree = "<group>"; };
 		E6312B6920A0565F0090054C /* RGImagePickerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGImagePickerViewController.h; sourceTree = "<group>"; };
 		E6312B6A20A0565F0090054C /* RGImagePickerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGImagePickerViewController.m; sourceTree = "<group>"; };
 		E6312B6E20A0619F0090054C /* RGImageAlbumListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGImageAlbumListViewController.h; sourceTree = "<group>"; };
@@ -206,6 +222,13 @@
 		E6D3BAD622F3D25C00A6E595 /* RGImagePickerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGImagePickerCell.h; sourceTree = "<group>"; };
 		E6D3BAD722F3D25C00A6E595 /* RGImagePickerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RGImagePickerCell.m; sourceTree = "<group>"; };
 		E6D3BADA22F3F0D400A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "[Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png"; sourceTree = "<group>"; };
+		E6D3BADD22F40AFF00A6E595 /* fire.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = fire.gif; sourceTree = "<group>"; };
+		E6D3BAE022F40DA600A6E595 /* 8bit.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 8bit.jpg; sourceTree = "<group>"; };
+		E6D3BAE322F4123300A6E595 /* 8bit2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 8bit2.jpg; sourceTree = "<group>"; };
+		E6D3BAE722F5326200A6E595 /* ImageGallery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageGallery.m; sourceTree = "<group>"; };
+		E6D3BAE822F5326200A6E595 /* ImageGallery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageGallery.h; sourceTree = "<group>"; };
+		E6D3BAEF22F5B55300A6E595 /* UIImageView+RGGif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+RGGif.h"; sourceTree = "<group>"; };
+		E6D3BAF022F5B55300A6E595 /* UIImageView+RGGif.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+RGGif.m"; sourceTree = "<group>"; };
 		E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chatBg_1.jpg; sourceTree = "<group>"; };
 		E6FA149F20BEEC1000F097C8 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		EF0403BB5F62FA71A469BBD6 /* Pods_CommonPod_CampTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CommonPod_CampTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -319,9 +342,14 @@
 		6BD766B8208511D7003FD599 /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				E61DA3E022F6928B0008DC68 /* sad.png */,
+				E6D3BAE022F40DA600A6E595 /* 8bit.jpg */,
+				E6D3BAE322F4123300A6E595 /* 8bit2.jpg */,
+				E6D3BADD22F40AFF00A6E595 /* fire.gif */,
 				E6D3BADA22F3F0D400A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png */,
 				E657C83F218981F9007DE710 /* chat_list_bg.png */,
 				E657C83C21897EB2007DE710 /* miziha.JPG */,
+				E61DA3DA22F645920008DC68 /* fuzi_hd.png */,
 				E684BCF520A7009F00C3E973 /* yuru_camp_login.gif */,
 				E684BCF220A6FD3900C3E973 /* camp07.gif */,
 				E6E05AD6209C358C00C54A24 /* chatBg_1.jpg */,
@@ -381,10 +409,10 @@
 		9E72764F2088FE7600FE9454 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9E7276422088F3B200FE9454 /* CTChatTableViewController.h */,
-				9E7276432088F3B200FE9454 /* CTChatTableViewController.m */,
 				E657C830218954CD007DE710 /* CTChatListTableViewController.h */,
 				E657C831218954CD007DE710 /* CTChatListTableViewController.m */,
+				9E7276422088F3B200FE9454 /* CTChatTableViewController.h */,
+				9E7276432088F3B200FE9454 /* CTChatTableViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -415,6 +443,8 @@
 				E6312BB620A290DA0090054C /* Bluuur */,
 				E6035A15209BF9AB00A6C6CA /* RGBubbleView.h */,
 				E6035A16209BF9AB00A6C6CA /* RGBubbleView.m */,
+				E6D3BAEF22F5B55300A6E595 /* UIImageView+RGGif.h */,
+				E6D3BAF022F5B55300A6E595 /* UIImageView+RGGif.m */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -450,6 +480,7 @@
 		E6312B6D20A060C60090054C /* ImagePicker */ = {
 			isa = PBXGroup;
 			children = (
+				E6D3BAE622F5325200A6E595 /* ImageGallery */,
 				E6D3BAD222F2F7F900A6E595 /* RGImagePickerConst.h */,
 				E6D3BACE22F2F48900A6E595 /* RGImagePicker.h */,
 				E6D3BACF22F2F48900A6E595 /* RGImagePicker.m */,
@@ -517,6 +548,15 @@
 				E6B7F4782094468700918BC8 /* UINavigationItem+Gesture.m */,
 			);
 			path = UINavigationItem;
+			sourceTree = "<group>";
+		};
+		E6D3BAE622F5325200A6E595 /* ImageGallery */ = {
+			isa = PBXGroup;
+			children = (
+				E6D3BAE822F5326200A6E595 /* ImageGallery.h */,
+				E6D3BAE722F5326200A6E595 /* ImageGallery.m */,
+			);
+			path = ImageGallery;
 			sourceTree = "<group>";
 		};
 		E6FA149E20BEEC1000F097C8 /* Frameworks */ = {
@@ -617,18 +657,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E61DA3E122F6928B0008DC68 /* sad.png in Resources */,
 				6BD76638208504E3003FD599 /* LaunchScreen.storyboard in Resources */,
 				6BD766BA208515B8003FD599 /* linJiang.m4a in Resources */,
+				E6D3BAE422F4123300A6E595 /* 8bit2.jpg in Resources */,
+				E6D3BAE122F40DA600A6E595 /* 8bit.jpg in Resources */,
 				E684BCF620A700A000C3E973 /* yuru_camp_login.gif in Resources */,
 				6BD76635208504E3003FD599 /* Assets.xcassets in Resources */,
 				6BD766432085085A003FD599 /* corver0.jpg in Resources */,
 				E6D3BADB22F3F0D500A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png in Resources */,
 				E684BCF320A6FD3A00C3E973 /* camp07.gif in Resources */,
+				E61DA3DB22F645920008DC68 /* fuzi_hd.png in Resources */,
 				E657C840218981F9007DE710 /* chat_list_bg.png in Resources */,
 				E657C83D21897EB3007DE710 /* miziha.JPG in Resources */,
 				E6E05AD7209C358C00C54A24 /* chatBg_1.jpg in Resources */,
 				9E7276512088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD76633208504E3003FD599 /* Main.storyboard in Resources */,
+				E6D3BADE22F40B0000A6E595 /* fire.gif in Resources */,
 				E671495720B50971009070D0 /* corver1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -637,18 +682,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E61DA3E222F6928B0008DC68 /* sad.png in Resources */,
 				6BD766AE20850E11003FD599 /* LaunchScreen.storyboard in Resources */,
 				6BD766BB208515B9003FD599 /* linJiang.m4a in Resources */,
+				E6D3BAE522F4123300A6E595 /* 8bit2.jpg in Resources */,
+				E6D3BAE222F40DA600A6E595 /* 8bit.jpg in Resources */,
 				E684BCF720A700A000C3E973 /* yuru_camp_login.gif in Resources */,
 				6BD766AF20850E11003FD599 /* Assets.xcassets in Resources */,
 				6BD766B020850E11003FD599 /* corver0.jpg in Resources */,
 				E6D3BADC22F3F0D500A6E595 /* [Moozzi2] Yuru Camp - 05 (BD 1920x1080 x.264 Flac)-0002.png in Resources */,
 				E684BCF420A6FD3A00C3E973 /* camp07.gif in Resources */,
+				E61DA3DC22F645920008DC68 /* fuzi_hd.png in Resources */,
 				E657C841218981F9007DE710 /* chat_list_bg.png in Resources */,
 				E6E05AD8209C358C00C54A24 /* chatBg_1.jpg in Resources */,
 				9E7276522088FEBE00FE9454 /* CTChatTableViewCell.xib in Resources */,
 				6BD766B120850E11003FD599 /* Main.storyboard in Resources */,
 				E671495820B50971009070D0 /* corver1.jpg in Resources */,
+				E6D3BADF22F40B0000A6E595 /* fire.gif in Resources */,
 				E657C83E21897F3C007DE710 /* miziha.JPG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -760,9 +810,11 @@
 				E6312BC720A2ECA60090054C /* CTFileManger.m in Sources */,
 				E6B7F4792094468700918BC8 /* UINavigationItem+Gesture.m in Sources */,
 				E6D3BACC22F2F2BE00A6E595 /* RGImagePickerCache.m in Sources */,
+				E6D3BAF122F5B55300A6E595 /* UIImageView+RGGif.m in Sources */,
 				E6035A17209BF9AB00A6C6CA /* RGBubbleView.m in Sources */,
 				6BD7663B208504E3003FD599 /* main.m in Sources */,
 				E6D3BAD022F2F48900A6E595 /* RGImagePicker.m in Sources */,
+				E6D3BAE922F5326200A6E595 /* ImageGallery.m in Sources */,
 				6BD7662D208504E3003FD599 /* AppDelegate.m in Sources */,
 				9E72764B2088FE2A00FE9454 /* CTChatTableViewCell.m in Sources */,
 				9E72765520896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */,
@@ -796,9 +848,11 @@
 				E6312BC820A2ECA60090054C /* CTFileManger.m in Sources */,
 				E6B7F47A2094468700918BC8 /* UINavigationItem+Gesture.m in Sources */,
 				E6D3BACD22F2F2BE00A6E595 /* RGImagePickerCache.m in Sources */,
+				E6D3BAF222F5B55300A6E595 /* UIImageView+RGGif.m in Sources */,
 				E6035A18209BF9AB00A6C6CA /* RGBubbleView.m in Sources */,
 				6BD766A420850E11003FD599 /* main.m in Sources */,
 				E6D3BAD122F2F48900A6E595 /* RGImagePicker.m in Sources */,
+				E6D3BAEA22F5326200A6E595 /* ImageGallery.m in Sources */,
 				6BD766A520850E11003FD599 /* AppDelegate.m in Sources */,
 				9E72764C2088FE2A00FE9454 /* CTChatTableViewCell.m in Sources */,
 				9E72765620896B9C00FE9454 /* CTChatBubbleLabel.m in Sources */,
@@ -1006,7 +1060,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 59Q4A65TJN;
+				DEVELOPMENT_TEAM = 56545Q3LP9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CampTalk/3rd/FBSocketRocket",
@@ -1015,7 +1069,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/CampTalk/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalkBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalkBeta.xj;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1029,7 +1083,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 59Q4A65TJN;
+				DEVELOPMENT_TEAM = 56545Q3LP9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CampTalk/3rd/FBSocketRocket",
@@ -1038,7 +1092,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/CampTalk/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalkBeta;
+				PRODUCT_BUNDLE_IDENTIFIER = org.yuru.CampTalkBeta.xj;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";

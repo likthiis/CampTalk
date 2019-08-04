@@ -21,6 +21,8 @@
 
 @property (nonatomic, strong) FLAnimatedImageView *gifView;
 
+@property (nonatomic, strong) FLAnimatedImageView *fireView;
+
 @property (nonatomic, strong) UIActivityIndicatorView *loadingView;
 @property (nonatomic, strong) UIButton *resultButton;
 
@@ -31,8 +33,8 @@
 typedef enum : NSUInteger {
     CTLoginResultButtonStateNone,
     CTLoginResultButtonStateOK,
-    CTLoginResultButtonStateExisted,
     CTLoginResultButtonStateError,
+    CTLoginResultButtonStateNeedRefresh,
 } CTLoginResultButtonState;
 
 @implementation CTLoginViewController
@@ -59,6 +61,17 @@ typedef enum : NSUInteger {
     
     self.navigationItem.leftBarButtonItem =
     [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismiss)];
+}
+
+- (FLAnimatedImageView *)fireView {
+    if (!_fireView) {
+        NSData *data = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"fire" withExtension:@"gif"]];
+        FLAnimatedImage *gif = [FLAnimatedImage animatedImageWithGIFData:data];
+        _fireView = [[FLAnimatedImageView alloc] initWithFrame:CGRectMake(0, 0, gif.size.width, gif.size.height)];
+        _fireView.contentMode = UIViewContentModeCenter;
+        _fireView.animatedImage = gif;
+    }
+    return _fireView;
 }
 
 - (void)startAnimate {
@@ -97,7 +110,8 @@ typedef enum : NSUInteger {
     if (!_accountId) {
         _accountId = [[RGInputTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RGInputTableViewCellID];
         _accountId.backgroundColor = [UIColor clearColor];
-        _accountId.textFieldEdge = UIEdgeInsetsMake(0, 20, 0, 20);
+        _accountId.textFieldEdge = UIEdgeInsetsMake(0, 20, 0, 0);
+        _accountId.rightViewEdge = UIEdgeInsetsMake(0, 0, 0, 20);
         _accountId.textField.tintColor = [UIColor blackColor];
         UIImageView *left = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"account"]];
         left.frame = CGRectMake(0, 0, 24, 40);
@@ -185,6 +199,7 @@ typedef enum : NSUInteger {
         
         self.resultButton.alpha = 0.f;
         [self.loadingView startAnimating];
+        self.tableView.tableFooterView = nil;
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(doCheckUser) object:nil];
         
@@ -230,7 +245,11 @@ typedef enum : NSUInteger {
     
     NSString *text = [self.accountId.inputText copy];
     
-    [[AFHTTPSessionManager manager] POST:@"http:211.159.166.251:16233//query/query_existence" parameters:@{@"uid":text} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    // @"http:211.159.166.251:16233//query/query_existence"
+    // @{@"uid":text}
+    NSString *userCheckUrl = @"https://renged.xyz/user/check";
+    
+    [[AFHTTPSessionManager manager] GET:userCheckUrl parameters:@{@"username":text} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if (![self.accountId.inputText isEqualToString:text]) {
             return;
@@ -242,15 +261,14 @@ typedef enum : NSUInteger {
         self.resultButton.alpha = 1.f;
         self.resultButton.transform = CGAffineTransformMakeRotation(0);
         
-        NSString *status = responseObject[@"status"];
-        if ([status isEqualToString:@"user_existence"]) {
-            [self setResultButtonState:CTLoginResultButtonStateExisted];
-        } else if ([status isEqualToString:@"user_inexistence"]) {
+        NSInteger code = [responseObject[@"code"] intValue];
+        if (code == 1000) {
             [self setResultButtonState:CTLoginResultButtonStateOK];
+        } else if (code == 1001) {
+            [self setResultButtonState:CTLoginResultButtonStateError];
         } else {
-            [self setResultButtonState:CTLoginResultButtonStateNone];
+            [self setResultButtonState:CTLoginResultButtonStateNeedRefresh];
         }
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
         if (![self.accountId.inputText isEqualToString:text]) {
@@ -262,7 +280,7 @@ typedef enum : NSUInteger {
         
         self.resultButton.transform = CGAffineTransformMakeRotation(M_PI);
         self.resultButton.alpha = 0.f;
-        [self setResultButtonState:CTLoginResultButtonStateError];
+        [self setResultButtonState:CTLoginResultButtonStateNeedRefresh];
         
         [UIView animateWithDuration:0.3 animations:^{
             
@@ -284,11 +302,11 @@ typedef enum : NSUInteger {
 
 - (void)setResultButtonState:(CTLoginResultButtonState)state {
     switch (state) {
-        case CTLoginResultButtonStateExisted:
+        case CTLoginResultButtonStateError:
             [self.resultButton setBackgroundImage:[UIImage imageNamed:@"user_check_exist"] forState:UIControlStateNormal];
             self.resultButton.userInteractionEnabled = NO;
             break;
-        case CTLoginResultButtonStateError:
+        case CTLoginResultButtonStateNeedRefresh:
             [self.resultButton setBackgroundImage:[UIImage imageNamed:@"user_check_refresh"] forState:UIControlStateNormal];
             self.resultButton.userInteractionEnabled = YES;
             break;
@@ -300,6 +318,11 @@ typedef enum : NSUInteger {
             [self.resultButton setImage:nil forState:UIControlStateNormal];
             self.resultButton.userInteractionEnabled = NO;
             break;
+    }
+    if (state == CTLoginResultButtonStateOK) {
+        self.tableView.tableFooterView = self.fireView;
+    } else {
+        self.tableView.tableFooterView = nil;
     }
 }
 
